@@ -40,15 +40,15 @@
   <!-- Style Switcher -->
   <div class="switcher-box">
   <?php if($this->session->userdata('userid')){?>
-    <a class="open-switcher show-switcher" id = "login-icon" data-toggle = "popover" data-placement = "right" title = "Welcome Admin! "><i class="fa fa-user fa-2x"></i></a>
+    <a class="open-switcher show-switcher" id = "login-icon" data-toggle = "popover" data-placement = "right" title = "Welcome <?php echo $this->session->userdata('username');?>! "><i class="fa fa-user fa-2x"></i></a>
     <h4>Profile</h4>
 
       <div class = "row" style = "width: 221px; text-align:right">
           <button class="btn btn-primary btn-xs" id = "btn-update-profile" data-toggle="tooltip" data-placement="top" title="Update Profile" >
-            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <i class="fa fa-edit fa-fw"></i>
           </button>
           <button class="btn btn-primary btn-xs" id = "btn-changepwd" data-toggle="tooltip" data-placement="top" title="Change Password" >
-            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+            <i class="fa fa-lock fa-fw"></i>
           </button>
         </div>
           <!-- Divider -->
@@ -60,12 +60,15 @@
         <span style = "text-align:center !important">Hello Ariana</span>
         <!-- Divider -->
         <div class="hr1 margin-top"></div>
-        
-        
+        <div class = "row" style = "text-align:right; width: 214px;">
+              <button id = "btn-logout" class = "btn btn-primary btn-sm"><i class="fa fa-sign-out fa-2x"></i> Logout</button>
+            </div>
+         <!-- Divider -->
+        <div class="hr1 margin-top"></div>
     <?php }else{?>
       <a class="open-switcher show-switcher" id = "login-icon" data-toggle = "popover" data-placement = "right" title = "Login/Register Here"><i class="fa fa-cog fa-2x"></i></a>
       <h4>Login</h4>
-          <a href = "#">Register</a>|<a href="#">Forgot Password ?</a>
+          <a href = "#" id = "register">Register</a>|<a href="#">Forgot Password ?</a>
           <br/>
           <span id = "error" data-placement="top" data-toggle="popover"></span>
           <!-- Divider -->
@@ -95,45 +98,7 @@
         <div class="hr1 margin-top"></div>
     <?php } ?>
   </div>
-  <!-- modal enter security password -->
-    <div class="modal fade" id = "modal_profile" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Update Profile</h4>
-          </div>
-          <div class="modal-body">
-            <div class = "row">
-              <div class = "col-xs-9">
-                <form>  
-                    <div class = "form-group">
-                      <label for = "f_name">First Name :</label>
-                      <input type = "text" class = "form-control" id = "f_name" name = "f_name" placeholder="First Name"/>
-                    </div>
-                    <div class = "form-group">
-                      <label for = "l_name">Last Name :</label>
-                      <input type = "text" class = "form-control" id = "l_name" name = "l_name" placeholder="Last Name"/>
-                    </div>
-                    <div class = "form-group">
-                      <label for = "bday">Birthday :</label>
-                      <input type = "text" class = "form-control" id = "bday" name = "bday" placeholder="Birthday"/>
-                    </div>
-                    <div class = "form-group">
-                      <label for = "contact">Contact # :</label>
-                      <input type = "text" class = "form-control" id = "contact" name = "contact" placeholder="Contact Number"/>
-                    </div>
-                </form>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save Changes</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!-- end modal -->
+  
   <script type="text/javascript" src="assets/js/script.js"></script>
   <script type="text/javascript" src="assets/js/main.js"></script>
   <script type="text/javascript" src="assets/js/login.js"></script>

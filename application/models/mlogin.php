@@ -28,14 +28,13 @@ class Mlogin extends CI_Model {
         		$usertype = $row->UserType;
         		$userid = $row->UserID;
 
-        		$sql = "SELECT * FROM $table WHERE UserID='$userid'";
+        		$sql = "SELECT * FROM user_details WHERE UserID='$userid'";
         		$q = $this->db->query($sql);
         		$rowx = $q->row();
         		$session = array('userid' => $userid,
         						 'username' => $row->UserName,
-        						 'usertype' => $row->UserType,
-        						 '');
-
+        						 'usertype' => $row->UserType
+        						 );
         		$this->session->set_userdata($session);
         	}else{
         		$data = 2; //incorrect password
@@ -46,5 +45,17 @@ class Mlogin extends CI_Model {
        	return $data;
      }
 
-	
+	function checkusername(){
+		$uname = $this->input->post('uname');
+		$sql = "SELECT * FROM user_accounts WHERE UserName = '$uname'";
+		$q = $this->db->query($sql);
+
+		if($q->num_rows() > 0){
+			$data  = 1;
+		}else{
+			$data = 0;
+		}
+
+		return $data;
+	}
 }

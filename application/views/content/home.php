@@ -557,3 +557,143 @@
       </div>
     </div>
     <!-- End Content -->
+<!-- modal edit profile -->
+    <div class="modal fade" id = "modal_profile" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Update Profile</h4>
+          </div>
+          <div class="modal-body">
+            <div class = "row">
+              <div class = "col-xs-9">
+                <form>  
+                    <div class = "form-group">
+                      <label for = "f_name">First Name :</label>
+                      <input type = "text" class = "form-control" id = "f_name" name = "f_name" placeholder="First Name"/>
+                    </div>
+                    <div class = "form-group">
+                      <label for = "l_name">Last Name :</label>
+                      <input type = "text" class = "form-control" id = "l_name" name = "l_name" placeholder="Last Name"/>
+                    </div>
+                    <div class = "form-group">
+                      <label for = "bday">Birthday :</label>
+                      <input type = "text" class = "form-control" id = "bday" name = "bday" placeholder="Birthday"/>
+                    </div>
+                    <div class = "form-group">
+                      <label for = "contact">Contact # :</label>
+                      <input type = "text" class = "form-control" id = "contact" name = "contact" placeholder="Contact Number"/>
+                    </div>
+                </form>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save Changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- end modal -->
+  </div>
+
+    <!-- modal edit profile -->
+    <div class="modal fade" id = "modal_registration" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Registration</h4>
+          </div>
+          <div class="modal-body">
+            <div class = "row">
+              <div class = "col-xs-9" style = "margin-left:92px">
+                <form>  
+
+                    <!-- Start registration Carousel -->
+                    <div class="custom-carousel show-one-slide touch-carousel" data-appeared-items="1">
+                      <!-- Testimonial 1 -->
+                      <div class="classic-testimonials item">
+                         <!-- Classic Heading -->
+                       <h4 class="classic-title"><span>STEP 1 : Please Choose Account Type</span></h4>
+                          <div class = "form-group">
+                            <select class = "form-control" id = "usertype" name = "usertype" >
+                                <option value = "1">Service Provider</option>
+                                <option value = "2">Client</option>
+                            </select>
+                          </div>
+                          
+                      </div>
+                      <!-- Testimonial 2 -->
+                      <div class="classic-testimonials item">
+                        <!-- Classic Heading -->
+                       <h4 class="classic-title"><span>STEP 2 : Choose Subscription Plan</span></h4>
+                          <div class = "form-group">
+                           <select class = "form-control" id = "subscriptionplan" name = "subscriptionplan" >
+                                <option value = "2">Premium</option>
+                                <option value = "1">Free 30 Day Trial</option>
+                            </select>
+                          </div>
+                      </div>
+                      <!-- registration 3 -->
+                      <div class="classic-testimonials item">
+                        <!-- Classic Heading -->
+                       <h4 class="classic-title"><span>STEP 3 : Personal Information</span></h4>
+                        <div class = "form-group">
+                            <label for = "regf_name">First Name :</label>
+                            <input type = "text" class = "form-control" id = "regf_name" name = "regf_name" placeholder="First Name"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regl_name">Last Name :</label>
+                            <input type = "text" class = "form-control" id = "regl_name" name = "regl_name" placeholder="Last Name"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regbday">Birthday :</label>
+                            <input type = "text" class = "form-control" id = "regbday" name = "regbday" placeholder="Birthday"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regcontact">Contact # :</label>
+                            <input type = "text" class = "form-control" id = "regcontact" name = "regcontact" placeholder="Contact Number"/>
+                          </div>
+                          
+                      </div>
+                      <!-- registration 3 -->
+                      <div class="classic-testimonials item">
+                        <!-- Classic Heading -->
+                       <h4 class="classic-title"><span>STEP 3 : Account Setup</span></h4>
+                        <div class = "form-group">
+                            <label for = "reguname" id="label_reguname" data-placement="right" data-toggle="popover">Username : </label>
+                            <input type = "text" class = "form-control" id = "reguname" name = "reguname" placeholder="Username"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regpwd" id="label_regpwd" data-placement="top" data-toggle="popover">Enter Password : <span class ="text-info">Minimum of 8 and maximum of 10 characters.<span></label>
+                            <input type = "password" class = "form-control" id = "regpwd" name = "regpwd" placeholder="Enter Password"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regconfirmpwd" id="label_regconfirmpwd" data-placement="top-right" data-toggle="popover">Re-enter Password :</label>
+                            <input type = "password" class = "form-control" id = "regconfirmpwd" name = "regconfirmpwd" placeholder="Re-enter Password"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "regemail">Email :</label>
+                            <input type = "text" class = "form-control" id = "regemail" name = "regemail" placeholder="Email"/>
+                          </div>
+                      </div>
+                    </div>
+                    <!-- End REGISTRATION Carousel -->
+
+                </div>
+                <!-- End Services Icons -->
+                    
+                </form>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+            <button type="button" class="btn btn-primary">Register</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+    <!-- end modal -->

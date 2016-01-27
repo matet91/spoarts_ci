@@ -29,12 +29,18 @@ class Service_provider extends CI_Controller {
 	public function index()
 	{
 		
-		
+		if($this->session->userdata('usertype')==0 ){
+			$content = 'service_provider.php';
+			$title = "Service Provider";
+		}else{
+			$content = 'services.php';
+			$title = "Services";
+		}
 		$data = array('header' => 'header.php',
-					  'content' => 'content/service_provider.php',
+					  'content' => 'content/'.$content,
 					  'menu' => 'menu.php',
 					  'footer' => 'footer.php',
-					  'title' => 'Service Provider');
+					  'title' => $title);
 		$this->load->view('index',$data);
 	}
 	

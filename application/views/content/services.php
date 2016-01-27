@@ -361,4 +361,4 @@
   </div>
     <!-- end modal -->
     <!-- javascripts -->
-    <script type="text/javascript" src="js/services.js"></script>
+    <script type="text/javascript" src="assets/js/services.js"></script>

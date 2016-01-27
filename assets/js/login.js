@@ -51,4 +51,20 @@ $(document).ready(function(){
 			});
 		}
 	});
+
+	$("#btn-logout").click(function(){
+		logout();
+	});
 });
+
+
+function logout(){
+	$.ajax({
+		url:'login/logout',
+		dataType:'json',
+		type: 'POST',
+		success:function(msg){
+			window.location = "index";
+		}
+	});
+}

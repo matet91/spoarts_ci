@@ -85,6 +85,10 @@
                   <li><a href="service_provider" >Service Providers</a></li>
                   <li><a href="?content=subscription_settings">Subscription Setttings</a></li>
                 </ul>
+                <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
+                 <li> <a href="service_provider" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
+                 <li> <a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
+                <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
                 <?php }else{ ?>
                 <a href="#" class = "<?php echo ($content == 'service_provider.php'?'active':'');?>">Clubs</a>
                 <ul class="dropdown">
@@ -118,6 +122,10 @@
               <li><a href="?content=subscription_settings">Subscription Settings</a>
               </li>
             </ul>
+            <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
+            <li><a href="service_provider" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
+            <li><a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
+            <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
             <?php }else{?>
               <a href="#" class = "<?php echo ($content == 'service_provider.php'?'active':'');?>">Clubs</a>
               <ul class="dropdown">

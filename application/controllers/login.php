@@ -46,4 +46,12 @@ class Login extends CI_Controller {
 		$pwd = $this->encrypt->encode("1234");
 		$this->db->query("update user_accounts set Password='$pwd'");
 	}
+
+	function logout(){
+		$this->session->sess_destroy();
+	}
+	function checkusername(){
+		$data = $this->mlogin->checkusername();
+		echo json_encode($data);
+	}
 }
