@@ -286,8 +286,6 @@ function view_studentinstructor(id){
   var top = parseInt(height)/7-parseInt(dialogHeight);
   $("#modal_viewlist").modal('show').attr('style','top:'+top+'px !important;');
   
-  var table = $("#tbl-instructor").dataTable();
-  table.fnFilter(id);
 }
 
 function instructorList(id){
