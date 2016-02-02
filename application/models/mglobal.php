@@ -80,4 +80,5 @@ class mglobal extends CI_Model {
 
 		return $result;
 	}
+
 }

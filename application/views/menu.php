@@ -3,6 +3,7 @@
       <div class="navbar navbar-default navbar-top">
         <div class="container">
           <div class="navbar-header">
+            
             <!-- Stat Toggle Nav Link For Mobiles -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <i class="fa fa-bars"></i>
@@ -94,5 +95,11 @@
         </ul>
         <!-- Mobile Menu End -->
 
+      </div>
+      <div id="message">
+        <div style="padding: 5px;">
+            <div id="inner-message" class="alert alert-error">
+            </div>
+        </div>
       </div>
       <!-- End Header ( Logo & Naviagtion ) -->

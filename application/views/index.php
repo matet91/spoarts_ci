@@ -18,9 +18,11 @@
     <header class="clearfix">
       <?php $this->load->view($menu); ?>
     </header>
+    
     <!-- End Header -->
 
     <!-- Start Content -->      
+
     <?php $this->load->view($content);?>
     <!-- End Content -->
 
@@ -235,6 +237,37 @@
     <!-- end modal -->
   </div>
 <!-- end security settings -->
+
+<!-- modal security -->
+    <div class="modal fade" id = "modal_security" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Authentication</h4>
+          </div>
+          <div class="modal-body">
+            <div class = "row">
+            <div class="alert" role="alert" style = "display:none"></div>
+              <form  id="formsecurity">
+                <div class = "col-md-8">  
+                  <div class = "form-group">
+                    <label for = "securitypwd"><?=$this->session->userdata('securityquestion');?></label><input type = "password" placeholder="Service Password" class = "form-control" id = "sec_pwd" name = "sec_pwd"/>
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+            <button type="button" id= "btn-continue" class="btn btn-primary">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+    <!-- end modal -->
+
+    
   <script type="text/javascript" src="assets/js/script.js"></script>
   <script type="text/javascript" src="assets/js/main.js"></script>
   <script type="text/javascript" src="assets/js/login.js"></script>

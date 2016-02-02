@@ -21,10 +21,14 @@
     </div>
     <!-- End Page Banner -->
 
-
+<!-- hidden text boxes -->
+<input type = "hidden" id = "action_type"/>
+<!-- removing services, set this textbox below of the service id that will be deleted -->
+<input type = "hidden" id = "sid"/> 
     <!-- Start Content -->
     <div id="content">
       <div class="container">
+        
         <div class="row sidebar-page"> 
             <div class="page-content" id = "content-services">
             <!-- picture -->
@@ -45,7 +49,9 @@
                 </div>
               </div>
               <div class="col-md-8">
+                <br/>
               <div class="alert" role="alert" style = "display:none"></div>
+
                 <form class="form-horizontal" id = "form-clinic">
                   
                   <div class="form-group">
@@ -92,12 +98,15 @@
                 </form>
               </div>
               <!-- Divider -->
-            <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
-              <div class="col-sm-10">
-                <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services"><span class = "glyphicon glyphicon-plus"></span></button>
+              <div class = "row">
+                <div class="hr1 margin-top"></div>
+                <div class="col-sm-10">
+                  <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services"><span class = "glyphicon glyphicon-plus"></span></button>
+                </div>
+                <!-- Divider -->
+                <div class="hr1 margin-top"></div>
               </div>
-              <!-- Divider -->
-            <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+              <br/>
               <table id="tbl-services" class="display" cellspacing="0" width="100%">
             </table>
 
@@ -232,6 +241,7 @@
                 </div>
                 <!-- Tab Content 2 -->
                 <div class="tab-pane fade" id="tab-2" id = "instructor-tab">
+                  <input type="text" id = "instHiddenVal" />
                   <?php if($this->session->userdata('usertype') == 1){?>
                   <h4 class="classic-title"><span>Add Instructor</span></h4>
                      <div class="col-sm-10">
@@ -297,6 +307,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">Add Service</h4>
           </div>
+          <input type = "hidden" id = "txtHiddenService" value = "1">
           <div class="modal-body">
             <div class = "row">
             <div class="alert" role="alert" style = "display:none"></div>
@@ -315,7 +326,7 @@
                   </div>
                   <div class = "form-group">
                     <label for = "forserv_desc">Description</label>
-                    <textarea class = "form-control" id = "serviceDesc" name = "serviceDesc"></textarea>
+                    <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
                   </div>
                   <div class = "form-group">
                     <label for = "serv_sched">Schedule</label>
@@ -351,36 +362,5 @@
     </div><!-- /.modal -->
   </div>
     <!-- end modal -->
-
-     <!-- modal security -->
-    <div class="modal fade" id = "modal_security" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Authentication</h4>
-          </div>
-          <div class="modal-body">
-            <div class = "row">
-            <div class="alert" role="alert" style = "display:none"></div>
-              <form  id="formsecurity">
-                <div class = "col-md-8">  
-                  <div class = "form-group">
-                    <label for = "securitypwd"><?=$this->session->userdata('securityquestion');?></label><input type = "password" placeholder="Service Password" class = "form-control" id = "sec_pwd" name = "sec_pwd"/>
-                  </div>
-                </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-continue" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div>
-    <!-- end modal -->
-
-
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/services.js"></script>

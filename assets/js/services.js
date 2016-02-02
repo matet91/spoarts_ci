@@ -35,7 +35,8 @@ $(document).ready(function(){
 
   //save service details to database
   $("#btn-saveServices").click(function(){
-    saveService();
+   var data = validateServiceForm();
+    saveService(data);
   });
 
   $("#clubimage").popover('show');
@@ -44,10 +45,7 @@ $(document).ready(function(){
     $("#clubimage").popover('hide');   
   },6000);
   $("#content-services #btn-update").click(function(){
-      var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-      var top = parseInt(height)/5-parseInt(dialogHeight);
-      $("#modal_security").modal('show');
-      $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
+    $("#action_type").val(1);
       checkClinicFields();
      
   });
@@ -59,12 +57,19 @@ $(document).ready(function(){
       if(pwd.val() == ''){
         pwd.parent().addClass('has-error');
         $("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
+
+        setTimeout(function(){
+          pwd.parent().removeClass('has-error');
+          $("#modal_security .alert").html("").removeClass('alert-danger').hide();
+        },3000);
       }else{
         pwd.parent().removeClass('has-error');
         $("#modal_security .alert").html("").removeClass("alert-danger").hide();
-        checkSecurityPwd(pwd.val());
+        var t = $('#action_type').val();
+        checkSecurityPwd(pwd.val(),t);
       }
   });
+
 
   //validate text fields
   $("#btn-addInstructor").click(function(){
@@ -87,6 +92,7 @@ $(document).ready(function(){
       addInstructor(data);
     }
   });
+  
 });
 
 function getservices(){
@@ -111,7 +117,7 @@ function getservices(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button><button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studinstruct('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studinstruct('+aData[0]+');"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button><button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+');"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -123,9 +129,7 @@ function getservices(){
 
 }
 
-
-function saveService(){
-
+function validateServiceForm(){
   //validate form
   var dataForm = $("#formaddservice").serializeArray();
   var data = {};
@@ -151,7 +155,14 @@ function saveService(){
         }
       }
   });
+  return data;
 
+}
+function saveService(data){
+   var txtHiddenService = $('#txtHiddenService').val();
+
+if(txtHiddenService == 1) var url = "services/addServices";
+else var url = "services/updateServices/"+txtHiddenService;
 //get how many div is using 'has-error' class
 var error = $("#formaddservice .has-error").length;
   if(error > 0){
@@ -159,19 +170,23 @@ var error = $("#formaddservice .has-error").length;
   }else{
     $("#modal_addservices .alert").html("").removeClass('alert-danger').hide();
     $.ajax({
-      url:'services/addServices',
+      url:url,
       data:{data},
       dataType:'JSON',
       type:'POST',
       success:function(msg){
-        var table = $("#tbl-services").DataTable(); 
-        if(msg == 0){
+        var table = $("#tbl-services").DataTable(), dataForm = $("#formaddservice").serializeArray(); 
+        if(msg == true){
 
             $("#modal_addservices .alert").html($("#ServiceName").val()+" Service has been added successfully.").addClass("alert-success").show();
 
             $.each(dataForm, function(i,e){
               $("#"+e.name).val("");
             });
+            setTimeout(function(){
+              $("#modal_addservices .alert").html("").removeClass("alert-success").hide();
+              $("#modal_addservices").modal('hide');
+            },3000);
 
              table.ajax.reload();
         }else{
@@ -180,7 +195,6 @@ var error = $("#formaddservice .has-error").length;
       }
     });
   }
-
 }
 
 function uploadClubpic(){
@@ -225,26 +239,15 @@ function checkClinicFields(){
   if(count > 0){
     $("#content-services  .alert").html("All fields are required.").addClass('alert-danger').show();
   }else{
+      var height = $(window).height();
+      var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
+      var top = parseInt(height)/5-parseInt(dialogHeight);
+      $("#modal_security").modal('show');
+      $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
+
      $("#content-services  .alert").html("").removeClass('alert-danger').hide();
       $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
   }
-}
-
-function checkSecurityPwd(pwd){
-  $.ajax({
-    url:'services/checkSecurityPwd',
-    dataType:'JSON',
-    type:'POST',
-    data:{pwd:pwd},
-    success:function(msg){
-      if(msg == 1){ //if correct
-        saveClinicInfo();
-      }else{//incorrect password
-        $("#modal_security #sec_pwd").parent().addClass('has-error');
-        $("#modal_security .alert").html("Incorrect Password.").addClass("alert-danger").show();
-      }
-    }
-  })
 }
 
 function saveClinicInfo(){
@@ -262,8 +265,7 @@ function saveClinicInfo(){
       if(msg == 1){
         $("#modal_security .alert").html("").hide();
         $("#modal_security").modal('hide');
-        $("#content-services .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();
-
+        $("#message .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();
         setTimeout(function(){
           window.location = 'services';
         },3000);
@@ -279,7 +281,6 @@ function saveClinicInfo(){
 }
 
 function view_studentinstructor(id){
-  
   instructorList(id);
   var height = $(window).height();
   var dialogHeight = $("#modal_viewlist").find('.modal-dialog').outerHeight(true);
@@ -289,7 +290,8 @@ function view_studentinstructor(id){
 }
 
 function instructorList(id){
-  $('#tbl-instructor').DataTable( {
+
+  var table = $('#tbl-instructor').DataTable( {
     "bProcessing":true, 
     "bServerSide":true,
     "bRetrieve": true,
@@ -354,5 +356,72 @@ function addInstructor(data){
         $("#instructor-tab .alert").html("An error occurred. Please try again later or contact your Administrator.").addClass('alert-danger').show();
       }
     }
+  });
+}
+
+function editServices(id){
+  var height = $(window).height();
+  var dialogHeight = $("#modal_viewlist").find('.modal-dialog').outerHeight(true);
+  var top = parseInt(height)/5-parseInt(dialogHeight);
+  $("#modal_addservices").modal('show').attr('style','top:'+top+'px !important;');
+  $("#modal_addservices").modal('show');
+  $('#modal_addservices .modal-title').html("Edit Services");
+  
+  getData(id, 1);
+}
+
+
+function getData(id, type){
+  $("#txtHiddenService").val(id); //2 for update
+  $.ajax({
+    url:'services/getData',
+    data:{id:id, type:type},
+    dataType:'JSON',
+    type:'POST',
+    success: function(msg){
+      var frmdata = $("#formaddservice").serializeArray();
+      $.each(frmdata, function(i,e){
+          var name = e.name;
+          $("#formaddservice #"+name).val(msg[0][name]);
+      });
+    }
+  });
+}
+
+function removeService(id){
+  $("#action_type").val(2);
+  $('#sid').val(id);
+  var height = $(window).height();
+  var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
+  var top = parseInt(height)/5-parseInt(dialogHeight);
+  $("#modal_security").modal('show');
+  $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
+
+ $("#content-services  .alert").html("").removeClass('alert-danger').hide();
+  $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
+}
+
+function deleteService(){
+  var sid = $("#sid").val();
+
+  $.ajax({
+      url: 'services/deleteService/'+sid,
+      dataType: 'JSON',
+      type:'GET',
+      success:function(msg){
+        if(msg == true){
+            $("#modal_security .alert").html("").hide();
+            $("#modal_security").modal('hide');
+            $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();
+            setTimeout(function(){
+              $("#message .alert").html("").removeClass("alert-success").show();
+              var table = $("#tbl-services").DataTable();
+              table.ajax.reload();
+            },2000);
+        }else{
+
+        }
+
+      }
   });
 }

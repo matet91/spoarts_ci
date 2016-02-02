@@ -49,7 +49,19 @@
   <link rel="stylesheet" type="text/css" href="assets/css/colors/purple.css" title="purple" media="screen" />
   <link rel="stylesheet" type="text/css" href="assets/css/colors/sky-blue.css" title="sky-blue" media="screen" />
   <link rel="stylesheet" type="text/css" href="assets/css/colors/yellow.css" title="yellow" media="screen" />
-  
+  <style>
+    #message {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index:999999;
+    }
+    #inner-message {
+      text-align: center;
+        margin: 0 auto;
+    }
+  </style>
 
 
   <!-- Margo JS  -->

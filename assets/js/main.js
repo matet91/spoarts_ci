@@ -1,4 +1,10 @@
 $(document).ready(function(){
+	$('.modal').on('hidden.bs.modal', function(e){
+	      var table = $(".modal .dataTable").DataTable();
+	      table.destroy(); 
+
+	  });
+
 	var height = $(window).height();
 	$("#spbirthday").datepicker({
 		'dateFormat':'yy-mm-dd'
@@ -33,8 +39,6 @@ $(document).ready(function(){
 	$("#regemail").focus(function(){
 		comparepassword('regpwd','regconfirmpwd','label_regconfirmpwd','regemail');
 	});
-
-	
 
 	//check password length
 
@@ -370,4 +374,29 @@ function verifyPassword(c){
 			}
 		}
 	});
+}
+
+function checkSecurityPwd(pwd,t){
+  $.ajax({
+    url:'services/checkSecurityPwd',
+    dataType:'JSON',
+    type:'POST',
+    data:{pwd:pwd},
+    success:function(msg){
+      if(msg == 1){ //if correct
+      	switch(t){
+      		case '1': //save clinic info under services menu of service provider's dashboard
+      				saveClinicInfo();
+      		break;
+
+      		case '2': //delete service
+      				deleteService();
+      		break;
+      	}
+      }else{//incorrect password
+        $("#modal_security #sec_pwd").parent().addClass('has-error');
+        $("#modal_security .alert").html("Incorrect Password.").addClass("alert-danger").show();
+      }
+    }
+  });
 }

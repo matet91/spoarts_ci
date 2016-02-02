@@ -16,13 +16,8 @@ class mservices extends CI_Model {
 		$data['SPID']=$this->session->userdata('userid');
 		$data['ServiceStatus'] = 1;
 		$insert = $this->db->insert('services',$data);
-		if($insert){//if successful return 0
-			$error = 0;
-		}else{
-			$error = 1;
-		}
 
-		return $error;
+		return $insert;
 	}
 
 	function loadprofile(){
@@ -159,6 +154,35 @@ class mservices extends CI_Model {
 		$data['ins_status'] = 1;
 		$q = $this->db->insert('instructors',$data);
 
+		return $q;
+	}
+
+	function getData(){
+		$id = $this->input->post('id');
+		$type = $this->input->post('type');
+
+		switch($type){
+			case 1: //services
+					$sql = "SELECT * FROM services WHERE ServiceID = '$id'";
+			break;
+		}
+
+		$q = $this->db->query($sql);
+
+		return $q->result();
+	}
+
+	function updateServices($id){
+		$data = $this->input->post('data');
+		$this->db->where('ServiceId',$id);
+		$q = $this->db->update('services',$data);
+
+		return $q;
+	}
+	
+	function deleteService($id){
+		$this->db->where('ServiceId',$id);
+		$q = $this->db->delete('services');
 		return $q;
 	}
 }
