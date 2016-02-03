@@ -25,6 +25,13 @@
 <input type = "hidden" id = "action_type"/>
 <!-- removing services, set this textbox below of the service id that will be deleted -->
 <input type = "hidden" id = "sid"/> 
+
+<!-- update/add indicator for Instructors -->
+<input type="hidden" id = "instHiddenVal"/>
+
+<!-- type to delete. 1-services,2-instructors, 3-students -->
+<input type="hidden" id = "deleteType"/>
+
     <!-- Start Content -->
     <div id="content">
       <div class="container">
@@ -241,7 +248,7 @@
                 </div>
                 <!-- Tab Content 2 -->
                 <div class="tab-pane fade" id="tab-2" id = "instructor-tab">
-                  <input type="text" id = "instHiddenVal" />
+                  
                   <?php if($this->session->userdata('usertype') == 1){?>
                   <h4 class="classic-title"><span>Add Instructor</span></h4>
                      <div class="col-sm-10">
@@ -278,6 +285,13 @@
                           <div class = "form-group">
                             <label for = "serv_sched">Room :</label>
                             <input type="text" placeholder="Room" class = "form-control" id = "ins_room" name = "ins_room"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "serv_sched">Room :</label>
+                            <select class = "form-control" id = "ins_status" name = "ins_status">
+                              <option value = "1">Active</option>
+                              <option value = "0">Inactive</option>
+                            </select>
                           </div>
                         </div>
                       </form>

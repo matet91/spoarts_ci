@@ -390,7 +390,7 @@ function checkSecurityPwd(pwd,t){
       		break;
 
       		case '2': //delete service
-      				deleteService();
+      				removeData();
       		break;
       	}
       }else{//incorrect password

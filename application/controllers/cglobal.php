@@ -55,4 +55,14 @@ class cglobal extends CI_Controller {
 
 		echo json_encode($data);
 	}
+
+	function test(){
+		$content = 'test.php';
+		$data = array('header' => 'header.php',
+					  'content' => 'content/'.$content,
+					  'menu' => '',
+					  'footer' => '',
+					  'title' => 'Test');
+		$this->load->view('content/test',$data);
+	}
 }

@@ -16,7 +16,7 @@
     <!-- Start Header -->
     <div class="hidden-header"></div>
     <header class="clearfix">
-      <?php $this->load->view($menu); ?>
+      <?php ($menu !=''?$this->load->view($menu):''); ?>
     </header>
     
     <!-- End Header -->
@@ -29,7 +29,7 @@
 
     <!-- Start Footer -->
     <footer>
-      <?php $this->load->view($footer); ?>
+      <?php ($footer!=''?$this->load->view($footer):''); ?>
     </footer>
     <!-- End Footer -->
 
@@ -259,7 +259,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-continue" class="btn btn-primary">Save</button>
+            <button type="button" id= "btn-continue" class="btn btn-primary">Continue</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

@@ -77,12 +77,17 @@ class Services extends CI_Controller {
 	}
 
 	function updateServices($id){
-		$data = $this->mservices->updateServices($id);
+		$data = $this->mservices->UpdateData($id,1);
 		echo json_encode($data);
 	}
 
-	function deleteService($id){
-		$data = $this->mservices->deleteService($id);
+	function removeData($id,$type){
+		$data = $this->mservices->removeData($id,$type);
+		echo json_encode($data);
+	}
+
+	function updateInstructor($id){
+		$data = $this->mservices->UpdateData($id,2);
 		echo json_encode($data);
 	}
 }

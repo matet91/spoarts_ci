@@ -89,8 +89,8 @@ $(document).ready(function(){
       $("#instructor-tab .alert").html("All fields are required.").addClass('alert-danger').show();
     }else{
       $('#instructor-tab .alert').html('').removeClass('alert-danger').hide();
-      addInstructor(data);
-    }
+        addInstructor(data);
+      }
   });
   
 });
@@ -117,7 +117,7 @@ function getservices(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button><button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+');"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -161,8 +161,13 @@ function validateServiceForm(){
 function saveService(data){
    var txtHiddenService = $('#txtHiddenService').val();
 
-if(txtHiddenService == 1) var url = "services/addServices";
-else var url = "services/updateServices/"+txtHiddenService;
+if(txtHiddenService == 1){ 
+  var url = "services/addServices";
+  var errorMsg = $("#ServiceName").val()+" Service has been added successfully.";
+}else{ 
+  var url = "services/updateServices/"+txtHiddenService;
+  var errorMsg = $("#ServiceName").val()+" Service info has been updated successfully";
+}
 //get how many div is using 'has-error' class
 var error = $("#formaddservice .has-error").length;
   if(error > 0){
@@ -178,7 +183,7 @@ var error = $("#formaddservice .has-error").length;
         var table = $("#tbl-services").DataTable(), dataForm = $("#formaddservice").serializeArray(); 
         if(msg == true){
 
-            $("#modal_addservices .alert").html($("#ServiceName").val()+" Service has been added successfully.").addClass("alert-success").show();
+            $("#modal_addservices .alert").html(errorMsg).addClass("alert-success").show();
 
             $.each(dataForm, function(i,e){
               $("#"+e.name).val("");
@@ -189,6 +194,7 @@ var error = $("#formaddservice .has-error").length;
             },3000);
 
              table.ajax.reload();
+             $('#txtHiddenService').val(1);
         }else{
           $("#modal_addservices .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-success").show();
         }
@@ -309,7 +315,7 @@ function instructorList(id){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[6] == 1 ){
-        $('td:eq(5)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button><button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studinstruct('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studinstruct('+aData[0]+');"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(5)', nRow).html('<button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="deleteInstructor('+aData[0]+',2);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -337,16 +343,24 @@ function services(){
 }
 
 function addInstructor(data){
+  var instHiddenVal = $('#instHiddenVal').val();
 
+  if(instHiddenVal != ''){
+    var url = 'services/updateInstructor/'+instHiddenVal;
+    var errorMsg = "Changes saved.";
+  }else{ 
+    var url = 'services/addInstructor';
+    var errorMsg = "New Instructor has been added to your Service."
+  }
   $.ajax({
-    url:'services/addInstructor',
+    url:url,
     data:{data:data},
     dataType:'JSON',
     type:'POST',
     success: function(msg){
       var table = $("#tbl-instructor").DataTable();
       if(msg == true){
-        $("#instructor-tab .alert").html("New Instructor has been added to your Service.").addClass('alert-success').show();
+        $("#instructor-tab .alert").html(errorMsg).addClass('alert-success').show();
 
         $.each(data, function(i,e){
             $('#'+e.name).val('');
@@ -370,26 +384,47 @@ function editServices(id){
   getData(id, 1);
 }
 
+function updateInstructor(id){
+  getData(id, 2);
+}
 
 function getData(id, type){
-  $("#txtHiddenService").val(id); //2 for update
+  switch(type){
+    case 1: //update services
+          $("#txtHiddenService").val(id); //2 for update
+    break;
+    case 2: //instructors
+          $('#instHiddenVal').val(id);
+    break;
+  }
+  
   $.ajax({
     url:'services/getData',
     data:{id:id, type:type},
     dataType:'JSON',
     type:'POST',
     success: function(msg){
-      var frmdata = $("#formaddservice").serializeArray();
+      switch(type){
+        case 1: //services
+              var frmName = "#formaddservice";
+        break;
+
+        case 2: //instructors
+              var frmName = "#formaddinstructor";
+        break;
+      }
+      var frmdata = $(frmName).serializeArray();
       $.each(frmdata, function(i,e){
           var name = e.name;
-          $("#formaddservice #"+name).val(msg[0][name]);
+          $(frmName+" #"+name).val(msg[0][name]);
       });
     }
   });
 }
 
-function removeService(id){
+function removeService(id,t){
   $("#action_type").val(2);
+  $('#deleteType').val(t);
   $('#sid').val(id);
   var height = $(window).height();
   var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
@@ -401,15 +436,16 @@ function removeService(id){
   $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
 }
 
-function deleteService(){
+function removeData(){
+  var deleteType =  $('#deleteType').val();
   var sid = $("#sid").val();
-
   $.ajax({
-      url: 'services/deleteService/'+sid,
+      url: 'services/removeData/'+sid+"/"+deleteType,
       dataType: 'JSON',
       type:'GET',
       success:function(msg){
         if(msg == true){
+             $('#deleteType').val('');
             $("#modal_security .alert").html("").hide();
             $("#modal_security").modal('hide');
             $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();

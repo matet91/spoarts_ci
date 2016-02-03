@@ -165,24 +165,50 @@ class mservices extends CI_Model {
 			case 1: //services
 					$sql = "SELECT * FROM services WHERE ServiceID = '$id'";
 			break;
+
+			case 2: //instructors
+					$sql = "SELECT * FROM instructors WHERE ins_id = '$id'";
+			break;
 		}
 
 		$q = $this->db->query($sql);
 
 		return $q->result();
 	}
-
-	function updateServices($id){
+	function UpdateData($id, $type){
+		switch($type){
+			case 1: //services
+					$field = "ServiceId";
+					$table = "services";
+			break;
+			case 2: //instructor
+					$field = "ins_id";
+					$table = "instructors";
+			break;
+		}
 		$data = $this->input->post('data');
-		$this->db->where('ServiceId',$id);
-		$q = $this->db->update('services',$data);
+		$this->db->where($field,$id);
+		$q = $this->db->update($table,$data);
 
 		return $q;
 	}
 	
-	function deleteService($id){
-		$this->db->where('ServiceId',$id);
-		$q = $this->db->delete('services');
+	function removeData($id,$type){
+		switch($type){
+			case 1: //services
+					$field = 'ServiceId';
+					$table = "services";
+			break;
+
+			case 2: //instructors
+					$field = "isn_id";
+					$table = "instructors";
+			break;
+		}
+		$this->db->where($field,$id);
+		$q = $this->db->delete($table);
 		return $q;
 	}
+
+
 }
