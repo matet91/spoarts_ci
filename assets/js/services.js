@@ -461,3 +461,20 @@ function removeData(){
       }
   });
 }
+
+
+function loadInterest(t){
+  $.ajax({
+    url: 'cglobal/loadInterest/'+t,
+    dataType:'JSON',
+    type:'POST',
+    success: function(msg){
+      var opt = "";
+      $.each(msg, function(i,e){
+            opt += "<option value = "+e.interest_id+">"+e.interest_name+"</option>";
+      });
+
+      $('#interest_id').html(opt);
+    }
+  });
+}

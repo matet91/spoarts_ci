@@ -25,8 +25,18 @@
     <!-- Start Content -->
     <div id="content">
       <div class="container">
-      <textarea id = "questions"></textarea>
-		<button class="btn btn-primary btn-sm" id="btn-saveQ" data-toggle="tooltip" data-placement="top" title="Save Changes"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
+        <div class = "row">
+          <textarea id = "questions"></textarea>
+    		<button class="btn btn-primary btn-sm" id="btn-saveQ" data-toggle="tooltip" data-placement="top" title="Save Changes"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
+      </div>
+      <div class = "row">
+       <input type ="text" name = "interest" id = "interest" placeholder="Interest Name">
+       <select id = "interest_type" >
+          <option value = "0">Sports</option>
+          <option value = "1">Arts</option>
+       </select>
+    <button class="btn btn-primary btn-sm" id="btn-saveInterest" data-toggle="tooltip" data-placement="top" title="Save Interest"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
+      </div>
       </div>
     </div>
     <!-- End Content -->

@@ -12,7 +12,7 @@
             <a class="navbar-brand" href="index.html"><img alt="" src="assets/images/logo.png"></a>
           </div>
           <div class="navbar-collapse collapse">
-            <!-- Stat Search -->
+            
             <div class="search-side">
               <button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Notifications"><span class = "glyphicon glyphicon-bell"></span> 3</button>
             </div>
@@ -29,16 +29,16 @@
                   <li><a href="service_provider" >Service Providers</a></li>
                   <li><a href="?content=subscription_settings">Subscription Setttings</a></li>
                 </ul>
-                </li>
+              </li>
                 <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
                  <li> <a href="services" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
                  <li> <a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
                 <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
                 <?php }else{ ?>
-                <a href="#" class = "<?php echo ($content == 'service_provider.php'?'active':'');?>">Clubs</a>
+                <a href="#" class = "<?php echo ($content == 'content/clinics.php'?'active':'');?>">Clinics</a>
                 <ul class="dropdown">
-                  <li><a href="service_provider" >Arts</a></li>
-                  <li><a href="?content=subscription_settings">Sports</a></li>
+                  <li><a href="clinics?type=1">Arts</a></li>
+                  <li><a href="clinics?type=0">Sports</a></li>
                 </ul>
                 <?php } ?>
               </li>
@@ -75,7 +75,7 @@
             <li><a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
             <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
             <?php }else{?>
-              <a href="#" class = "<?php echo ($content == 'service_provider.php'?'active':'');?>">Clubs</a>
+              <a href="clinics" class = "<?php echo ($content == 'clinics.php'?'active':'');?>">Clinics</a>
               <ul class="dropdown">
                 <li><a href="service_provider">Arts</a>
                 </li>

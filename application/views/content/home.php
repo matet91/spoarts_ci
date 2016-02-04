@@ -37,7 +37,7 @@
         <span><strong>SpoArts</strong> for the highest</span>
     </h2>
                 <h3 class="animated5">
-     <span>Check out our clubs</span>
+     <span>Check out our Clinics</span>
  </h3>
                 <p class="animated6"><a href="#" class="slider btn btn-system btn-large">Arts</a></p>
                 <p class="animated6"><a href="#" class="slider btn btn-system btn-large">Sports</a></p>

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class cglobal extends CI_Controller {
+class Clinics extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,47 +22,25 @@ class cglobal extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('mglobal');
+		$this->load->model('mclinics');
 	}
 
 	public function index()
 	{
-		$content = 'global.php';
+		$content = 'clinics.php';
+		$type = $this->input->get('type');
+		$title = ($type == 1)?"Arts Clinic":"Sports Clinic";
+		
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,
 					  'menu' => 'menu.php',
 					  'footer' => 'footer.php',
-					  'title' => 'Configuration');
+					  'title' => $title);
 		$this->load->view('index',$data);
-	}	
-
-
-	function addQuestion(){
-		$data = $this->mglobal->addQuestion();
-		echo json_encode($data);
 	}
 
-	function dropdown($case){
-		switch($case){
-			case 1:
-					$userid = $this->session->userdata('userid');
-					$table = "services";
-					$where = " SPID = '$userid' AND ServiceStatus = 1";
-			break;
-		}
-
-		$data = $this->mglobal->dropdown($table,$case,$where);
-
-		echo json_encode($data);
-	}
-
-	function addInterest(){
-		$data = $this->mglobal->addInterest();
-		echo json_encode($data);
-	}
-
-	function loadInterest($t){
-		$data = $this->mglobal->loadInterest($t);
+	function loadServices($c,$search=null){
+		$data = $this->mclinics->loadServices($c,$search);
 		echo json_encode($data);
 	}
 }

@@ -2,6 +2,10 @@ $(document).ready(function(){
 	$("#btn-saveQ").click(function(){
 		btnSave();
 	});
+
+	$("#btn-saveInterest").click(function(){
+		btnAddInterest();
+	});
 });
 
 function btnSave(){
@@ -12,6 +16,13 @@ function btnSave(){
 		alert("Please enter a security question.");
 	}
 }
+
+function btnAddInterest(){
+	var i = $("#interest").val();
+	if(i != '') saveInterest(i);
+	else alert("Please enter interest name.");
+}
+
 
 function saveQuestions(q){
 	$.ajax({
@@ -25,6 +36,24 @@ function saveQuestions(q){
 			}else{
 				alert("Can't save. Please check query.");
 			}
+		}
+	});	
+}
+
+
+function saveInterest(q){
+	var type = $('#interest_type').val();
+	$.ajax({
+			url: 'cglobal/addInterest',
+			dataType:'JSON',
+			type:'POST',
+			data:{interest:q, type:type},
+			success:function(msg){
+				if(msg == 1){
+					alert("Successfully added.");
+				}else{
+					alert("Can't save. Please check query.");
+				}
 		}
 	});	
 }

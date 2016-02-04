@@ -49,6 +49,7 @@
   <link rel="stylesheet" type="text/css" href="assets/css/colors/purple.css" title="purple" media="screen" />
   <link rel="stylesheet" type="text/css" href="assets/css/colors/sky-blue.css" title="sky-blue" media="screen" />
   <link rel="stylesheet" type="text/css" href="assets/css/colors/yellow.css" title="yellow" media="screen" />
+  <link rel="stylesheet" type="text/css" href="assets/css/chosen.min.css" title="yellow" media="screen" />
   <style>
     #message {
         position: absolute;
@@ -84,6 +85,8 @@
   <script type="text/javascript" src="assets/js/jquery.parallax.js"></script>
   <script type="text/javascript" src="assets/js/jquery.slicknav.js"></script>
   <script type="text/javascript" src="assets/js/jquery.dataTables.min.1.10.10.js"></script>
+  <script type="text/javascript" src="assets/js/chosen.proto.min.js"></script>
+  <script type="text/javascript" src="assets/js/chosen.jquery.min.js"></script>
 
   <!--<![if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->

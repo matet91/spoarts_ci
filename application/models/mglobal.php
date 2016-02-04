@@ -81,4 +81,23 @@ class mglobal extends CI_Model {
 		return $result;
 	}
 
+	function addInterest(){
+		$interest = $this->input->post('interest');
+		$type = $this->input->post('type');
+
+		$q = $this->db->insert('interest',array('interest_name'=>$interest,'interest_type'=>$type));
+
+		if($q == true) return 1;
+		else return 0;
+	}
+
+	function loadInterest($t){
+		$this->db->order_by('interest_name');
+		$this->db->where('interest_type',$t);
+		$this->db->select('*');
+		$q = $this->db->get('interest');
+
+		$result = $q->result();
+		return $result;
+	}
 }

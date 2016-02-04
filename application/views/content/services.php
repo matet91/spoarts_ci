@@ -34,7 +34,6 @@
 
     <!-- Start Content -->
     <div id="content">
-      <div class="container">
         
         <div class="row sidebar-page"> 
             <div class="page-content" id = "content-services">
@@ -264,8 +263,6 @@
                           <div class = "form-group">
                             <label for = "service_id">Select Service :</label>
                             <select class = "form-control" id = "service_id" name = "service_id">
-                              <option value = "0">Sports</option>
-                              <option value = "1">Arts</option>
                             </select>
                           </div>
                           <div class = "form-group">
@@ -328,10 +325,16 @@
               <form  id="formaddservice">  
                 <div class="col-md-6">
                   <div class = "form-group">
-                    <label for = "securitypwd">Service Type</label>
-                    <select class = "form-control" id = "serv_type" name = "ServiceType">
+                    <label for = "ServiceType">Service Type</label>
+                    <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
+                      <option value = "">Please Select Service Type</option>
                       <option value = "0">Sports</option>
                       <option value = "1">Arts</option>
+                    </select>
+                    <br/>
+                    <label for = "interest_id" >Interest List</label>
+                    <select class = "form-control" id = "interest_id" name = "interest_id">
+                      <option value = "">Please select service type to populate this dropdown</option>
                     </select>
                   </div>
                   <div class = "form-group">
