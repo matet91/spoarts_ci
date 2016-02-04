@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2016 at 10:47 PM
+-- Generation Time: Feb 04, 2016 at 10:57 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `bookmark` (
   `bm_id` int(11) NOT NULL,
   `clinic_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
-  `service_id` int(11) NOT NULL
+  `service_id` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
