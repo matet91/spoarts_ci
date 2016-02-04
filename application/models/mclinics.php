@@ -21,5 +21,12 @@ class mclinics extends CI_Model {
 	//	echo $this->db->last_query();
 		return $q->result();
 	}
-		
+	
+	function bookmark(){
+		$serviceid = $this->input->post('serviceid');
+		$clinicid = $this->input->post('clinicid');
+		$userid = $this->session->userdata('userid');
+		$data = array('service_id'=>$serviceid,'clinic_id'=>$clinicid,'client_id'=>$userid);
+		$this->db->insert('bookmark');
+	}
 }

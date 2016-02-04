@@ -43,4 +43,9 @@ class Clinics extends CI_Controller {
 		$data = $this->mclinics->loadServices($c,$search);
 		echo json_encode($data);
 	}
+
+	function bookmark(){
+		$data = $this->mclinics->bookmark();
+		echo json_encode($data);
+	}
 }

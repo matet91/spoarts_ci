@@ -27,9 +27,9 @@ function loadServices(c,search){
 				            "<p class='body'>Clinic "+e.clinic_name+"</p>"+
 				            "<p class='body'>Located at "+e.SPLocation+"</p>"+
 				          "</div>"+
-				          "<a href='#' data-toggle='tooltip' data-placement='top' title='Bookmark'><i class='more fa fa-bookmark' style = 'left:30% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
-				          "<a href='#' data-toggle='tooltip' data-placement='top' title='Enroll' ><i class='more fa fa-sign-in' style = 'left:55% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
-				          "<a href='#' data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
+				          "<a href='#' onclick = bookmark('"+e.ServiceID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Bookmark'><i class='more fa fa-bookmark' style = 'left:30% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></button>"+
+				          "<a href='#' onclick = enroll('"+e.ServiceID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Enroll' ><i class='more fa fa-sign-in' style = 'left:55% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
+				          "<a href='#' onclick = info('"+e.ServiceID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
 
 				        "</li>";
 
@@ -39,6 +39,18 @@ function loadServices(c,search){
 			}
 			$('#portfolio-list').html(content);
 
+		}
+	});
+}
+
+function bookmark(serviceid,clinicid){
+	$.ajax({
+		url:'clinics/bookmark',
+		data:{serviceid:serviceid,clinicid:clinicid},
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){
+			
 		}
 	});
 }
