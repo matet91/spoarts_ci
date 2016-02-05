@@ -92,7 +92,6 @@ $(document).ready(function(){
         addInstructor(data);
       }
   });
-  
 });
 
 function getservices(){

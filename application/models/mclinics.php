@@ -51,7 +51,7 @@ class mclinics extends CI_Model {
 			$d = $this->db->insert('bookmark');
 
 			if($d == true)
-				return 3; //new service bookmark
+				return 3; //new service bookmark added
 			else return 0; //error occurred
 			exit();
 		}

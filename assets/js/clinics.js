@@ -50,7 +50,9 @@ function bookmark(serviceid,clinicid){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
-			
+			if(msg == 1){
+				
+			}
 		}
 	});
 }

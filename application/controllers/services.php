@@ -23,6 +23,7 @@ class Services extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->model('mservices');
+		$this->load->libraries('paypal');
 	}
 
 	public function index()

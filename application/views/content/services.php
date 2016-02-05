@@ -34,6 +34,7 @@
 
     <!-- Start Content -->
     <div id="content">
+      <div class="container">
         
         <div class="row sidebar-page"> 
             <div class="page-content" id = "content-services">
@@ -51,6 +52,7 @@
                   <div class="col-sm-10">
                     <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
                     <button class="btn btn-info btn-sm" id="btn-renew" data-toggle="tooltip" data-placement="top" title="Upgrade/Renew Subscription"><span class = "glyphicon glyphicon-king"></span> </button>
+                     <form id="myContainer" method="post" action="/checkout"></form>
                   </div>
                 </div>
               </div>
