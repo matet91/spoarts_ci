@@ -22,16 +22,19 @@ class Login extends CI_Controller {
 			parent::__construct();
 			$this->load->library('session');
 			$this->load->library('encrypt');
+			$this->load->library('mailer');
 			$this->load->model('mlogin');
+			
+
 	}
 	public function index()
 	{
 		
 		$data = array('header'=>'header.php',
-						'content'=>'content/home.php',
+						'content'=>'content/login.php',
 						'menu'=>'menu.php',
 						'footer'=>'footer.php',
-						'title'=>'Home'
+						'title'=>'Welcome'
 					);
 		
 		$this->load->view('index.php',$data);
@@ -52,6 +55,16 @@ class Login extends CI_Controller {
 	}
 	function checkusername(){
 		$data = $this->mlogin->checkusername();
+		echo json_encode($data);
+	}
+
+	function checkEmail(){
+		$data = $this->mlogin->checkEmail();
+		echo json_encode($data);
+	}
+
+	function saveRegister(){
+		$data = $this->mlogin->saveRegister();
 		echo json_encode($data);
 	}
 }

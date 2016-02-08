@@ -87,6 +87,3 @@
   <script type="text/javascript" src="assets/js/jquery.dataTables.min.1.10.10.js"></script>
   <script type="text/javascript" src="assets/js/chosen.proto.min.js"></script>
   <script type="text/javascript" src="assets/js/chosen.jquery.min.js"></script>
-
-  <!--<![if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->

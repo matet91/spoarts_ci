@@ -91,16 +91,43 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Subscription Type</label>
                     <div class="col-sm-10">
-                      <select id = "SPSubsPlan" id = "SPSubsPlan" name = "SPSubsPlan" class = "form-control">
-                        <option value="1" <?php echo($data->SPSubsPlan==1)?'selected':'';?>>Trial</option>
-                        <option value="2" <?php echo($data->SPSubsPlan==2)?'selected':'';?>>Premium</option>
+                      <select  id = "SubscType" name = "SubscType" class = "form-control">
+                        <option value="1" <?php echo($data->SubscType==1)?'selected':'';?>>Trial</option>
+                        <option value="2" <?php echo($data->SubscType==2)?'selected':'';?>>Premium</option>
                       </select>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan Expiry Date</label>
                     <div class="col-sm-10">
-                      <p>January 01, 2017</p>
+                      <p><?php echo date('F d Y',strtotime($data->SubscEndDate));?></p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan Status</label>
+                    <div class="col-sm-10">
+                      <p><?php 
+                      if($data->SubscType==2){
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "<p class='text-success'>Paid</p>";
+                        }else if($data->SubsStatus==0){
+                          echo "<p class='text-danger'>Unpaid. Please settle your balance for you to Manage Services Module.</p>";
+                        }else{
+                          echo "<p class='text-info'>Your subscription has expired. Renew your subscription to continue using this service.</p>";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "<p class='text-info'>You have ".$interval->format('%R%a days')." remaining</p>";
+                          }else{
+                            echo "<p class='text-danger'>Your Free Trial has expired. You can upgrade your account to Premium to enjoy this service.</p>";
+                          }
+                      }?></p>
+                      
                     </div>
                   </div>
                 </form>
@@ -109,14 +136,89 @@
               <div class = "row">
                 <div class="hr1 margin-top"></div>
                 <div class="col-sm-10">
-                  <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services"><span class = "glyphicon glyphicon-plus"></span></button>
+                  &nbsp;
+                  
                 </div>
                 <!-- Divider -->
                 <div class="hr1 margin-top"></div>
               </div>
               <br/>
-              <table id="tbl-services" class="display" cellspacing="0" width="100%">
-            </table>
+              <div class="tabs-section" id = "tab-management">
+
+              <!-- Nav Tabs -->
+	              <ul class="nav nav-tabs">
+	                <li class="active"><a href="#tab-4" data-toggle="tab"><i class="fa fa-desktop"></i>Services</a></li>
+	                <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-calendar"></i>Manage Schedules</a></li>
+	                <li><a href="#tab-6" data-toggle="tab"><i class="fa fa-map-pin"></i>Manage Rooms</a></li>
+	                <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-group"></i>Manage Instructors</a></li>
+	              </ul>
+
+	              <!-- Tab panels -->
+	            <div class="tab-content">
+	                <!-- Tab Content 1 -->
+	                <div class="tab-pane fade in active" id="tab-4">
+	                <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services" 
+                  <?php
+                    if($data->SubscType==2){
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "";
+                        }else if($data->SubsStatus==0){
+                          echo "disabled";
+                        }else{
+                          echo "disabled";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "";
+                          }else{
+                            echo "disabled";
+                          }
+                      }
+                  ?>
+                  ><i class="fa fa-plus"> Add Services</i></button>
+	                <div class="hr1 margin-top"></div>
+              			<table id="tbl-services" class="display" cellspacing="0" width="100%"></table>
+              		</div>
+              		<div class="tab-pane fade in" id="tab-5">
+              			<button class="btn btn-primary btn-sm" id="btn-modalSched" data-toggle="tooltip" data-placement="top" title="Add Schedules"
+                     <?php
+                    if($data->SubscType==2){
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "";
+                        }else if($data->SubsStatus==0){
+                          echo "disabled";
+                        }else{
+                          echo "disabled";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "";
+                          }else{
+                            echo "disabled";
+                          }
+                      }
+                  ?>><i class="fa fa-plus"></i> Add Schedules</button>
+              			<div class="hr1 margin-top"></div>
+              			<table id="tbl-schedules" class="display" cellspacing="0" width="100%"></table>
+              		</div>
+              		<div class="tab-pane fade in" id="tab-6">
+              			<table id="tbl-rooms" class="display" cellspacing="0" width="100%"></table>
+              		</div>
+              		<div class="tab-pane fade in" id="tab-7">
+              			<table id="tbl-rooms" class="display" cellspacing="0" width="100%"></table>
+              		</div>
+              	</div>
+              </div>
 
           </div>
         </div>
@@ -310,6 +412,130 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <!-- end modal -->
+
+    <!-- modal add Services -->
+    <div class="modal fade" id = "modal_addservices" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Add Service</h4>
+          </div>
+          <input type = "hidden" id = "txtHiddenService" value = "1">
+          <div class="modal-body">
+            <div class = "row">
+            <div class="alert" role="alert" style = "display:none"></div>
+              <form  id="formaddservice">  
+                <div class="col-md-6">
+                  <div class = "form-group">
+                    <label for = "ServiceType">Service Type</label>
+                    <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
+                      <option value = "">Please Select Service Type</option>
+                      <option value = "0">Sports</option>
+                      <option value = "1">Arts</option>
+                    </select>
+                    <br/>
+                    <label for = "interest_id" >Interest List</label>
+                    <select class = "form-control" id = "interest_id" name = "interest_id">
+                      <option value = "">Please select service type to populate this dropdown</option>
+                    </select>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "forserv_name">Name</label>
+                    <input type = "text" placeholder="Service Name" class = "form-control" id = "ServiceName" name = "ServiceName"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "forserv_desc">Description</label>
+                    <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "serv_sched">Schedule</label>
+                    <input type="text" placeholder="Schedule" class = "form-control" id = "ServiceSchedule" name = "ServiceSchedule"/>
+                  </div>
+                </div>
+                <div class = "col-md-6">
+                  <div class = "form-group">
+                    <label for = "serv_reg_fee">Registration Fee</label>
+                    <input type="text" placeholder="Registration Fee" class = "form-control" id = "ServiceRegistrationFee" name = "ServiceRegistrationFee"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "serv_walkin">Walk-in/Per Session</label>
+                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceWalkin" name = "serviceWalkin"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "serv_walkin"># of Hour(s)/Session</label>
+                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceHour" name = "serviceHour"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "serv_monthly">Monthly Fee</label>
+                    <input type="text" placeholder="Monthly Fee" class = "form-control" id = "ServicePrice" name = "ServicePrice"/>
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+            <button type="button" id= "btn-saveServices" class="btn btn-primary">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+    <!-- end modal --><!-- modal add Schedules -->
+    <div class="modal fade" id = "modal_addschedule" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Add Service</h4>
+          </div>
+          <input type = "hidden" id = "txtHiddenSchedule" value = "1">
+          <div class="modal-body">
+            <div class = "row">
+            <div class="alert" role="alert" style = "display:none"></div>
+              <form  id="formaddschedule">  
+                <div class="col-md-6">
+                  <div class = "form-group">
+                    <label for = "ServiceID">Service</label>
+                    <select name="ServiceID" id="ServiceID" class = "form-control" >
+                    </select>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "SchedDate">Date</label>
+                    <input type="text" placehoder="Date" name="SchedDate" id="SchedDate" class = "form-control" />
+                  </div>
+                  <div class = "form-group">
+                    <label for = "SchedTime">Time</label>
+                    <input type = "text" placeholder="Time" class = "form-control" id = "SchedTime" name = "SchedTime"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "RoomID">Room</label>
+                    <select class = "form-control" id = "RoomID" name = "RoomID">
+                    </select>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "InstructorID">Instructor</label>
+                    <select type="text" class = "form-control" id = "InstructorID" name = "InstructorID">
+                    </select>
+                  </div>
+                </div>
+                <div class = "col-md-6">
+                  <div class = "form-group">
+                    <label for = "SchedSlots">Slots</label>
+                    <input type="text" placeholder="Slots" class = "form-control" id = "SchedSlots" name = "SchedSlots"/>
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+            <button type="button" id= "btn-saveSchedule" class="btn btn-primary">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
     <!-- end modal -->
 
     <!-- modal add Services -->

@@ -100,4 +100,66 @@ class mglobal extends CI_Model {
 		$result = $q->result();
 		return $result;
 	}
+
+	function saveSQSettings(){
+		$sq = $this->input->post('sq');
+		$sq_pwd = md5($this->input->post('sq_pwd'));
+		$firstlogin = 1;
+		$userid = $this->session->userdata('userid');
+
+		$data = array(
+						'security_question_id'=>$sq,
+						'security_password'=>$sq_pwd,
+						'first_login'=>$firstlogin
+					);
+		$this->db->where('UserID',$userid);
+		$q = $this->db->update('user_accounts',$data);
+		if($q == true){
+			$this->db->where("sec_id",$sq);
+			$this->db->select("*");
+			$get = $this->db->get("security_questions");
+			$sqrow=$get->row();
+			$this->session->set_userdata('first_login',1);
+			$this->session->set_userdata('securityquestion',$sqrow->sec_questions);
+		}
+		return $q;
+	}
+
+	function listInterest(){
+		$this->db->select("*");
+		$get = $this->db->get("interest");
+		return $get->result();
+	}
+
+	function saveInterest(){
+		$sq = $this->input->post('sq');
+		$sq_pwd = md5($this->input->post('sq_pwd'));
+		$interest =$this->input->post('interest');
+		$firstlogin = 1;
+		$userid = $this->session->userdata('userid');
+
+		$data = array(
+						'security_question_id'=>$sq,
+						'security_password'=>$sq_pwd,
+						'first_login'=>$firstlogin
+					);
+		$this->db->where('UserID',$userid);
+		$q = $this->db->update('user_accounts',$data);
+
+		$dataInterest = array(
+							'client_id'=>$userid,
+							'interest'=>$interest
+						);
+		$this->db->insert('client_clinics',$dataInterest);
+		if($q == true){
+			$this->db->where("sec_id",$sq);
+			$this->db->select("*");
+			$get = $this->db->get("security_questions");
+			$sqrow=$get->row();
+
+			$this->session->set_userdata('first_login',1);
+			$this->session->set_userdata('securityquestion',$sqrow->sec_questions);
+		}
+		return $q;
+	}
 }

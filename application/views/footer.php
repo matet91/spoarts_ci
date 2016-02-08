@@ -1,4 +1,5 @@
-<div class="container">
+<footer>
+    <div class="container">
         <div class="row footer-widgets">
 
 
@@ -29,3 +30,4 @@
         <!-- End Copyright -->
 
       </div>
+</footer>

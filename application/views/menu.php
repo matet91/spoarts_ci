@@ -9,7 +9,7 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.html"><img alt="" src="assets/images/logo.png"></a>
+            <a class="navbar-brand" href="#"><img alt="" src="assets/images/logo.png"></a>
           </div>
           <div class="navbar-collapse collapse">
             
@@ -32,7 +32,8 @@
               </li>
                 <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
                  <li> <a href="services" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
-                 <li> <a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
+                 <li> <a href="events_and_promos" class = "<?php echo ($content == 'content/events_and_promos.php'?'active':'');?>">Events & Promos</a></li>
+                 <li> <a href="reviews_and_ratings" class = "<?php echo ($content == 'content/reviews_and_ratings.php'?'active':'');?>">Reviews and Ratings</a></li>
                 <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
                 <?php }else{ ?>
                 <a href="#" class = "<?php echo ($content == 'content/clinics.php'?'active':'');?>">Clinics</a>
@@ -43,9 +44,6 @@
                 <?php } ?>
               </li>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
-                <li>
-                  <a href="?content=testimonials.php" class = "<?php echo ($content == 'testimonials.php'?'active':'');?>">Reviews & Ratings</a>
-                </li>
                 <li><a href="?content=sales.php" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
@@ -72,7 +70,8 @@
             </ul>
             <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
             <li><a href="services" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
-            <li><a href="service_provider" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Events & Promos</a></li>
+            <li> <a href="events_and_promos" class = "<?php echo ($content == 'content/events_and_promos.php'?'active':'');?>">Events & Promos</a></li>
+                 <li> <a href="reviews_and_ratings" class = "<?php echo ($content == 'content/reviews_and_ratings.php'?'active':'');?>">Reviews and Ratings</a></li>
             <li><a href="clients" class = "<?php echo ($content == 'content/clients.php'?'active':'');?>">Clients</a></li>
             <?php }else{?>
               <a href="clinics" class = "<?php echo ($content == 'clinics.php'?'active':'');?>">Clinics</a>
@@ -85,9 +84,7 @@
             <?php } ?>
           </li>
           <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
-          <li>
-            <a href="?content=testimonials.php" class = "<?php echo ($content == 'testimonials.php'?'active':'');?>">Reviews & Ratings</a>
-          </li>
+          
           <li>
             <a href="?content=sales.php" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a>
           </li>

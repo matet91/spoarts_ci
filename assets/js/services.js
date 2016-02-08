@@ -92,6 +92,13 @@ $(document).ready(function(){
         addInstructor(data);
       }
   });
+
+  $("#btn-modalSched").click(function(){
+      var dialogHeight = $("#modal_addschedules").find('.modal-dialog').outerHeight(true);
+      var top = parseInt(height)/5-parseInt(dialogHeight);
+      $("#modal_addschedules").modal('show').attr('style','top:'+top+'px !important;');
+  });
+  getSchedules();
 });
 
 function getservices(){
@@ -111,6 +118,38 @@ function getservices(){
             {"sTitle":"# of Hours Per Session","bSearchable": true},
             {"sTitle":"Monthly Fee (Peso)","bSearchable": true},
             {"sTitle":"Type","bSearchable": true},
+            {"sTitle":"Actions"}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+      if ( aData[9] == 1 ){
+        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+      }
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+
+
+}
+
+function getSchedules(){
+  $('#tbl-schedules').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "services/dataTables/3",
+    "aoColumns":[ {"sTitle":"ID","sName":"s.SchedID","bVisible":false},
+            {"sTitle":"Date","sName":"s.SchedDate"},
+            {"sTitle":"Time","sName":"s.SchedTime","bSearchable": true},
+            {"sTitle":"Rooms","sName":"r.RoomName","bSearchable": true},
+            {"sTitle":"Instructors","sName":"m.MasterInsName","bSearchable": true},
+            {"sTitle":"Services","sName":"srv.ServiceName","bSearchable": true},
+            {"sTitle":"Slots","sName":"s.SchedSlots","bSearchable": true},
             {"sTitle":"Actions"}
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
@@ -295,7 +334,6 @@ function view_studentinstructor(id){
 }
 
 function instructorList(id){
-
   var table = $('#tbl-instructor').DataTable( {
     "bProcessing":true, 
     "bServerSide":true,
@@ -316,14 +354,12 @@ function instructorList(id){
       if ( aData[6] == 1 ){
         $('td:eq(5)', nRow).html('<button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="deleteInstructor('+aData[0]+',2);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
-
     },
     "fnInitComplete": function(oSettings, json) {
     }
   }).on('processing.dt',function(oEvent, settings, processing){
   });
 }
-
 
 //list all services under the service provider
 function services(){
@@ -403,6 +439,7 @@ function getData(id, type){
     dataType:'JSON',
     type:'POST',
     success: function(msg){
+      console.log(msg);
       switch(type){
         case 1: //services
               var frmName = "#formaddservice";

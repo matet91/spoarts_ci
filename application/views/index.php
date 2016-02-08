@@ -28,10 +28,9 @@
 
 
     <!-- Start Footer -->
-    <footer>
+    
       <?php ($footer!=''?$this->load->view($footer):''); ?>
-    </footer>
-    <!-- End Footer -->
+        <!-- End Footer -->
 
   </div>
   <!-- End Container -->
@@ -45,6 +44,7 @@
   </div>
 </div>
   <!-- Style Switcher -->
+  <?php if($content!='content/landingpage.php'){?>
   <div class="switcher-box">
   <?php if($this->session->userdata('userid')){?>
     <a class="open-switcher show-switcher" id = "login-icon" data-toggle = "popover" data-placement = "right" title = "Welcome <?php echo $this->session->userdata('username');?>! "><i class="fa fa-user fa-2x"></i></a>
@@ -105,7 +105,7 @@
         <div class="hr1 margin-top"></div>
     <?php } ?>
   </div>
-
+  <?php }?>
   <!-- modal edit profile -->
     <div class="modal fade" id = "modal_profile" tabindex="-1" role="dialog">
       <div class="modal-dialog">
@@ -270,7 +270,6 @@
     
   <script type="text/javascript" src="assets/js/script.js"></script>
   <script type="text/javascript" src="assets/js/main.js"></script>
-  <script type="text/javascript" src="assets/js/login.js"></script>
 
 </body>
 

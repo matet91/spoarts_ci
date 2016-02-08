@@ -22,7 +22,7 @@ class mservices extends CI_Model {
 
 	function loadprofile(){
 		$userid = $this->session->userdata('userid');
-		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID WHERE a.UserID='$userid'";
+		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID WHERE a.UserID='$userid'";
 
 		$q = $this->db->query($sql);
 
@@ -70,7 +70,7 @@ class mservices extends CI_Model {
 		else return 0;
 	}
 
-	function dataTables($case,$serviceid=null){
+	function dataTables($case,$id=null){
 		$sSort = $this->input->get('iSortCol_0');
 		$sSortype = $this->input->get('sSortDir_0');
 		$sSearch = $this->input->get('sSearch');
@@ -104,11 +104,26 @@ class mservices extends CI_Model {
 				$sTable = "instructors";
 				$leftjoin = "";
 				//print_r($select);
-				$sWhere = "WHERE service_id = '$serviceid'";
+				$sWhere = "WHERE service_id = '$id'";
 				if($sSearch){$sWhere .= " AND (ins_name like '%".$sSearch."%' OR ins_room like '%".$sSearch."%' OR ins_schedule like '%".$sSearch."%' OR ins_status like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
 				$aColumns_output = $aColumns;
+			break;
+
+			case 3://schedules
+					$select = array("s.SchedID","s.SchedDate","s.SchedTime","r.RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots");;
+					
+					$sTable = "schedules s";
+					$leftjoin = "LEFT JOIN services srv ON srv.ServiceID=s.ServiceID
+						LEFT JOIN rooms r ON r.RoomID=s.RoomID
+						LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
+					//print_r($select);
+					$sWhere = "WHERE SchedID = '$id'";
+					if($sSearch){$sWhere .= " AND (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedDateTime like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("SchedID","SchedDate","SchedTime","RoomName","MasterInsName","ServiceName","SchedSlots");
 			break;
 		}
 		
