@@ -1,5 +1,13 @@
 <!-- Start HomePage Slider -->
-
+<style>
+  .modal-dialog {
+    width: 65%; /* or whatever you wish */
+    
+  }
+  .owl-item{
+    padding:8px;
+  }
+</style>
     <section id="home">
       <!-- Carousel -->
       <div id="main-slide" class="carousel slide" data-ride="carousel">
@@ -536,24 +544,51 @@
                       <!-- registration 3 -->
                       <div class="classic-testimonials item">
                         <!-- Classic Heading -->
-                       <h4 class="classic-title"><span>STEP 3 : Personal Information</span></h4>
-                        <div class = "form-group">
-                            <label for = "spfirstname">First Name :</label>
-                            <input type = "text" class = "form-control" id = "spfirstname" name = "spfirstname" placeholder="First Name"/>
+                        <h4 class="classic-title"><span>STEP 3 : Personal Information</span></h4>
+                        <div class = "row">
+                          <div class = "col-md-6">
+                            <div class = "form-group">
+                              <label for = "spfirstname">First Name :</label>
+                              <input type = "text" class = "form-control" id = "spfirstname" name = "spfirstname" placeholder="First Name"/>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "splastname">Last Name :</label>
+                              <input type = "text" class = "form-control" id = "splastname" name = "splastname" placeholder="Last Name"/>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "spbirthday">Birthday :</label>
+                              <input type = "text" class = "form-control" id = "spbirthday" name = "spbirthday" placeholder="Birthday"/>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "SPContactNo">Contact # :</label>
+                              <input type = "text" class = "form-control" id = "SPContactNo" name = "SPContactNo" placeholder="Contact Number"/>
+                            </div>
                           </div>
-                          <div class = "form-group">
-                            <label for = "splastname">Last Name :</label>
-                            <input type = "text" class = "form-control" id = "splastname" name = "splastname" placeholder="Last Name"/>
+                          <div class = "col-md-6">
+                            <div class = "form-group">
+                              <label for = "country">House #, Street, Barangay :</label>
+                              <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="House #, Street, Barangay"/>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "country">Country :</label>
+                              <select class = "form-control chosen-select" id = "country_id" name = "country_id" placeholder="Country">
+                                  <option value = "">Select Country</option>
+                              </select>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "state">State :</label>
+                              <select class = "form-control chosen-select" id = "state_id" name = "state_id" placeholder="State" disabled>
+                                  <option value = "">Select State</option>
+                              </select>
+                            </div>
+                            <div class = "form-group">
+                              <label for = "city">City :</label>
+                              <select class = "form-control chosen-select" id = "city_id" name = "city_id" placeholder="City" disabled>
+                                  <option value = "">Select City</option>
+                              </select>
+                            </div>
                           </div>
-                          <div class = "form-group">
-                            <label for = "spbirthday">Birthday :</label>
-                            <input type = "text" class = "form-control" id = "spbirthday" name = "spbirthday" placeholder="Birthday"/>
-                          </div>
-                          <div class = "form-group">
-                            <label for = "SPContactNo">Contact # :</label>
-                            <input type = "text" class = "form-control" id = "SPContactNo" name = "SPContactNo" placeholder="Contact Number"/>
-                          </div>
-                          
+                        </div>
                       </div>
                       <!-- registration 3 -->
                       <div class="classic-testimonials item">

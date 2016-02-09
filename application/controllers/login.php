@@ -24,6 +24,7 @@ class Login extends CI_Controller {
 			$this->load->library('encrypt');
 			$this->load->library('mailer');
 			$this->load->model('mlogin');
+			$this->load->model('mglobal');
 			
 
 	}
@@ -65,6 +66,11 @@ class Login extends CI_Controller {
 
 	function saveRegister(){
 		$data = $this->mlogin->saveRegister();
+		echo json_encode($data);
+	}
+
+	function listings($c,$id){
+		$data = $this->mglobal->listings($c, $id);
 		echo json_encode($data);
 	}
 }

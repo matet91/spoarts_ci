@@ -66,11 +66,9 @@ $(document).ready(function(){
 		var height = $(window).height();
 		var dialogHeight = $("#modal_registration").find('.modal-dialog').outerHeight(true);
     	var top = parseInt(height)/5-parseInt(dialogHeight);
-		$("#modal_registration").modal('show').attr('style','top:'+top+'px !important');
+		$("#modal_registration").modal('show');
 		
 	});
-
-	$("#spbirthday").datepicker();
 
 	//username validation
 	$("#UserName").change(function(){
@@ -143,6 +141,17 @@ $(document).ready(function(){
 				$('#SPEmail').attr('disabled','disabled');
 			},2000);
 		}
+	});
+	
+	listings(1,null); //country dropdown
+	$("#country_id").change(function(){
+		var val = $(this).val();
+		listings(2,val); //states dropdown
+	});
+
+	$("#state_id").change(function(){
+		var val = $(this).val();
+		listings(3,val); //states dropdown
 	});
 });
 
@@ -253,7 +262,12 @@ function saveRegister(){
 	var frmdata = $("#form-reg").serializeArray(),data={};
 	$.each(frmdata, function(i,e){
 		if(e.name != 'regconfirmpwd'){
-			data[e.name] = e.value;
+			if(e.name == 'SPAddress'){
+				var city = $("#city_id").val(),
+					country = $("#country_id").val(),
+					state = $("#state_id").val();
+				data[e.name] = e.value+" "+$("#city_id option[value="+city+"]").text()+", "+$("#state_id option[value="+state+"]").text()+", "+$("#country_id option[value="+country+"]").text();
+			} else data[e.name] = e.value;
 		}
 		
 	});

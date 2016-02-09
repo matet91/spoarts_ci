@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$(".chosen-select").chosen({width: "95%"});
 	$('.modal').on('hidden.bs.modal', function(e){
 	      var table = $(".modal .dataTable").DataTable();
 	      table.destroy(); 
@@ -6,15 +7,22 @@ $(document).ready(function(){
 	  });
 
 	var height = $(window).height();
-	$("#spbirthday").datepicker({
-		'dateFormat':'yy-mm-dd'
+
+
+	$("#spbirthday").datetimepicker({
+		yearOffset:-50,
+		timepicker:false,
+		formatDate:'Y-m-d',
+		format:'Y-m-d'
 	});
+
+
 	loadSecurity();
 	$("#btn-update-profile").click(function(){
 		
 		var dialogHeight = $("#modal_profile").find('.modal-dialog').outerHeight(true);
     	var top = parseInt(height)/5-parseInt(dialogHeight);
-		$('#modal_profile').modal('show').attr('style','top:'+top+'px !important');
+		$('#modal_profile').modal('show');
 		myprofile();
 
 	});
@@ -86,6 +94,8 @@ $("#newpwd").change(function(){
 $("#con_newpwd").change(function(){
 	comparepassword('newpwd','con_newpwd','label_con_newpwd','btn-newPwd');
 });
+
+
 });
 
 
@@ -306,4 +316,34 @@ function logout(){
 			window.location = "login";
 		}
 	});
+}
+
+function listings(c,id){
+		switch(c){
+			case 1: //country
+					var selectid = "country_id",
+					 	opt = "<option value=''>Select Country</option>";
+			break;
+
+			case 2: //states
+					var selectid = "state_id",
+					 	opt = "<option value=''>Select State</option>";
+			break;
+
+			case 3: //cities
+					var selectid = "city_id",
+					 	opt = "<option value=''>Select City</option>";
+			break;
+		}
+	$.ajax({
+			url:'login/listings/'+c+"/"+id,
+			dataType:'JSON',
+			success: function(msg){
+				$.each(msg, function(i,e){
+					opt += "<option value='"+e.id+"'>"+e.name+"</option>";
+				});
+
+				$("#"+selectid).html(opt).removeAttr('disabled').trigger('chosen:updated');
+			}
+	});	
 }

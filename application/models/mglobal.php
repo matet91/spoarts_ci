@@ -148,9 +148,9 @@ class mglobal extends CI_Model {
 
 		$dataInterest = array(
 							'client_id'=>$userid,
-							'interest'=>$interest
+							'interest_ids'=>$interest
 						);
-		$this->db->insert('client_clinics',$dataInterest);
+		$this->db->insert('client_interest',$dataInterest);
 		if($q == true){
 			$this->db->where("sec_id",$sq);
 			$this->db->select("*");
@@ -161,5 +161,30 @@ class mglobal extends CI_Model {
 			$this->session->set_userdata('securityquestion',$sqrow->sec_questions);
 		}
 		return $q;
+	}
+
+	function listings($c,$id=null){
+
+		switch($c){
+			case 1: //country
+					
+					$table = "countries";
+			break;
+
+			case 2: //states
+					$where = array('country_id'=>$id);
+					$table = "states";
+					$this->db->where($where);
+			break;
+
+			case 3://cities
+					$table = "cities";
+					$where = array('state_id'=>$id);
+					$this->db->where($where);
+			break;
+		}
+		$this->db->select("*");
+		$data = $this->db->get($table);
+		return $data->result();
 	}
 }

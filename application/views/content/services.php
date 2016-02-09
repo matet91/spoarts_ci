@@ -1,5 +1,5 @@
 <style>
-  #modal_viewlist .modal-dialog {
+  .modal-dialog {
     width: 95%; /* or whatever you wish */
   }
 </style>
@@ -488,7 +488,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Service</h4>
+            <h4 class="modal-title">Add Schedules</h4>
           </div>
           <input type = "hidden" id = "txtHiddenSchedule" value = "1">
           <div class="modal-body">
@@ -497,26 +497,32 @@
               <form  id="formaddschedule">  
                 <div class="col-md-6">
                   <div class = "form-group">
-                    <label for = "ServiceID">Service</label>
+                    <label for = "ServiceID">Service :</label>
                     <select name="ServiceID" id="ServiceID" class = "form-control" >
                     </select>
                   </div>
                   <div class = "form-group">
-                    <label for = "SchedDate">Date</label>
+                    <label for = "SchedDate">Date :</label>
                     <input type="text" placehoder="Date" name="SchedDate" id="SchedDate" class = "form-control" />
                   </div>
                   <div class = "form-group">
-                    <label for = "SchedTime">Time</label>
-                    <input type = "text" placeholder="Time" class = "form-control" id = "SchedTime" name = "SchedTime"/>
+                    <label for = "SchedTime">Start Time :</label>
+                    <input type = "text" placeholder="Start Time" class = "form-control" id = "startTime" name = "startTime"/>
+                  </div>
+                  <div class = "form-group">
+                    <label for = "SchedTime">End Time :</label>
+                    <input type = "text" placeholder="End Time" class = "form-control" id = "endTime" name = "endTime"/>
                   </div>
                   <div class = "form-group">
                     <label for = "RoomID">Room</label>
                     <select class = "form-control" id = "RoomID" name = "RoomID">
+                    <option value = "0">Select Room</option>
                     </select>
                   </div>
                   <div class = "form-group">
                     <label for = "InstructorID">Instructor</label>
                     <select type="text" class = "form-control" id = "InstructorID" name = "InstructorID">
+                      <option value = "0">Select Instructor</option>
                     </select>
                   </div>
                 </div>
@@ -530,7 +536,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-saveSchedule" class="btn btn-primary">Save</button>
+            <button type="button" id= "btn-saveSchedule" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save Schedule</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

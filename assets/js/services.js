@@ -94,11 +94,25 @@ $(document).ready(function(){
   });
 
   $("#btn-modalSched").click(function(){
-      var dialogHeight = $("#modal_addschedules").find('.modal-dialog').outerHeight(true);
+      var dialogHeight = $("#modal_addschedule").find('.modal-dialog').outerHeight(true);
       var top = parseInt(height)/5-parseInt(dialogHeight);
-      $("#modal_addschedules").modal('show').attr('style','top:'+top+'px !important;');
+      $("#modal_addschedule").modal('show');
+      $("#startTime, #endTime").datetimepicker({
+         datepicker:false,
+         formatTime: 'h:i a', 
+         format: 'h:i a'
+        });
   });
   getSchedules();
+
+  //datepicker
+
+  $("#SchedDate").datetimepicker({
+  lang:'ch',
+  timepicker:false,
+  format:'Y-m-d',
+  formatDate:'Y-m-d'
+});
 });
 
 function getservices(){
@@ -372,7 +386,7 @@ function services(){
         opt += "<option value = '"+e.ServiceID+"'>"+e.ServiceName+"</option>";
       }); 
 
-      $('#service_id').html(opt);
+      $('#service_id,#ServiceID').html(opt);
     }
   });
 }

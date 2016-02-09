@@ -28,6 +28,9 @@ class Services extends CI_Controller {
 
 	public function index()
 	{
+		if(!$this->session->userdata('userid')){
+			header("Location:login");
+		}
 		$content = 'services.php';
 		$title = "Services";
 		

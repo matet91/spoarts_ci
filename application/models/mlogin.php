@@ -116,7 +116,7 @@ class Mlogin extends CI_Model {
         $data = $this->input->post('data');
         $useraccount = array('UserName','Password','UserType');
 
-        $userdetails = array('spfirstname','splastname','spbirthday','SPContactNo','SPEmail');
+        $userdetails = array('spfirstname','splastname','spbirthday','SPContactNo','SPEmail','SPAddress','city_id','state_id','country_id');
 
         foreach($useraccount as $val){
             if($val == 'Password') $UAData[$val] = md5($data[$val]);
@@ -194,7 +194,7 @@ class Mlogin extends CI_Model {
             $to = $data['SPEmail'];
             $subject = "[Do not reply] Spoarts: Account Verification";
             $message = "<span style='color:#3BACAD'>Hi ".$data['spfirstname']."!</span><br/>
-                        <p style='color:#0298D3;'>Congratulations. You are now a member of Spoarts. To proceed to next step, click <a href='http://localhost/spoarts_ci/landingpage?type=2&code=".$UAData['verification_code']."&id=".$UserID."' target='_blank'>HERE</a> to verify your account.<br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
+                        <p style='color:#0298D3;'>Congratulations. You are now a member of Spoarts.To verify your account click <a href='http://localhost/spoarts_ci/landingpage?type=2&code=".$UAData['verification_code']."&id=".$UserID."' target='_blank'>HERE</a>. For mobile user, please use this <b>CODE : ".$UAData['verification_code']."</b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
                         <h3 style='color:#0298D3'>Spoarts Team</h3></p>";
             $mail = new Mailer();
            // $mail->SMTPDebug = 3;
