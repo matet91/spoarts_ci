@@ -104,34 +104,36 @@ class mservices extends CI_Model {
 				$sTable = "instructors";
 				$leftjoin = "";
 				//print_r($select);
-				$sWhere = "WHERE service_id = '$id'";
-				if($sSearch){$sWhere .= " AND (ins_name like '%".$sSearch."%' OR ins_room like '%".$sSearch."%' OR ins_schedule like '%".$sSearch."%' OR ins_status like '%".$sSearch."%')";}
+				$sWhere = "";
+				if($sSearch){
+					$sWhere .= "QHERE (ins_name like '%".$sSearch."%' OR ins_room like '%".$sSearch."%' OR ins_schedule like '%".$sSearch."%' OR ins_status like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
 				$aColumns_output = $aColumns;
 			break;
 
 			case 3://schedules
-					$select = array("s.SchedID","s.SchedDate","s.SchedTime","r.RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots");;
+					$select = array("s.SchedID","s.SchedDays","s.SchedTime","r.RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots","s.date_added","1 as action");
 					
 					$sTable = "schedules s";
 					$leftjoin = "LEFT JOIN services srv ON srv.ServiceID=s.ServiceID
 						LEFT JOIN rooms r ON r.RoomID=s.RoomID
 						LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
 					//print_r($select);
-					$sWhere = "WHERE SchedID = '$id'";
-					if($sSearch){$sWhere .= " AND (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedDateTime like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
+					$sWhere = "";
+					if($sSearch){
+						$sWhere .= " Where (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedTime like '%".$sSearch."%' OR s.date_added like '%".$sSearch."%' OR s.SchedDays like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 					$groupby = "";
-					$aColumns_output = array("SchedID","SchedDate","SchedTime","RoomName","MasterInsName","ServiceName","SchedSlots");
+					$aColumns_output = array("SchedID","SchedDays","SchedTime","RoomName","MasterInsName","ServiceName","SchedSlots","date_added","action");
 			break;
 		}
 		
 		$sIndexColumn = "*";
 			
 		$sQuery = "SELECT SQL_CALC_FOUND_ROWS ".implode(",", $select)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit";
-		
-		//print_r("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
+		//echo $this->db->last_query();
+		//print("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
 		
 		$rResult = $this->db->query( $sQuery );
 		//echo $this->db->last_query();
@@ -157,7 +159,11 @@ class mservices extends CI_Model {
 		foreach($rResult->result() as $aRow){	
 			$row = array();
 			foreach ( $aColumns_output as $col ){
-				$row[] = ($aRow->$col =="0") ? '-' : $aRow->$col;
+				if($case == 3){
+					$row[] = ($aRow->$col ==0) ? 'TBA' : $aRow->$col;
+				}else{
+					$row[] = ($aRow->$col ==0) ? '-' : $aRow->$col;
+				}
 			}
 			$output['aaData'][] = $row;
 		}
@@ -225,5 +231,10 @@ class mservices extends CI_Model {
 		return $q;
 	}
 
+	function addSchedule(){
+		$data = $this->input->post('data');
+		$q = $this->db->insert('schedules',$data);
+		return $q;
+	}	
 
 }

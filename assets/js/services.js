@@ -13,7 +13,7 @@ $(document).ready(function(){
 	    e.preventDefault();
       var dialogHeight = $("#modal_viewlist").find('.modal-dialog').outerHeight(true);
       var top = parseInt(height)/5-parseInt(dialogHeight);
-      $("#modal_addservices").modal('show').attr('style','top:'+top+'px !important;');
+      $("#modal_addservices").modal('show');;
   });
 	
 
@@ -35,10 +35,14 @@ $(document).ready(function(){
 
   //save service details to database
   $("#btn-saveServices").click(function(){
-   var data = validateServiceForm();
-    saveService(data);
+    validateForm(1);
   });
 
+  //saveschedules
+  $("#btn-saveSchedule").click(function(){
+      validateForm(2);
+      
+  });
   $("#clubimage").popover('show');
   //hide after 6 seconds.
   setTimeout(function(){
@@ -136,8 +140,8 @@ function getservices(){
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-      if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+      if ( aData[10] == 1 ){
+        $('td:eq(9)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -158,18 +162,19 @@ function getSchedules(){
     "sLimit":10,  
     "sAjaxSource": "services/dataTables/3",
     "aoColumns":[ {"sTitle":"ID","sName":"s.SchedID","bVisible":false},
-            {"sTitle":"Date","sName":"s.SchedDate"},
+            {"sTitle":"Days","sName":"s.SchedDays"},
             {"sTitle":"Time","sName":"s.SchedTime","bSearchable": true},
             {"sTitle":"Rooms","sName":"r.RoomName","bSearchable": true},
             {"sTitle":"Instructors","sName":"m.MasterInsName","bSearchable": true},
             {"sTitle":"Services","sName":"srv.ServiceName","bSearchable": true},
             {"sTitle":"Slots","sName":"s.SchedSlots","bSearchable": true},
+            {"sTitle":"Date Added","sName":"s.date_added","bSearchable": true},
             {"sTitle":"Actions"}
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-      if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+      if ( aData[8] == 1 ){
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -179,80 +184,6 @@ function getSchedules(){
   });
 
 
-}
-
-function validateServiceForm(){
-  //validate form
-  var dataForm = $("#formaddservice").serializeArray();
-  var data = {};
-  
-  $("#modal_addservices .alert").html("");
-  $.each(dataForm,function(i,e){
-      var name = $("#"+e.name);
-      if(e.value == ""){
-        name.parent().addClass("has-error");
-      }else{
-        if(e.name == 'ServiceRegistrationFee' || e.name=="serviceWalkin" || e.name == 'ServicePrice' || e.name=="serviceHour"){
-            if($.isNumeric(e.value)){
-              name.parent().removeClass('has-error');
-              data[e.name] = e.value;
-             
-            }else{
-              $("#modal_addservices .alert").html(name.prev().html()+" should be numeric.");
-              name.parent().addClass("has-error");
-            }
-        }else{
-          name.parent().removeClass('has-error');
-          data[e.name] = e.value;
-        }
-      }
-  });
-  return data;
-
-}
-function saveService(data){
-   var txtHiddenService = $('#txtHiddenService').val();
-
-if(txtHiddenService == 1){ 
-  var url = "services/addServices";
-  var errorMsg = $("#ServiceName").val()+" Service has been added successfully.";
-}else{ 
-  var url = "services/updateServices/"+txtHiddenService;
-  var errorMsg = $("#ServiceName").val()+" Service info has been updated successfully";
-}
-//get how many div is using 'has-error' class
-var error = $("#formaddservice .has-error").length;
-  if(error > 0){
-    $("#modal_addservices .alert").append("All fields are required.").addClass('alert-danger').show();
-  }else{
-    $("#modal_addservices .alert").html("").removeClass('alert-danger').hide();
-    $.ajax({
-      url:url,
-      data:{data},
-      dataType:'JSON',
-      type:'POST',
-      success:function(msg){
-        var table = $("#tbl-services").DataTable(), dataForm = $("#formaddservice").serializeArray(); 
-        if(msg == true){
-
-            $("#modal_addservices .alert").html(errorMsg).addClass("alert-success").show();
-
-            $.each(dataForm, function(i,e){
-              $("#"+e.name).val("");
-            });
-            setTimeout(function(){
-              $("#modal_addservices .alert").html("").removeClass("alert-success").hide();
-              $("#modal_addservices").modal('hide');
-            },3000);
-
-             table.ajax.reload();
-             $('#txtHiddenService').val(1);
-        }else{
-          $("#modal_addservices .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-success").show();
-        }
-      }
-    });
-  }
 }
 
 function uploadClubpic(){
@@ -386,7 +317,7 @@ function services(){
         opt += "<option value = '"+e.ServiceID+"'>"+e.ServiceName+"</option>";
       }); 
 
-      $('#service_id,#ServiceID').html(opt);
+      $('#service_id,#ServiceID').html(opt).trigger("chosen:updated");
     }
   });
 }
@@ -453,7 +384,6 @@ function getData(id, type){
     dataType:'JSON',
     type:'POST',
     success: function(msg){
-      console.log(msg);
       switch(type){
         case 1: //services
               var frmName = "#formaddservice";
@@ -524,7 +454,162 @@ function loadInterest(t){
             opt += "<option value = "+e.interest_id+">"+e.interest_name+"</option>";
       });
 
-      $('#interest_id').html(opt);
+      $('#interest_id').html(opt).trigger("chosen:updated");
     }
   });
+}
+
+function validateForm(t){
+
+  switch(t){
+    case 1: //add services
+        var frmid = "formaddservice",
+            modal = "modal_addservices";
+    break;
+    case 2: //add schedules
+         var frmid = "formaddschedule",
+              modal = "modal_addschedule";
+    break;
+  }
+  var frmdata = $("#"+frmid).serializeArray(),data={};
+  $.each(frmdata, function(i,e){
+        var name = $("#"+e.name);
+        if(e.value == ""){
+          switch(t){
+            case 1: //add services
+                    name.parent().addClass("has-error");
+            break;
+
+            case 2: //add schedules
+                  if(e.name != 'InstructorID' || e.name != 'RoomID'){
+                    name.parent().addClass('has-error');
+                  }
+            break;
+          }
+            
+        }else{
+              switch(t){
+                case 1://add services
+                      if(e.name == 'ServiceRegistrationFee' || e.name=="serviceWalkin" || e.name == 'ServicePrice' || e.name=="serviceHour"){
+                          if($.isNumeric(e.value)){
+                            name.parent().removeClass('has-error');
+                            data[e.name] = e.value;
+                           
+                          }else{
+                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                            name.parent().addClass("has-error");
+                            setTimeout(function(){
+                              $("#message .alert").html("").removeClass("alert-danger").hide();
+                            },2000);  
+                          }
+                      }else{
+                        name.parent().removeClass('has-error');
+                        data[e.name] = e.value;
+                      }
+                break;
+
+                case 2://add schedules
+                      if(e.name == "SchedSlots"){
+                        if($.isNumeric(e.value)){
+                            name.parent().removeClass('has-error');
+                            data[e.name] = e.value;
+                           
+                          }else{
+                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                            name.parent().addClass("has-error");
+                            setTimeout(function(){
+                              $("#message .alert").html("").removeClass("alert-danger").hide();
+                            },2000);  
+                        }
+                      }else if(e.name == "endTime" || e.name == 'startTime'){
+                        
+                        data['SchedTime'] = $("#startTime").val()+" - "+$("#endTime").val();
+                          name.parent().removeClass('has-error');
+                      }else if(e.name == 'SchedDays'){
+                        data[e.name] = e.value.toString();
+                        name.parent().removeClass('has-error');
+                      }else{
+                        data[e.name] = e.value;
+                        name.parent().removeClass('has-error');
+                      }
+                break;
+              }
+              
+        }
+  }); 
+
+  var count = $("#"+modal+" .has-error").lentgh;
+  if(count > 0){
+    $("#message .alert").html("All fields are required").addClass("alert-danger").show();
+    setTimeout(function(){
+      $("#message .alert").html("").removeClass('alert-danger').hide();
+    },2000);
+  }else{
+            saveData(data,t);
+  }
+}
+
+function saveData(data,t){
+  var txtHiddenService = $('#txtHiddenService').val();
+switch(t){
+  case 1: //services
+        if(txtHiddenService == ''){ 
+          var url = "services/addServices",
+              errorMsg = $("#ServiceName").val()+" Service has been added successfully.";
+        }else{ 
+          var url = "services/updateServices/"+txtHiddenService,
+              errorMsg = $("#ServiceName").val()+" Service info has been updated successfully";
+        }
+        var frmid = "formaddservice",
+            modal = "modal_addservices",
+            table = "tbl-services";
+  break;
+
+  case 2: //schedules
+        if(txtHiddenService == ''){ 
+          var url = "services/addSchedule", 
+              errorMsg = "New schedule has been added.";
+        }else{ 
+          var url = "services/updateSchedule/"+txtHiddenService,
+              errorMsg = "Schedules has been updated.";
+        }
+        var frmid = "formaddschedule",
+            modal = "modal_addschedule",
+            table = "tbl-schedules";
+  break;
+}
+
+//get how many div is using 'has-error' class
+var error = $("#"+frmid+" .has-error").length;
+  if(error > 0){
+    $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();
+  }else{
+    $("#message .alert").html("").removeClass('alert-danger').hide();
+    $.ajax({
+      url:url,
+      data:{data},
+      dataType:'JSON',
+      type:'POST',
+      success:function(msg){
+        var table = $("#"+table).DataTable(), dataForm = $("#"+frmid).serializeArray(); 
+        if(msg == true){
+
+            $("#message .alert").html(errorMsg).addClass("alert-success").show();
+
+            $.each(dataForm, function(i,e){
+              $("#"+e.name).val("");
+            });
+            setTimeout(function(){
+              $("#message .alert").html("").removeClass("alert-success").hide();
+              $("#"+modal).modal('hide');
+            },3000);
+
+             table.ajax.reload();
+             $('#txtHiddenService').val(1);
+        }else{
+          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
+        }
+      }
+    });
+  }
 }

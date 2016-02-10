@@ -347,3 +347,18 @@ function listings(c,id){
 			}
 	});	
 }
+
+function getHour24(timeString)
+{
+    time = null;
+    var matches = timeString.match(/^(\d{1,2}):00 (\w{2})/);
+    if (matches != null && matches.length == 3)
+    {
+        time = parseInt(matches[1]);
+        if (matches[2] == 'PM')
+        {
+            time += 12;
+        }
+    }
+    return time;
+}

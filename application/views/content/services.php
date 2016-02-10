@@ -32,6 +32,7 @@
 <!-- type to delete. 1-services,2-instructors, 3-students -->
 <input type="hidden" id = "deleteType"/>
 
+<input type = "hidden" id = "txtHiddenService" value = "">
     <!-- Start Content -->
     <div id="content">
       <div class="container">
@@ -437,7 +438,7 @@
                     </select>
                     <br/>
                     <label for = "interest_id" >Interest List</label>
-                    <select class = "form-control" id = "interest_id" name = "interest_id">
+                    <select class = "form-control chosen-select" id = "interest_id" name = "interest_id">
                       <option value = "">Please select service type to populate this dropdown</option>
                     </select>
                   </div>
@@ -476,7 +477,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-saveServices" class="btn btn-primary">Save</button>
+            <button type="button" id= "btn-saveServices" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -490,20 +491,25 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">Add Schedules</h4>
           </div>
-          <input type = "hidden" id = "txtHiddenSchedule" value = "1">
+          <input type = "hidden" id = "txtHiddenSchedule" value = "">
           <div class="modal-body">
             <div class = "row">
             <div class="alert" role="alert" style = "display:none"></div>
               <form  id="formaddschedule">  
-                <div class="col-md-6">
-                  <div class = "form-group">
-                    <label for = "ServiceID">Service :</label>
-                    <select name="ServiceID" id="ServiceID" class = "form-control" >
-                    </select>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "SchedDate">Date :</label>
-                    <input type="text" placehoder="Date" name="SchedDate" id="SchedDate" class = "form-control" />
+              <div class = "col-md-6">
+                <div class = "form-group">
+                  
+                  <label for = "SchedDate">Days (You can select Multiple):</label>
+                      <select type="text" placehoder="Day From" name="SchedDays" id="SchedDays" class = "chosen-select form-control" multiple>
+                        <option value = "">Select Days</option>
+                        <option value = "Monday">Monday</option>
+                        <option value = "Tuesday">Tuesday</option>
+                        <option value = "Wednesday">Wednesday</option>
+                        <option value = "Thursday">Thursday</option>
+                        <option value = "Friday">Friday</option>
+                        <option value = "Saturday">Saturday</option>
+                        <option value = "Sunday">Sunday</option>
+                      </select>
                   </div>
                   <div class = "form-group">
                     <label for = "SchedTime">Start Time :</label>
@@ -514,22 +520,27 @@
                     <input type = "text" placeholder="End Time" class = "form-control" id = "endTime" name = "endTime"/>
                   </div>
                   <div class = "form-group">
-                    <label for = "RoomID">Room</label>
-                    <select class = "form-control" id = "RoomID" name = "RoomID">
-                    <option value = "0">Select Room</option>
+                    <label for = "SchedSlots">Slots</label>
+                    <input type="text" placeholder="Slots" class = "form-control" id = "SchedSlots" name = "SchedSlots"/>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class = "form-group">
+                    <label for = "ServiceID">Service :</label>
+                    <select name="ServiceID" id="ServiceID" class = "form-control chosen-select" >
                     </select>
                   </div>
                   <div class = "form-group">
                     <label for = "InstructorID">Instructor</label>
-                    <select type="text" class = "form-control" id = "InstructorID" name = "InstructorID">
+                    <select type="text" class = "chosen-select form-control" id = "InstructorID" name = "InstructorID">
                       <option value = "0">Select Instructor</option>
                     </select>
                   </div>
-                </div>
-                <div class = "col-md-6">
                   <div class = "form-group">
-                    <label for = "SchedSlots">Slots</label>
-                    <input type="text" placeholder="Slots" class = "form-control" id = "SchedSlots" name = "SchedSlots"/>
+                    <label for = "RoomID">Room</label>
+                    <select class = "chosen-select form-control" id = "RoomID" name = "RoomID">
+                    <option value = "0">Select Room</option>
+                    </select>
                   </div>
                 </div>
               </form>
@@ -552,7 +563,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">Add Service</h4>
           </div>
-          <input type = "hidden" id = "txtHiddenService" value = "1">
+          
           <div class="modal-body">
             <div class = "row">
             <div class="alert" role="alert" style = "display:none"></div>
