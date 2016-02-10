@@ -117,7 +117,8 @@ $(document).ready(function(){
   format:'Y-m-d',
   formatDate:'Y-m-d'
 });
-});
+  listings(4,null); //see main.js
+}); 
 
 function getservices(){
   $('#tbl-services').DataTable( {
@@ -471,7 +472,7 @@ function validateForm(t){
               modal = "modal_addschedule";
     break;
   }
-  var frmdata = $("#"+frmid).serializeArray(),data={};
+  var frmdata = $("#"+frmid).serializeArray(),data={},schedDays = new Array();
   $.each(frmdata, function(i,e){
         var name = $("#"+e.name);
         if(e.value == ""){
@@ -526,7 +527,7 @@ function validateForm(t){
                         data['SchedTime'] = $("#startTime").val()+" - "+$("#endTime").val();
                           name.parent().removeClass('has-error');
                       }else if(e.name == 'SchedDays'){
-                        data[e.name] = e.value.toString();
+                         schedDays.push(e.value);
                         name.parent().removeClass('has-error');
                       }else{
                         data[e.name] = e.value;
@@ -537,7 +538,7 @@ function validateForm(t){
               
         }
   }); 
-
+  if(t == 2) data['schedDays'] = schedDays.toString();
   var count = $("#"+modal+" .has-error").lentgh;
   if(count > 0){
     $("#message .alert").html("All fields are required").addClass("alert-danger").show();
@@ -545,6 +546,7 @@ function validateForm(t){
       $("#message .alert").html("").removeClass('alert-danger').hide();
     },2000);
   }else{
+
             saveData(data,t);
   }
 }

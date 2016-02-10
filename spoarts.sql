@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2016 at 08:45 AM
+-- Generation Time: Feb 10, 2016 at 05:56 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -47891,7 +47891,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `id` int(11) NOT NULL,
   `sortname` varchar(3) NOT NULL,
   `name` varchar(150) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=249 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `countries`
@@ -48402,14 +48402,23 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 
 CREATE TABLE IF NOT EXISTS `schedules` (
   `SchedID` int(11) NOT NULL,
-  `SchedDate` date NOT NULL,
+  `SchedDays` varchar(50) NOT NULL,
   `SchedStatus` int(11) NOT NULL,
   `RoomID` int(11) NOT NULL,
   `InstructorID` int(11) NOT NULL,
   `ServiceID` int(11) NOT NULL,
   `SchedSlots` int(11) NOT NULL,
-  `SchedTime` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `SchedTime` varchar(50) NOT NULL,
+  `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `schedules`
+--
+
+INSERT INTO `schedules` (`SchedID`, `SchedDays`, `SchedStatus`, `RoomID`, `InstructorID`, `ServiceID`, `SchedSlots`, `SchedTime`, `date_added`) VALUES
+(1, 'Wednesday', 0, 0, 0, 8, 15, '09:00 am - 12:00 pm', '2016-02-10 12:25:45'),
+(2, 'Saturday', 0, 0, 0, 8, 10, '05:00 am - 02:00 pm', '2016-02-10 12:30:24');
 
 -- --------------------------------------------------------
 
@@ -48452,7 +48461,7 @@ CREATE TABLE IF NOT EXISTS `services` (
   `serviceHour` int(11) NOT NULL,
   `clubpic` varchar(50) NOT NULL,
   `interest_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `services`
@@ -48472,7 +48481,9 @@ INSERT INTO `services` (`ServiceID`, `ServiceName`, `ServiceDesc`, `ServiceSched
 (12, 'Kick-boxing', 'Kick-boxing', 'Monday-Saturday 09:00am-10:00pm', 500, 1, '2000', 0, 27, 200, 0, '', 36),
 (13, 'Badminton', 'Badminton', 'Monday-Sunday 07:00am-08:00pm', 500, 1, '1000', 0, 27, 100, 0, '', 36),
 (19, 'test', 'kjfjskdl', '235fbdfg', 5645, 1, '232', 0, 27, 345, 67, '', 0),
-(21, 'dfskdfj', 'dskhkds', 'rhkgher', 21424, 1, '345', 0, 27, 234823, 23432, '', 34);
+(21, 'dfskdfj', 'dskhkds', 'rhkgher', 21424, 1, '345', 0, 27, 234823, 23432, '', 34),
+(22, 'archery ', 'dsfkskf', 'Monday-Friday 09:00am-06:00pm', 1000, 1, '3000', 0, 27, 500, 3, '', 29),
+(23, 'zumba', 'zumba', 'Monday-Sunday 04:00AM-09:00AM', 300, 1, '500', 0, 27, 150, 3, '', 37);
 
 -- --------------------------------------------------------
 
@@ -53002,7 +53013,7 @@ ALTER TABLE `clinics`
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=249;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=247;
 --
 -- AUTO_INCREMENT for table `instructors`
 --
@@ -53037,7 +53048,7 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `security_questions`
 --
@@ -53047,7 +53058,7 @@ ALTER TABLE `security_questions`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `states`
 --

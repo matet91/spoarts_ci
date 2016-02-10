@@ -81,7 +81,7 @@ class Mlogin extends CI_Model {
                 }
         		
         		$this->session->set_userdata($session);
-                return 1; exit(); //correct password
+                return array(1, $row->UserType); exit(); //correct password
             }
 
        	}else{

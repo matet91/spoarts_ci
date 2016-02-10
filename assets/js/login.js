@@ -26,9 +26,17 @@ $(document).ready(function(){
 				dataType:'JSON',
 				type:'POST',
 				success:function(msg){
-					if(msg == 1){
+					if(msg[0] == 1){
+
 						$("#message .alert").html("").removeClass('alert-danger').hide();
-						window.location = "index";
+						if(msg[1] == "0"){
+							window.location = "index";
+						}else if(msg[1] == "1"){
+							window.location = "services";
+						}else{
+							window.location = "service_provider";
+						}
+						
 					}else if(msg == 2){//inactive
 						$("#message .alert").html("Your account has not been verified. Please check your email. We sent you a new verification code.").addClass('alert-danger').show();
 							setTimeout(function(){

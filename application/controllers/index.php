@@ -32,17 +32,18 @@ class Index extends CI_Controller {
   		switch($first_login){
   			case 0: //firstlogin
   				$title = "Settings";
-  				if($userType == 2)
+  				if($userType == 2) //client
   					$content = "content/firstlogin_client.php";
-  				else
+  				else //service provider
   					$content = "content/firstlogin_sp.php";
   				$menu = "";
   			break;
 
   			case 1: //old user
-  					$title = "Home";
-  					$content = "content/home.php";
-  					$menu="menu.php";
+				$title = "Home";
+				$content = "content/home.php";
+				$menu="menu.php";
+	  				
 
   			break;
   		}

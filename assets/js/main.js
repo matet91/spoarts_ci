@@ -334,6 +334,11 @@ function listings(c,id){
 					var selectid = "city_id",
 					 	opt = "<option value=''>Select City</option>";
 			break;
+
+			case 4://instructors
+					var selectid = "InstructorID",
+						opt = "<option value=''>Assign Instructor</option>";
+			break;
 		}
 	$.ajax({
 			url:'login/listings/'+c+"/"+id,

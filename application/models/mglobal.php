@@ -182,6 +182,11 @@ class mglobal extends CI_Model {
 					$where = array('state_id'=>$id);
 					$this->db->where($where);
 			break;
+
+			case 4: //instructors
+					$table = "instructor_masterlist";
+					
+			break;
 		}
 		$this->db->select("*");
 		$data = $this->db->get($table);

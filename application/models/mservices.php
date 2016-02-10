@@ -137,6 +137,7 @@ class mservices extends CI_Model {
 		
 		$rResult = $this->db->query( $sQuery );
 		//echo $this->db->last_query();
+		//print_r($rResult->result());
 		$sQuery = "SELECT FOUND_ROWS() as count";
 		$rResultFilterTotal = $this->db->query( $sQuery);
 
@@ -160,7 +161,8 @@ class mservices extends CI_Model {
 			$row = array();
 			foreach ( $aColumns_output as $col ){
 				if($case == 3){
-					$row[] = ($aRow->$col ==0) ? 'TBA' : $aRow->$col;
+
+					$row[] = ($aRow->$col==null) ? 'TBA' : $aRow->$col;
 				}else{
 					$row[] = ($aRow->$col ==0) ? '-' : $aRow->$col;
 				}
