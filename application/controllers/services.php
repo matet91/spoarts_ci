@@ -23,7 +23,16 @@ class Services extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->model('mservices');
-		//$this->load->libraries('paypal');
+		$this->load->library('paypalcreditcard');
+		$this->load->library('paypaldetails');
+		$this->load->library('paypalfundinginstrument');
+		$this->load->library('paypalitem');
+		$this->load->library('paypalitemlist');
+		$this->load->library('paypalpayer');
+		$this->load->library('paypalpayment');
+		$this->load->library('paypaltransaction');
+		$this->load->library('paypalpayer');
+		
 	}
 
 	public function index()
@@ -102,6 +111,11 @@ class Services extends CI_Controller {
 
 	function addRoom(){
 		$data = $this->mservices->addRoom();
+		echo json_encode($data);
+	}
+
+	function paypal($type){
+		$data = $this->mservices->paypal($type);
 		echo json_encode($data);
 	}
 }

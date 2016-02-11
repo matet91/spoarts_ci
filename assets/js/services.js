@@ -51,6 +51,11 @@ $(document).ready(function(){
       
   });
 
+  //open modal for payment method
+  $('#btn-paynow').click(function(e){
+    e.preventDefault();
+    $("#modal_payment").modal('show');
+  });
   $("#clubimage").popover('show');
   //hide after 6 seconds.
   setTimeout(function(){
@@ -631,9 +636,22 @@ function validateForm(t){
                 break;
 
                 case 4://add Room
-                     
+                      if(e.name == "RoomNo"){
+                         if($.isNumeric(e.value)){
+                              name.parent().removeClass('has-error');
+                              data[e.name] = e.value;
+                             
+                            }else{
+                              $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                              name.parent().addClass("has-error");
+                              setTimeout(function(){
+                                $("#message .alert").html("").removeClass("alert-danger").hide();
+                              },2000);  
+                          }
+                      }else{                        
                         name.parent().removeClass('has-error');
                         data[e.name] = e.value;
+                      }
                 break;
               }
               
@@ -740,5 +758,16 @@ var error = $("#"+frmid+" .has-error").length;
         }
       }
     });
+  }
+}
+
+
+function numbersOnly(val,id){
+  if(!$.isNumeric(val)){
+    $('#'+id).parent().addClass('has-error');
+    $("#message .alert").html($("#"+id).prev().html()+" should be numeric.").addClass("alert-danger").show();
+  }else{
+    $("#"+id).parent().removeClass('has-error');
+    $("#message .alert").html("").removeClass('has-error').hide();
   }
 }

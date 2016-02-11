@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Clinics extends CI_Controller {
+class Myclinics extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -27,7 +27,7 @@ class Clinics extends CI_Controller {
 
 	public function index()
 	{
-		$content = 'clinics.php';
+		$content = 'myclinics.php';
 		$type = $this->input->get('type');
 		$title = ($type == 1)?"Arts Clinic":"Sports Clinic";
 		
@@ -43,6 +43,7 @@ class Clinics extends CI_Controller {
 		$data = $this->mclinics->loadServices($c,$search);
 		echo json_encode($data);
 	}
+	
 	function loadClinics($c,$search=null){
 		$data = $this->mclinics->loadClinics($c,$search);
 		echo json_encode($data);
@@ -57,16 +58,6 @@ class Clinics extends CI_Controller {
 		$table = "schedules";
 		$fields = "SchedID, SchedDate, SchedTime";
 		$where = "WHERE ServiceID = '".$serviceid."' AND SchedStatus = 1";
-		$order = "";
-		
-		$data = $this->mclinics->getlist($table, $fields , $where, $order);
-		echo json_encode($data);
-	}
-	
-	function getService($c,$userid){
-		$table = "services";
-		$fields = "ServiceID, ServiceName";
-		$where = "WHERE SPID = '".$userid."' AND ServiceType='".$c."' AND ServiceStatus = 1";
 		$order = "";
 		
 		$data = $this->mclinics->getlist($table, $fields , $where, $order);

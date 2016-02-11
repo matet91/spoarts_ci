@@ -42,7 +42,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="title-promo">Enroll</h4>
+					<h4 class="modal-title" id="title-promo">Interest</h4>
 				</div>
 				<div class="modal-body">
 					<div class = "row">
@@ -60,7 +60,7 @@
 								<label for = "forsched_name">Interest Names</label>
 							  </div>
 							  <div class = "form-group">
-								<select class = "form-control" multiple="multiple" id = "interest_id" name = "interest_id"></select>
+								<select multiple="multiple" class="chosenElement" id = "interest_id" name = "interest_id"></select>
 							  </div>
 							</div>
 						</form>
@@ -89,7 +89,7 @@
               <form  id="formsecurity">
                 <div class = "col-md-8">  
                   <div class = "form-group">
-                    <label for = "securitypwd"><?=$this->session->userdata('securityquestion');?></label><input type = "password" placeholder="Service Name" class = "form-control" id = "sec_pwd" name = "sec_pwd"/>
+                    <label for = "securitypwd"><?=$this->session->userdata('securityquestion');?></label><input type = "password" placeholder="Password" class = "form-control" id = "sec_pwd" name = "sec_pwd"/>
                   </div>
                 </div>
               </form>

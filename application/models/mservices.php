@@ -291,4 +291,73 @@ class mservices extends CI_Model {
 		$q = $this->db->insert('rooms',$data);
 		return $q;
 	}
+
+	function paypal($type){
+		switch($type){
+			case 1: //credit or debit card
+					$data = $this->input->post('data');
+					$number = $data['cardno'];
+					$month = $data['expdatemonth'];
+					$firstname = $data['cfirstname'];
+					$lastname = $data['clastname'];
+					$year = $data['expdateyear'];
+					$card = new PaypalCreditCard();
+					$card->setType("visa")
+					    ->setNumber(" 4032034118189292")
+					    ->setExpireMonth("11")
+					    ->setExpireYear("2019")
+					    ->setCvv2("012")
+					    ->setFirstName("Joe")
+					    ->setLastName("Shopper");
+					$fi = new PaypalFundingInstrument(); $fi->setCreditCard($card);
+					$payer = new Payer();
+					$payer->setPaymentMethod("credit_card")
+					    ->setFundingInstruments(array($fi));
+					$item1 = new Item();
+					$item1->setName('Premium')
+					    ->setDescription('Upgrade/Renew to Premium')
+					    ->setCurrency('PHP')
+					    ->setQuantity(1)
+					    ->setTax(0)
+					    ->setPrice(1500);
+					$item2 = new Item();
+
+					$itemList = new PaypalItemList();
+					$itemList->setItems(array($item1, $item2));
+					$details = new Details();
+					$details->setShipping(1.2)
+					    ->setTax(1.3)
+					    ->setSubtotal(17.5);
+					$amount = new Amount();
+					$amount->setCurrency("USD")
+					    ->setTotal(20)
+					    ->setDetails($details);
+					$transaction = new PaypalTransaction();
+					$transaction->setAmount($amount)
+					    ->setItemList($itemList)
+					    ->setDescription("Payment description")
+					    ->setInvoiceNumber(uniqid());
+					$payment = new PaypalPayment();
+					$payment->setIntent("sale")
+					    ->setPayer($payer)
+					    ->setTransactions(array($transaction));
+
+					$request = clone $payment;
+					try {
+					    $payment->create($apiContext);
+					} catch (Exception $ex) {
+
+					 	//ResultPrinter::printError('Create Payment Using Credit Card. If 500 Exception, try creating a new Credit Card using <a href="https://ppmts.custhelp.com/app/answers/detail/a_id/750">Step 4, on this link</a>, and using it.', 'Payment', null, $request, $ex);
+					    exit(1);
+					}
+
+					// ResultPrinter::printResult('Create Payment Using Credit Card', 'Payment', $payment->getId(), $request, $payment);
+
+					return $payment;
+			break;
+
+			case 2: //paypal
+			break;
+		}
+	}
 }

@@ -85,7 +85,14 @@ class Mlogin extends CI_Model {
             }
 
        	}else{
-       		return 0; exit();//account does not exist or incorrect passsword
+            $this->db->where("UserName",'$uname');
+            $this->db->select("*");
+            $get = $this->db->get("user_accounts");
+            if($get->num_rows() > 0){
+                return 4; exit(); //incorrect password
+            }else{
+       		   return 0; exit();//account does not exist 
+            }
        	}  
      }
 
