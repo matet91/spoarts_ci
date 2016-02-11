@@ -50,7 +50,9 @@ $(document).ready(function(){
       validateForm(4);
       
   });
-
+  $('#btn-checkout').click(function(){
+      validateForm(5);
+  });
   //open modal for payment method
   $('#btn-paynow').click(function(e){
     e.preventDefault();
@@ -129,6 +131,7 @@ $(document).ready(function(){
   formatDate:'Y-m-d'
 });
   listings(4,null); //see main.js
+  listings(5,null); //see main.js
 }); 
 
 function getservices(){
@@ -457,7 +460,7 @@ function getData(id, type){
         break;
 
         case 2: //instructors
-              var frmName = "#formaddinstructor";
+              var frmName = "#formaddInstructor";
         break;
       }
       var frmdata = $(frmName).serializeArray();
@@ -546,6 +549,10 @@ function validateForm(t){
         var frmid = "formaddRoom  ",
             modal = "modal_addRoom";
     break;
+    case 5: //paypal
+        var frmid = "formpaymentMethod  ",
+            modal = "modal_payment";
+    break;
   }
   var frmdata = $("#"+frmid).serializeArray(),data={},schedDays = new Array();
   $.each(frmdata, function(i,e){
@@ -565,6 +572,9 @@ function validateForm(t){
                     name.parent().addClass("has-error");
             break;
             case 4: //add room
+                    name.parent().addClass("has-error");
+            break;
+            case 5: //add room
                     name.parent().addClass("has-error");
             break;
           }
@@ -653,6 +663,11 @@ function validateForm(t){
                         data[e.name] = e.value;
                       }
                 break;
+
+                case 5://paypal                     
+                        name.parent().removeClass('has-error');
+                        data[e.name] = e.value;
+                break;
               }
               
         }
@@ -722,6 +737,19 @@ switch(t){
         }
         var frmid = "formaddRoom",
             modal = "modal_addRoom",
+            table = "tbl-rooms";
+  break;
+
+  case 5: //paypal credit card
+        if(txtHiddenService == ''){ 
+          var url = "services/paypal/"+1, 
+              errorMsg = "Payment successful. Congratulations! You are now a premium member";
+        }else{ 
+          var url = "services/updateRoom/"+txtHiddenService,
+              errorMsg = "Room Information has been updated.";
+        }
+        var frmid = "formpaymentMethod",
+            modal = "modal_payment",
             table = "tbl-rooms";
   break;
 }

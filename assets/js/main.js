@@ -197,7 +197,6 @@ function saveProfile(data){
 				$("#modal_profile .alert").html("Changes saved. Modal will automatically close.").removeClass('alert-danger').show().addClass('alert-success');
 				setTimeout(function(){
 					$("#modal_profile").modal('hide');
-					window.reload();
 				},4000);
 				
 			}else{
@@ -338,6 +337,11 @@ function listings(c,id){
 			case 4://instructors
 					var selectid = "InstructorID",
 						opt = "<option value=''>Assign Instructor</option>";
+			break;
+
+			case 5://instructors
+					var selectid = "RoomID",
+						opt = "<option value=''>Assign Room</option>";
 			break;
 		}
 	$.ajax({

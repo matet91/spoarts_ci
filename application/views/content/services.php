@@ -43,7 +43,7 @@
             <div class = "col-md-1">
                 <div class = "row">
                   <img src="assets/images/<?php echo $clubpic;?>" class="img-circle" style = "width80px; height80px; cursorpointer;" id = "clubimage" data-toggle = "popover" data-placement = "top" title = "Click here to change picture.">
-                   <input type="file" name="clubpic" id="clubpic" accept="image/*" style = "displaynone"/>
+                   <input type="file" name="clubpic" id="clubpic" accept="image/*" style = "display:none"/>
                 </div>
                  <!-- end picture -->
               </div>
@@ -52,7 +52,6 @@
                 <div class="row">
                   <div class="col-sm-10">
                     <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
-                    <button class="btn btn-info btn-sm" id="btn-renew" data-toggle="tooltip" data-placement="top" title="Upgrade/Renew Subscription"><span class = "glyphicon glyphicon-king"></span> </button>
                   </div>
                 </div>
               </div>
@@ -91,7 +90,7 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Subscription Type</label>
                     <div class="col-sm-10">
-                      <select  id = "SubscType" name = "SubscType" class = "form-control">
+                      <select  id = "SubscType" name = "SubscType" class = "form-control" disabled>
                         <option value="1" <?php echo($data->SubscType==1)?'selected':'';?>>Trial</option>
                         <option value="2" <?php echo($data->SubscType==2)?'selected':'';?>>Premium</option>
                       </select>
@@ -112,7 +111,7 @@
                         {
                           echo "<p class='text-success'>Paid</p>";
                         }else if($data->SubsStatus==0){
-                          echo "<p class='text-danger'>Unpaid. Please settle your balance for you to Manage Services Module.</p><button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Pay Now thru Visa'><i class ='fa fa-cc-visa fa-2x'></i>&nbsp;<i class ='fa fa-cc-paypal fa-2x'></i>&nbsp;<i class ='fa fa-cc-mastercard fa-2x'></i>&nbsp;<i class ='fa fa-credit-card fa-2x'></i>&nbsp;Pay Now</button>";
+                          echo "<p class='text-danger'>Unpaid. Please settle your balance for you to Manage Services Module.</p><button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Pay Now'><i class ='fa fa-cc-visa fa-2x'></i>&nbsp;<i class ='fa fa-cc-paypal fa-2x'></i>&nbsp;</i>&nbsp;<i class ='fa fa-credit-card fa-2x'></i>&nbsp;Pay Now</button>";
                         }else{
                           echo "<p class='text-info'>Your subscription has expired. Renew your subscription to continue using this service.</p>";
                         }
@@ -528,7 +527,7 @@
                   <div class="tabs-section" id = "tab-management">
                     <!-- Nav Tabs -->
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#tab-creditcard" data-toggle="tab"><i class="fa fa-credit-card"></i>Credit or Debit Card</a></li>
+                      <li class="active"><a href="#tab-creditcard" data-toggle="tab"><i class="fa fa-credit-card"></i>Credit Card</a></li>
                       <li><a href="#tab-paypal" data-toggle="tab"><i class="fa fa-paypal"></i>Paypal</a></li>
                     </ul>
                     <!-- Tab panels -->
@@ -559,7 +558,7 @@
                             </div>
 
                             <div class = "col-md-4">
-                              <input type="text" class = "form-control" id = "expdateyear" name = "expdateyear" placeholder = "yy" maxlength = "2"/>
+                              <input type="text" class = "form-control" id = "expdateyear" name = "expdateyear" placeholder = "yy" maxlength = "4"/>
                             </div>
                           </div>
                         </div>
@@ -577,7 +576,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-              <button type="button" id= "btn-saveRoom" class="btn btn-primary">Continue</button>
+              <button type="button" id= "btn-checkout" class="btn btn-primary">Continue</button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

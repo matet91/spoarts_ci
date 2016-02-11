@@ -236,7 +236,7 @@ class mservices extends CI_Model {
 			break;
 
 			case 2: //instructors
-					$sql = "SELECT * FROM instructors WHERE ins_id = '$id'";
+					$sql = "SELECT * FROM instructor_masterlist WHERE MasterInsID = '$id'";
 			break;
 		}
 
@@ -251,8 +251,8 @@ class mservices extends CI_Model {
 					$table = "services";
 			break;
 			case 2: //instructor
-					$field = "ins_id";
-					$table = "instructors";
+					$field = "MasterInsID";
+					$table = "instructor_masterlist";
 			break;
 		}
 		$data = $this->input->post('data');
@@ -293,49 +293,64 @@ class mservices extends CI_Model {
 	}
 
 	function paypal($type){
+		$apiContext = new \PayPal\Rest\ApiContext(
+		    new \PayPal\Auth\OAuthTokenCredential(
+		        'AXk62QC51pffd4zUaXG9LQzu9oFIWNQx5eHzznUGBYYabG4Gi3AQKdH3uvugO5QZE3QXyoCy5p9fsimI',     // ClientID
+		        'EC_apl8JodAI6FwbTF6dUiAKgdIGovPxqt90et5vGo2r71I38mmmsu26WKqUS7XmBI-j_BmJr1h-zcTA'      // ClientSecret
+		    )
+		);
 		switch($type){
 			case 1: //credit or debit card
 					$data = $this->input->post('data');
+					//get premium amount in subscription_plans
+					$this->db->where('PlanID',2);
+					$this->db->select('*');
+					$get = $this->db->get('subscription_plans');
+					$row = $get->row();
+					$term = $row->PlanTerm;
+					$price = $row->PlanPrice;
+
+
 					$number = $data['cardno'];
 					$month = $data['expdatemonth'];
 					$firstname = $data['cfirstname'];
 					$lastname = $data['clastname'];
 					$year = $data['expdateyear'];
+					$ccv = $data['ccv'];
 					$card = new PaypalCreditCard();
 					$card->setType("visa")
-					    ->setNumber(" 4032034118189292")
-					    ->setExpireMonth("11")
-					    ->setExpireYear("2019")
-					    ->setCvv2("012")
-					    ->setFirstName("Joe")
-					    ->setLastName("Shopper");
+					    ->setNumber($number)
+					    ->setExpireMonth($month)
+					    ->setExpireYear($year)
+					    ->setCvv2($ccv)
+					    ->setFirstName($firstname)
+					    ->setLastName($lastname);
 					$fi = new PaypalFundingInstrument(); $fi->setCreditCard($card);
-					$payer = new Payer();
+					$payer = new PaypalPayer();
 					$payer->setPaymentMethod("credit_card")
 					    ->setFundingInstruments(array($fi));
-					$item1 = new Item();
+					$item1 = new PaypalItem();
 					$item1->setName('Premium')
 					    ->setDescription('Upgrade/Renew to Premium')
-					    ->setCurrency('PHP')
+					    ->setCurrency('USD')
 					    ->setQuantity(1)
 					    ->setTax(0)
-					    ->setPrice(1500);
-					$item2 = new Item();
+					    ->setPrice($price);
 
 					$itemList = new PaypalItemList();
-					$itemList->setItems(array($item1, $item2));
-					$details = new Details();
-					$details->setShipping(1.2)
-					    ->setTax(1.3)
-					    ->setSubtotal(17.5);
-					$amount = new Amount();
+					$itemList->setItems(array($item1));
+					$details = new PaypalDetails();
+					$details->setShipping(0)
+					    ->setTax(0)
+					    ->setSubtotal($price);
+					$amount = new PaypalAmount();
 					$amount->setCurrency("USD")
-					    ->setTotal(20)
+					    ->setTotal($price)
 					    ->setDetails($details);
 					$transaction = new PaypalTransaction();
 					$transaction->setAmount($amount)
 					    ->setItemList($itemList)
-					    ->setDescription("Payment description")
+					    ->setDescription("Subscription to Premium")
 					    ->setInvoiceNumber(uniqid());
 					$payment = new PaypalPayment();
 					$payment->setIntent("sale")
@@ -345,6 +360,7 @@ class mservices extends CI_Model {
 					$request = clone $payment;
 					try {
 					    $payment->create($apiContext);
+
 					} catch (Exception $ex) {
 
 					 	//ResultPrinter::printError('Create Payment Using Credit Card. If 500 Exception, try creating a new Credit Card using <a href="https://ppmts.custhelp.com/app/answers/detail/a_id/750">Step 4, on this link</a>, and using it.', 'Payment', null, $request, $ex);
@@ -352,11 +368,89 @@ class mservices extends CI_Model {
 					}
 
 					// ResultPrinter::printResult('Create Payment Using Credit Card', 'Payment', $payment->getId(), $request, $payment);
+					$transactions = $payment->getTransactions(); 
+					$relatedResources = $transactions[0]->getRelatedResources(); 
+					$sale = $relatedResources[0]->getSale(); 
+					$userid = $this->session->userdata('userid');
+					$transactionID = $sale->getId();
+					$createTime = $sale->getCreateTime();
+					$status = $sale->getState();
+					$invoice = $transactions[0]->getInvoiceNumber();
+					if($status == "completed"){
+						$paymentlog = array('paypal_amount'=>1500,
+											 'paypal_createTime'=>$createTime,
+											 'transaction_id'=>$transactionID,
+											 'buyer_name'=>$firstname." ".$lastname,
+											 'paypal_invoice'=>$invoice,
+											 'UserID'=>$userid);
+						$this->db->insert('paypal_logs',$paymentlog);
+						$d = date('Y-m-d h:i:s');
+        				$datetime = new DateTime($d);
+						$datetime->add(new DateInterval('P'.$term));
+						$subsData = array('SubscType'=>2,
+										  'SubsStatus'=>1,
+										  'SubscStartDate'=>date('Y-m-d',strtotime($createTime)),
+										  'SubscEndDate'=>$datetime->format('Y-m-d'));
 
-					return $payment;
+						$this->db->where('UserID',$userid);
+						$this->db->update('subscriptions',$subsData);
+						return true; exit();
+					}else{
+						return false; exit();
+					}
 			break;
 
 			case 2: //paypal
+
+					$payer = new PaypalPayer();
+					$payer->setPaymentMethod("paypal");
+					$item1 = new PaypalItem();
+					$item1->setName('Ground Coffee 40 oz')
+					    ->setCurrency('USD')
+					    ->setQuantity(1)
+					    ->setSku("123123") 
+					    ->setPrice(7.5);
+					$item2 = new PaypalItem();
+					$item2->setName('Granola bars')
+					    ->setCurrency('USD')
+					    ->setQuantity(5)
+					    ->setSku("321321") 
+					    ->setPrice(2);
+
+					$itemList = new PaypalItemList();
+					$itemList->setItems(array($item1, $item2));
+					$details = new PaypalDetails();
+					$details->setShipping(1.2)
+					    ->setTax(1.3)
+					    ->setSubtotal(17.50);
+					$amount = new PaypalAmount();
+					$amount->setCurrency("USD")
+					    ->setTotal(20)
+					    ->setDetails($details);
+					$transaction = new PaypalTransaction();
+					$transaction->setAmount($amount)
+					    ->setItemList($itemList)
+					    ->setDescription("Payment description")
+					    ->setInvoiceNumber(uniqid());
+					$baseUrl = base_url();
+					$redirectUrls = new PaypalRedirectUrls();
+					$redirectUrls->setReturnUrl("$baseUrl/ExecutePayment.php?success=true")
+					    ->setCancelUrl("$baseUrl/ExecutePayment.php?success=false");
+
+					$payment = new PaypalPayment();
+					$payment->setIntent("sale")
+					    ->setPayer($payer)
+					    ->setRedirectUrls($redirectUrls)
+					    ->setTransactions(array($transaction));
+
+					$request = clone $payment;
+					try {
+					    $payment->create($apiContext);
+					} catch (Exception $ex) {
+					    exit(1);
+					}
+
+					$approvalUrl = $payment->getApprovalLink();
 			break;
 		}
 	}

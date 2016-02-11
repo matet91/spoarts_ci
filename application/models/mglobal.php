@@ -164,7 +164,7 @@ class mglobal extends CI_Model {
 	}
 
 	function listings($c,$id=null){
-
+			$select = "*";
 		switch($c){
 			case 1: //country
 					
@@ -185,10 +185,18 @@ class mglobal extends CI_Model {
 
 			case 4: //instructors
 					$table = "instructor_masterlist";
+					$select = "MasterInsID as id,MasterInsName as name";
+					
+			break;
+
+			case 5: //room
+					$table = "rooms";
+					$select = "RoomID as id,RoomName as name";
 					
 			break;
 		}
-		$this->db->select("*");
+
+		$this->db->select($select);
 		$data = $this->db->get($table);
 		return $data->result();
 	}

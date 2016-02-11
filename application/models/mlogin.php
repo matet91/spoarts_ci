@@ -153,7 +153,6 @@ class Mlogin extends CI_Model {
         //verify expiry settings
         $d = date('Y-m-d h:i:s');
         $datetime = new DateTime($d);
-        $datetime->add(new DateInterval('P1D'));
         $UAData['verify_expiry'] = $datetime->format('Y-m-d H:i:s');
         //insert to user_accounts and get the userid
         $d = $this->db->insert('user_accounts',$UAData);

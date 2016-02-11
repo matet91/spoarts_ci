@@ -28,10 +28,11 @@ class Services extends CI_Controller {
 		$this->load->library('paypalfundinginstrument');
 		$this->load->library('paypalitem');
 		$this->load->library('paypalitemlist');
-		$this->load->library('paypalpayer');
 		$this->load->library('paypalpayment');
 		$this->load->library('paypaltransaction');
 		$this->load->library('paypalpayer');
+		$this->load->library('paypalamount');
+		$this->load->library('paypalredirecturls');
 		
 	}
 
