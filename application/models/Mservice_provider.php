@@ -66,6 +66,18 @@ class Mservice_provider extends CI_Model {
 				$groupby = "";
 				$aColumns_output = array("memberid","membername", "memberaddress", "memberage", "memberenrolled", "clientid","action");
 			break;
+			case 3:
+				$interestids = $this->getID("client_interest", "interest_ids" , "WHERE client_id = '".$this->session->userdata("userid")."'");
+				$aColumns = array("interest_id","interest_name", "interest_type");
+				$select = array("interest_id","interest_name", "(CASE WHEN interest_type=1 THEN 'Arts' ELSE 'Sports' END) as interest_type", "1 as action");
+				$sTable = "interest";
+				$leftjoin = " ";
+				$sWhere = "WHERE interest_id IN (".$interestids.") ";
+				if($sSearch){$sWhere .= " AND (interest_name like '%".$sSearch."%' OR interest_type like '%".$sSearch."%')";}
+				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+				$groupby = "";
+				$aColumns_output = array("interest_id","interest_name", "interest_type","action");
+			break;
 		}
 		
 		$sIndexColumn = "*";
@@ -98,7 +110,7 @@ class Mservice_provider extends CI_Model {
 		foreach($rResult->result() as $aRow){	
 			$row = array();
 			foreach ( $aColumns_output as $col ){
-				$row[] = ($aRow->$col =="0") ? '-' : $aRow->$col;
+				$row[] = ($aRow->$col =="0") ? '-' : ucfirst($aRow->$col);
 			}
 			$output['aaData'][] = $row;
 		}
@@ -119,5 +131,16 @@ class Mservice_provider extends CI_Model {
 				$spname = $row->SPName;
 			}
 		}
+	}
+	function getID($table,$field,$where){
+		$sql = "SELECT $field FROM $table $where";
+		$q = $this->db->query($sql);
+		$id = 0;
+		if($q->num_rows() > 0){
+			foreach($q->result() as $row){
+				$id = $row->$field;
+			}
+		}	
+		return $id;
 	}
 }

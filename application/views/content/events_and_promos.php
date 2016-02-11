@@ -7,7 +7,7 @@
 	margin: 0 auto;
   }
 </style>
-
+<link href='assets/css/jquery.datetimepicker.css' rel='stylesheet' />
 <link href='assets/fullcalendar/fullcalendar.css' rel='stylesheet' />
 <link href='assets/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
 <link rel="stylesheet" href="assets/css/bootstrap-multiselect.css" type="text/css"/>
@@ -215,7 +215,7 @@
 <script src='assets/fullcalendar/lib/moment.min.js'></script>
 <!--script src='assets/fullcalendar/lib/jquery.min.js'></script-->
 <script src='assets/fullcalendar/fullcalendar.min.js'></script>
-
+<script src='assets/js/jquery.datetimepicker.full.min.js'></script>
 <script type="text/javascript" src="assets/js/bootstrap-multiselect.js"></script>
 	
 	

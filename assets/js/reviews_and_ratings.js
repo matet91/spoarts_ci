@@ -16,24 +16,23 @@ function getReviewList(typelist){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
-			var cnt = msg.length;
 			var result = "";
-			for(var ctr=0; ctr < cnt; ctr++){
+			$.each(msg, function(i,e){
 				var star = "";
-				for(var str = 0; str < msg[ctr].Rating ; str++){
+				for(var str = 0; str < e.Rating ; str++){
 					star += '<span class = "glyphicon glyphicon-star-empty"></span>';
 				}
 				
 				var listbutton = "";
 				if(typelist == 0){
-					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
-					'<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="reviewaction(2,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-ok"></span></button>&nbsp;'+
-					'<button class = "btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" title="Disapprove" onclick="reviewaction(1,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-remove"></span></button>';
+					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
+					'<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="reviewaction(2,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-ok"></span></button>&nbsp;'+
+					'<button class = "btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" title="Disapprove" onclick="reviewaction(1,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-remove"></span></button>';
 				}else if(typelist == 1){
-					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
-					'<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="reviewaction(2,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-ok"></span></button>';
+					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
+					'<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="reviewaction(2,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-ok"></span></button>';
 				}else{
-					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+msg[ctr].ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>';	
+					listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="reviewaction(4,'+e.ReviewsID+')"><span class = "glyphicon glyphicon-trash"></span></button>';	
 				}
 				
 				result += '<div class="col-md-6">'+
@@ -43,10 +42,10 @@ function getReviewList(typelist){
 						'</div>'+
 						'<div class="hr5" style="margin-top:45px;margin-bottom:45px;"></div>'+
 						'<div class="testimonial-content">'+
-							'<p>'+msg[ctr].Message+'</p>'+
+							'<p>'+e.Message+'</p>'+
 						'</div>'
 						+star+
-						'<div class="testimonial-author"><span>'+msg[ctr].EnrolledName+'</span> - Clients of '+msg[ctr].SPname+'</div>'+
+						'<div class="testimonial-author"><span>'+e.EnrolledName+'</span> - Clients of '+e.SPname+'</div>'+
 					'</div>'+
 				'</div>';
 				
@@ -59,8 +58,7 @@ function getReviewList(typelist){
 				}else if((ctr % 2) == 0 &&  ctr == (cnt-1)){
 					result = '<div class="row">' + result + '</div>';
 				}
-					
-			}
+			});
 			
 			if(typelist == 0){
 				$("#tab-pending").html(result);

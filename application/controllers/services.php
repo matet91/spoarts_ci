@@ -99,4 +99,9 @@ class Services extends CI_Controller {
 		$data = $this->mservices->addSchedule();
 		echo json_encode($data);
 	}
+
+	function addRoom(){
+		$data = $this->mservices->addRoom();
+		echo json_encode($data);
+	}
 }

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class mclinics extends CI_Model {
+class myclinics extends CI_Model {
 	public function __construct()
 	{
 			// Call the CI_Model constructor
@@ -27,63 +27,13 @@ class mclinics extends CI_Model {
 		return $q->result();
 	}
 	
-	function loadClinics($c,$search){
-
-		if(isset($search) && $search!='0'){
-			$search = " AND (c.clinic_name LIKE '$search%')";
-		}else{
-			$search = "";
-		}
-		
-		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=1 GROUP BY SPID,ServiceType $search";
-		
-		$q = $this->db->query($sql);
-		return $q->result();
-	}
-	
 	function bookmark(){
-		$clinicid = $this->input->post('clinicid');
-		$userid = $this->session->userdata('userid');
-		//get list of bookmarked and verify if the clinic already exist
-		$this->db->where('client_id',$userid);
-		$this->db->select('clinic_id');	
-		$q = $this->db->get('bookmark');
-		
-		if($q->num_rows() > 0){
-			$row = $q->row();
-			$clinics = explode(',',$row->clinic_id);
-			if(in_array($clinicid,$clinics)){
-				return 1; //already bookmarked
-				exit();
-			}else{
-				array_push($clinics,$clinicid);
-				$this->db->where('client_id',$userid);
-				$d = $this->db->update('bookmark',array('clinic_id'=>implode(",",$clinics)));
-				if($d == true)
-					return 2;//bookmark updated
-				else return 0; //error occurred
-				exit();
-			}
-
-		}else{
-			$data = array('clinic_id'=>$clinicid,'client_id'=>$userid);
-			$d = $this->db->insert('bookmark',$data);
-
-			if($d == true)
-				return 3; //new clinic bookmark added
-			else return 0; //error occurred
-			exit();
-		}
-	}
-	
-	function bookmark_matet(){
 		$serviceid = $this->input->post('serviceid');
 		$clinicid = $this->input->post('clinicid');
 		$userid = $this->session->userdata('userid');
 		//get list of bookmarked and verify if the serviceid already exist
 		$this->db->where('client_id',$userid);
 		$this->db->select('service_id');
-		
 		$q = $this->db->get('bookmark');
 		if($q->num_rows() > 0){
 			$row = $q->row();
@@ -117,7 +67,7 @@ class mclinics extends CI_Model {
 		if($frmdata['studType'] ==0){ //new student
 			
 			$ch = $this->checkData("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$this->session->userdata('userid')."'");
-	
+
 			if($ch){
 				$error = 3; //existing student in a clinic
 			}else{
@@ -174,7 +124,7 @@ class mclinics extends CI_Model {
 	}
 	
 	function getID($table,$field,$where){
-		$sql = "SELECT $field FROM $table $where";
+		$sql = "SELECT $field FROM students $where";
 		$q = $this->db->query($sql);
 		$id = 0;
 		if($q->num_rows() > 0){

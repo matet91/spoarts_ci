@@ -11,7 +11,7 @@ class mservices extends CI_Model {
 	function addServices(){
 		$frmdata = $this->input->post('data');
 		foreach($frmdata as $row=>$val){
-			$data[$row]=$val;
+			$data[$row]=ucfirst($val);
 		}
 		$data['SPID']=$this->session->userdata('userid');
 		$data['ServiceStatus'] = 1;
@@ -61,13 +61,32 @@ class mservices extends CI_Model {
 
 	function saveClinicInfo(){
 		$data = $this->input->post('data');
+		$clinicInfo = array('clinic_name','SPLocation','SPAboutMe');
+
+		$subsInfo['SubscType'] = $data['SubscType'];
+
+		foreach($clinicInfo as $key){
+			$clinicData[$key] = ucfirst($data[$key]);
+		}
 		$userid = $this->session->userdata('userid');
 
 		$this->db->where('UserID',$userid);
-		$q = $this->db->update('clinics',$data);
+		$q = $this->db->update('subscriptions',$subsInfo);
 
-		if($q) return 1;
-		else return 0;
+		//check if existing
+		$this->db->where('UserID',$userid);
+		$this->db->select("*");
+		$chkq = $this->db->get('clinics');
+		if($chkq->num_rows() > 0){
+			$this->db->where('UserID',$userid);
+			$q = $this->db->update('clinics',$clinicData);
+		}else{
+			$clinicData['UserID'] = $userid;
+			$this->db->insert('clinics',$clinicData);
+		}
+		
+
+		return $q;
 	}
 
 	function dataTables($case,$id=null){
@@ -75,6 +94,7 @@ class mservices extends CI_Model {
 		$sSortype = $this->input->get('sSortDir_0');
 		$sSearch = $this->input->get('sSearch');
 		$usertype = $this->session->userdata('usertype');
+		$userid = $this->session->userdata('userid');
 		$aColumns = explode(',',$this->input->get('sColumns'));
 		$sLimit = "";
 		if ( $this->input->get('iDisplayStart')!='' && $this->input->get('iDisplayLength') != '-1' )
@@ -120,12 +140,39 @@ class mservices extends CI_Model {
 						LEFT JOIN rooms r ON r.RoomID=s.RoomID
 						LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
 					//print_r($select);
-					$sWhere = "";
+					$sWhere = "WHERE srv.SPID = '$userid'";
 					if($sSearch){
-						$sWhere .= " Where (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedTime like '%".$sSearch."%' OR s.date_added like '%".$sSearch."%' OR s.SchedDays like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
+						$sWhere .= " AND (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedTime like '%".$sSearch."%' OR s.date_added like '%".$sSearch."%' OR s.SchedDays like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 					$groupby = "";
 					$aColumns_output = array("SchedID","SchedDays","SchedTime","RoomName","MasterInsName","ServiceName","SchedSlots","date_added","action");
+			break;
+			case 4://masterlist od instructors
+					$select = $aColumns;
+					$select[6] = "(CASE WHEN MasterInsStatus = 1 THEN 'Active' ELSE 'Inactive' END) as MasterInsStatus";
+					$sTable = "instructor_masterlist";
+					$leftjoin = "";
+					//print_r($select);
+					$sWhere = "wHERE UserID='$userid'";
+					if($sSearch){
+						$sWhere .= " AND (MasterInsName like '%".$sSearch."%' OR MasterInsAddress like '%".$sSearch."%' OR MasterInsContactNo like '%".$sSearch."%' OR MasterInsEmail like '%".$sSearch."%' OR MasterInsExpertise like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise","MasterInsStatus","action");
+			break;
+
+			case 5://rooms
+					$select = $aColumns;
+					$select[6] = "(CASE WHEN RoomStatus = 1 THEN 'Active' ELSE 'Inactive' END) as RoomStatus";
+					$sTable = "rooms";
+					$leftjoin = "";
+					//print_r($select);
+					$sWhere = "wHERE UserID='$userid'";
+					if($sSearch){
+						$sWhere .= " AND (RoomNo like '%".$sSearch."%' OR RoomName like '%".$sSearch."%' OR RoomStatus like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("RoomID","RoomNo","RoomName","RoomStatus","action");
 			break;
 		}
 		
@@ -164,7 +211,7 @@ class mservices extends CI_Model {
 
 					$row[] = ($aRow->$col==null) ? 'TBA' : $aRow->$col;
 				}else{
-					$row[] = ($aRow->$col ==0) ? '-' : $aRow->$col;
+					$row[] = ($aRow->$col =='') ? '-' : $aRow->$col;
 				}
 			}
 			$output['aaData'][] = $row;
@@ -174,9 +221,8 @@ class mservices extends CI_Model {
 
 	function addInstructor(){
 		$data = $this->input->post('data');
-		$data['ins_status'] = 1;
-		$q = $this->db->insert('instructors',$data);
-
+		$data['UserID'] = $this->session->userdata('userid');
+		$q = $this->db->insert('instructor_masterlist',$data);
 		return $q;
 	}
 
@@ -239,4 +285,10 @@ class mservices extends CI_Model {
 		return $q;
 	}	
 
+	function addRoom(){
+		$data = $this->input->post('data');
+		$data['UserID'] = $this->session->userdata('userid');
+		$q = $this->db->insert('rooms',$data);
+		return $q;
+	}
 }

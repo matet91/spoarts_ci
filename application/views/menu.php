@@ -41,6 +41,10 @@
                   <li><a href="clinics?type=1">Arts</a></li>
                   <li><a href="clinics?type=0">Sports</a></li>
                 </ul>
+				<li> <a href="myclinics" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Clinics</a></li>
+				<li> <a href="myinterests" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Interest</a></li>
+				<li> <a href="mypayments" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Payments</a></li>
+				<li> <a href="myevents" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Events</a></li>
                 <?php } ?>
               </li>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>

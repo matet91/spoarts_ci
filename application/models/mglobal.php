@@ -44,7 +44,7 @@ class mglobal extends CI_Model {
 		move_uploaded_file($tmp_name, $dir);
 			$this->db->where('UserID',$userid);
 			$this->db->update('user_details',array('splogoname'=>$name));
-			
+		 $this->session->set_userdata('splogoname',$name);
 		return $name;
 	}
 

@@ -1,5 +1,5 @@
 <style>
-  .modal-dialog {
+  #content-services .modal-dialog {
     width: 95%; /* or whatever you wish */
   }
 </style>
@@ -66,19 +66,19 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Clinic Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="clinic_name" name = "clinic_name" placeholder="Club Name" value = "<?=$data->clinic_name;?>">
+                      <input type="text" class="form-control" id="clinic_name" name = "clinic_name" placeholder="Club Name" value = "<?=ucfirst($data->clinic_name);?>">
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Owner Name: </label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value = "<?=$this->session->userdata('name');?>" disabled>
+                      <input type="text" class="form-control" value = "<?=ucfirst($this->session->userdata('name'));?>" disabled>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Location</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=$data->SPLocation;?>">
+                      <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>">
                       <span class = "glyphicon glyphicon-map-marker" style = "cursor:pointer !important;" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
                     </div>
 
@@ -86,7 +86,7 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">About Us</label>
                     <div class="col-sm-10">
-                      <textarea id = "SPAboutMe" name = "SPAboutMe"><?=$data->SPAboutMe;?></textarea>
+                      <textarea id = "SPAboutMe" name = "SPAboutMe"><?=ucfirst($data->SPAboutMe);?></textarea>
                     </div>
                   </div>
                   <div class="form-group">
@@ -150,8 +150,8 @@
 	              <ul class="nav nav-tabs">
 	                <li class="active"><a href="#tab-4" data-toggle="tab"><i class="fa fa-desktop"></i>Services</a></li>
 	                <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-calendar"></i>Manage Schedules</a></li>
-	                <li><a href="#tab-6" data-toggle="tab"><i class="fa fa-map-pin"></i>Manage Rooms</a></li>
-	                <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-group"></i>Manage Instructors</a></li>
+	                <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-map-pin"></i>Manage Rooms</a></li>
+	                <li><a href="#tab-6" data-toggle="tab"><i class="fa fa-group"></i>Manage Instructors</a></li>
 	              </ul>
 
 	              <!-- Tab panels -->
@@ -210,419 +210,310 @@
                       }
                   ?>><i class="fa fa-plus"></i> Add Schedules</button>
               			<div class="hr1 margin-top"></div>
+
               			<table id="tbl-schedules" class="display" cellspacing="0" width="100%"></table>
               		</div>
               		<div class="tab-pane fade in" id="tab-6">
-              			<table id="tbl-rooms" class="display" cellspacing="0" width="100%"></table>
+                    <button class="btn btn-primary btn-sm" id="btn-modalInstructor" data-toggle="tooltip" data-placement="top" title="Add Intstructor"
+                     <?php
+                    if($data->SubscType==2){
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "";
+                        }else if($data->SubsStatus==0){
+                          echo "disabled";
+                        }else{
+                          echo "disabled";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "";
+                          }else{
+                            echo "disabled";
+                          }
+                      }?>><i class="fa fa-plus"></i> Add Instructor</button>
+                     <div class="hr1 margin-top"></div>
+              			<table id="tbl-insmaterlist" class="display" cellspacing="0" width="100%"></table>
               		</div>
               		<div class="tab-pane fade in" id="tab-7">
+                    <button class="btn btn-primary btn-sm" id="btn-modalRoom" data-toggle="tooltip" data-placement="top" title="Add Room"
+                     <?php
+                    if($data->SubscType==2){
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "";
+                        }else if($data->SubsStatus==0){
+                          echo "disabled";
+                        }else{
+                          echo "disabled";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "";
+                          }else{
+                            echo "disabled";
+                          }
+                      }?>><i class="fa fa-plus"></i> Add Room</button>
+                     <div class="hr1 margin-top"></div>
               			<table id="tbl-rooms" class="display" cellspacing="0" width="100%"></table>
               		</div>
               	</div>
               </div>
 
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Content -->
-    <!-- modal dialog for view students and instructors -->
-    <div class="modal fade" id = "modal_viewlist" tabindex="-1" role="dialog" >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">View Students and Instructors</h4>
-          </div>
-          <div class="modal-body">
-            <div id = "studentattendancelog" style= "display:none">
-              <button id = "btn-backtotab" class="btn btn-primary"><span class = "glyphicon glyphicon-arrow-left"></span>back to list</button>
-              <table id="example9" class="display" cellspacing="0" width="100%">
-                  <thead>
-                      <tr>
-                          <th>Date</th>
-                          <th>Time In</th>
-                          <th>Time Out</th>
-                          <th>Status</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td>January 01, 2016</td>
-                          <td>09:00am</td>
-                          <td>12:00pm</td>
-                          <td>Present</td>
-                      </tr>
-                      <tr>
-                          <td>January 02, 2016</td>
-                          <td>-</td>
-                          <td>-</td>
-                          <td>Absent</td>
-                      </tr>
-                      <tr>
-                          <td>January 03, 2016</td>
-                          <td>-</td>
-                          <td>-</td>
-                          <td>Absent</td>
-                      </tr>
-                     
-                  </tbody>
-              </table>
-            </div>
-            <div class="tabs-section" id = "studentsInstructor_tab">
-
-              <!-- Nav Tabs -->
-              <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-desktop"></i>Students</a></li>
-                <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-leaf"></i>Instructors</a></li>
-              </ul>
-
-              <!-- Tab panels -->
-              <div class="tab-content">
-                <!-- Tab Content 1 -->
-                <div class="tab-pane fade in active" id="tab-1">
-                  <table id="example7" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Age</th>
-                                <th>Member Since</th>
-                                <th>Client</th>
-                                <th>Status</th>
-                                <th>Time In</th>
-                                <th>Time Out</th>
-                                <th>Paid Today ?</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>John Doe 1</td>
-                                <td>Cebu City</td>
-                                <td>12</td>
-                                <td>December 01, 2015</td>
-                                <td>John Doe</td>
-                                <td>Regular</td>
-                                <td>January 21, 2016 08:00am</td>
-                                <td>-</td>
-                                <td>Yes</td>
-                                <td><button class = "btn btn-primary btn-attendance btn-xs" data-toggle="tooltip" data-placement="top" title="View Attendance History"><span class = "glyphicon glyphicon-calendar"></span></button>
-                                  <button class = "btn btn-info btn-paymentlog btn-xs" data-toggle="tooltip" data-placement="top" title="Payment Logs"><span class = "glyphicon glyphicon-piggy-bank"></span></button>
-                                  <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Time in & out"><span class = "glyphicon glyphicon-time"></span></button>
-                                  <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Mark As Paid"><span class = "glyphicon glyphicon-usd"></span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>John Doe 2</td>
-                                <td>Cebu City</td>
-                                <td>12</td>
-                                <td>December 01, 2015</td>
-                                <td>John Doe</td>
-                                <td>Regular</td>
-                                <td>January 21, 2016 08:00am</td>
-                                <td>-</td>
-                                <td>No</td>
-                                <td><button class = "btn btn-primary btn-attendance btn-xs" data-toggle="tooltip" data-placement="top" title="View Attendance History"><span class = "glyphicon glyphicon-calendar"></span></button>
-                                  <button class = "btn btn-info btn-paymentlog btn-xs" data-toggle="tooltip" data-placement="top" title="Payment Logs"><span class = "glyphicon glyphicon-piggy-bank"></span></button>
-                                  <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Time in & out"><span class = "glyphicon glyphicon-time"></span></button>
-                                <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Mark As Paid"><span class = "glyphicon glyphicon-usd"></span></button>
-                              </td>
-                            </tr>
-                            <tr>
-                                <td>John Doe 3</td>
-                                <td>Cebu City</td>
-                                <td>12</td>
-                                <td>December 01, 2015</td>
-                                <td>John Doe</td>
-                                <td>Regular</td>
-                                <td>January 21, 2016 08:00am</td>
-                                <td>-</td>
-                                <td>No</td>
-
-                                <td><button class = "btn btn-primary btn-attendance btn-xs" data-toggle="tooltip" data-placement="top" title="View Attendance History"><span class = "glyphicon glyphicon-calendar"></span></button>
-                                  <button class = "btn btn-info btn-paymentlog btn-xs" data-toggle="tooltip" data-placement="top" title="Payment Logs"><span class = "glyphicon glyphicon-piggy-bank"></span></button>
-                                  <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Time in & out"><span class = "glyphicon glyphicon-time"></span></button>
-                                  <button class = "btn btn-warning btn-timeinout btn-xs" data-toggle="tooltip" data-placement="top" title="Mark As Paid"><span class = "glyphicon glyphicon-usd"></span></button>
-                                </td>
-                            </tr>
-                           
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Tab Content 2 -->
-                <div class="tab-pane fade" id="tab-2" id = "instructor-tab">
-                  
-                  <?php if($this->session->userdata('usertype') == 1){?>
-                  <h4 class="classic-title"><span>Add Instructor</span></h4>
-                     <div class="col-sm-10">
-                        <button class="btn btn-primary btn-sm" id="btn-addInstructor" data-toggle="tooltip" data-placement="top" title="Save"><span class = "glyphicon glyphicon-floppy-save"></span></button>
-                      </div>
-                      <!-- Divider -->
-                    <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
-                   
-                  <div class = "row">
+            <!-- ********** MODAL ************-->
+            <!-- modal add Services -->
+            <div class="modal fade" id = "modal_addservices" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Service</h4>
+                  </div>
+                  <input type = "hidden" id = "txtHiddenService" value = "1">
+                  <div class="modal-body">
+                    <div class = "row">
                     <div class="alert" role="alert" style = "display:none"></div>
-                      <form  id="formaddinstructor">  
+                      <form  id="formaddservice">  
                         <div class="col-md-6">
                           <div class = "form-group">
-                            <label for = "service_id">Select Service :</label>
-                            <select class = "form-control" id = "service_id" name = "service_id">
+                            <label for = "ServiceType">Service Type</label>
+                            <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
+                              <option value = "">Please Select Service Type</option>
+                              <option value = "0">Sports</option>
+                              <option value = "1">Arts</option>
+                            </select>
+                            <br/>
+                            <label for = "interest_id" >Interest List</label>
+                            <select class = "form-control chosen-select" id = "interest_id" name = "interest_id">
+                              <option value = "">Please select service type to populate this dropdown</option>
                             </select>
                           </div>
                           <div class = "form-group">
-                            <label for = "ins_name">Name :</label>
-                            <input type = "text" placeholder="Instructor Name" class = "form-control" id = "ins_name" name = "ins_name"/>
+                            <label for = "forserv_name">Name</label>
+                            <input type = "text" placeholder="Service Name" class = "form-control" id = "ServiceName" name = "ServiceName"/>
                           </div>
                           <div class = "form-group">
-                            <label for = "ins_slot">Slots :</label>
-                            <input type = "text" placeholder="Slots" class = "form-control" id = "ins_slot" name = "ins_slot"/>
+                            <label for = "forserv_desc">Description</label>
+                            <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "serv_sched">Schedule</label>
+                            <input type="text" placeholder="Schedule" class = "form-control" id = "ServiceSchedule" name = "ServiceSchedule"/>
                           </div>
                         </div>
                         <div class = "col-md-6">
                           <div class = "form-group">
-                            <label for = "ins_sched">Schedule :</label>
-                            <input type = "text" placeholder= "Instructor's Schedule" class = "form-control" id = "ins_schedule" name = "ins_schedule"/>
+                            <label for = "serv_reg_fee">Registration Fee</label>
+                            <input type="text" placeholder="Registration Fee" class = "form-control" id = "ServiceRegistrationFee" name = "ServiceRegistrationFee"/>
                           </div>
                           <div class = "form-group">
-                            <label for = "serv_sched">Room :</label>
-                            <input type="text" placeholder="Room" class = "form-control" id = "ins_room" name = "ins_room"/>
+                            <label for = "serv_walkin">Walk-in/Per Session</label>
+                            <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceWalkin" name = "serviceWalkin"/>
                           </div>
                           <div class = "form-group">
-                            <label for = "serv_sched">Room :</label>
-                            <select class = "form-control" id = "ins_status" name = "ins_status">
-                              <option value = "1">Active</option>
-                              <option value = "0">Inactive</option>
+                            <label for = "serv_walkin"># of Hour(s)/Session</label>
+                            <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceHour" name = "serviceHour"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "serv_monthly">Monthly Fee</label>
+                            <input type="text" placeholder="Monthly Fee" class = "form-control" id = "ServicePrice" name = "ServicePrice"/>
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+                    <button type="button" id= "btn-saveServices" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+            <!-- end modal services-->
+
+            <!-- modal add Schedules -->
+            <div class="modal fade" id = "modal_addschedule" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Schedules</h4>
+                  </div>
+                  <input type = "hidden" id = "txtHiddenSchedule" value = "">
+                  <div class="modal-body">
+                    <div class = "row">
+                    <div class="alert" role="alert" style = "display:none"></div>
+                      <form  id="formaddschedule">  
+                      <div class = "col-md-6">
+                        <div class = "form-group">
+                          
+                          <label for = "SchedDate">Days (You can select Multiple):</label>
+                              <select type="text" placehoder="Day From" name="SchedDays" id="SchedDays" class = "chosen-select form-control" multiple>
+                                <option value = "">Select Days</option>
+                                <option value = "Monday">Monday</option>
+                                <option value = "Tuesday">Tuesday</option>
+                                <option value = "Wednesday">Wednesday</option>
+                                <option value = "Thursday">Thursday</option>
+                                <option value = "Friday">Friday</option>
+                                <option value = "Saturday">Saturday</option>
+                                <option value = "Sunday">Sunday</option>
+                              </select>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "SchedTime">Start Time :</label>
+                            <input type = "text" placeholder="Start Time" class = "form-control" id = "startTime" name = "startTime"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "SchedTime">End Time :</label>
+                            <input type = "text" placeholder="End Time" class = "form-control" id = "endTime" name = "endTime"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "SchedSlots">Slots</label>
+                            <input type="text" placeholder="Slots" class = "form-control" id = "SchedSlots" name = "SchedSlots"/>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class = "form-group">
+                            <label for = "ServiceID">Service :</label>
+                            <select name="ServiceID" id="ServiceID" class = "form-control chosen-select" >
+                            </select>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "InstructorID">Instructor</label>
+                            <select type="text" class = "chosen-select form-control" id = "InstructorID" name = "InstructorID">
+                              <option value = "0">Select Instructor</option>
+                            </select>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "RoomID">Room</label>
+                            <select class = "chosen-select form-control" id = "RoomID" name = "RoomID">
+                            <option value = "0">Select Room</option>
                             </select>
                           </div>
                         </div>
                       </form>
                   </div>
-                  <?php } ?>
-                  <table id="tbl-instructor" class="display" cellspacing="0" width="100%">
-                  </table>
-                </div>
-               
-              </div>
-              <!-- End Tab Panels -->
-            </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+                    <button type="button" id= "btn-saveSchedule" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save Schedule</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!-- end modal -->
+            <!-- end modal schedule-->
 
-    <!-- modal add Services -->
-    <div class="modal fade" id = "modal_addservices" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Service</h4>
-          </div>
-          <input type = "hidden" id = "txtHiddenService" value = "1">
-          <div class="modal-body">
-            <div class = "row">
-            <div class="alert" role="alert" style = "display:none"></div>
-              <form  id="formaddservice">  
-                <div class="col-md-6">
-                  <div class = "form-group">
-                    <label for = "ServiceType">Service Type</label>
-                    <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
-                      <option value = "">Please Select Service Type</option>
-                      <option value = "0">Sports</option>
-                      <option value = "1">Arts</option>
-                    </select>
-                    <br/>
-                    <label for = "interest_id" >Interest List</label>
-                    <select class = "form-control chosen-select" id = "interest_id" name = "interest_id">
-                      <option value = "">Please select service type to populate this dropdown</option>
-                    </select>
+            <!-- modal add Instructor -->
+            <div class="modal fade" id = "modal_addInstructor" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Instructor</h4>
                   </div>
-                  <div class = "form-group">
-                    <label for = "forserv_name">Name</label>
-                    <input type = "text" placeholder="Service Name" class = "form-control" id = "ServiceName" name = "ServiceName"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "forserv_desc">Description</label>
-                    <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_sched">Schedule</label>
-                    <input type="text" placeholder="Schedule" class = "form-control" id = "ServiceSchedule" name = "ServiceSchedule"/>
-                  </div>
-                </div>
-                <div class = "col-md-6">
-                  <div class = "form-group">
-                    <label for = "serv_reg_fee">Registration Fee</label>
-                    <input type="text" placeholder="Registration Fee" class = "form-control" id = "ServiceRegistrationFee" name = "ServiceRegistrationFee"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_walkin">Walk-in/Per Session</label>
-                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceWalkin" name = "serviceWalkin"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_walkin"># of Hour(s)/Session</label>
-                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceHour" name = "serviceHour"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_monthly">Monthly Fee</label>
-                    <input type="text" placeholder="Monthly Fee" class = "form-control" id = "ServicePrice" name = "ServicePrice"/>
-                  </div>
-                </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-saveServices" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div>
-    <!-- end modal --><!-- modal add Schedules -->
-    <div class="modal fade" id = "modal_addschedule" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Schedules</h4>
-          </div>
-          <input type = "hidden" id = "txtHiddenSchedule" value = "">
-          <div class="modal-body">
-            <div class = "row">
-            <div class="alert" role="alert" style = "display:none"></div>
-              <form  id="formaddschedule">  
-              <div class = "col-md-6">
-                <div class = "form-group">
                   
-                  <label for = "SchedDate">Days (You can select Multiple):</label>
-                      <select type="text" placehoder="Day From" name="SchedDays" id="SchedDays" class = "chosen-select form-control" multiple>
-                        <option value = "">Select Days</option>
-                        <option value = "Monday">Monday</option>
-                        <option value = "Tuesday">Tuesday</option>
-                        <option value = "Wednesday">Wednesday</option>
-                        <option value = "Thursday">Thursday</option>
-                        <option value = "Friday">Friday</option>
-                        <option value = "Saturday">Saturday</option>
-                        <option value = "Sunday">Sunday</option>
-                      </select>
+                  <div class="modal-body">
+                    <div class = "row">
+                    <div class="alert" role="alert" style = "display:none"></div>
+                      <form  id="formaddInstructor">  
+                        <div class="col-md-6">
+                          <div class = "form-group">
+                            <label for = "MasterInsName">Name :</label>
+                            <input type = "text" placeholder="Instructor's Name" class = "form-control" id = "MasterInsName" name = "MasterInsName"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "MasterInsAddress">Address :</label>
+                            <textarea class = "form-control" id = "MasterInsAddress" name = "MasterInsAddress"></textarea>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "MasterInsEmail">E-mail :</label>
+                            <input type="text" placeholder="E-mail" class = "form-control" id = "MasterInsEmail" name = "MasterInsEmail"/>
+                          </div>
+                        </div>
+                        <div class = "col-md-6">
+                          <div class = "form-group">
+                            <label for = "MasterInsEmail">Contact # :</label>
+                            <input type="text" placeholder="Contact #" class = "form-control" id = "MasterInsContactNo" name = "MasterInsContactNo"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "MasterInsExpertise">Expertise</label>
+                            <textarea placeholder="Expertise" class = "form-control" id = "MasterInsExpertise" name = "MasterInsExpertise"></textarea>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "serv_walkin">Status</label>
+                            <select placeholder="Status" class = "form-control chosen-select" id = "MasterInsStatus" name = "MasterInsStatus">
+                              <option value = "0">Inactive</option>
+                              <option value = "1">Active</option>
+                            </select>
+                          </div>
+                        </div>
+                      </form>
                   </div>
-                  <div class = "form-group">
-                    <label for = "SchedTime">Start Time :</label>
-                    <input type = "text" placeholder="Start Time" class = "form-control" id = "startTime" name = "startTime"/>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+                    <button type="button" id= "btn-saveInstructor" class="btn btn-primary">Save Instructor</button>
                   </div>
-                  <div class = "form-group">
-                    <label for = "SchedTime">End Time :</label>
-                    <input type = "text" placeholder="End Time" class = "form-control" id = "endTime" name = "endTime"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "SchedSlots">Slots</label>
-                    <input type="text" placeholder="Slots" class = "form-control" id = "SchedSlots" name = "SchedSlots"/>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class = "form-group">
-                    <label for = "ServiceID">Service :</label>
-                    <select name="ServiceID" id="ServiceID" class = "form-control chosen-select" >
-                    </select>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "InstructorID">Instructor</label>
-                    <select type="text" class = "chosen-select form-control" id = "InstructorID" name = "InstructorID">
-                      <option value = "0">Select Instructor</option>
-                    </select>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "RoomID">Room</label>
-                    <select class = "chosen-select form-control" id = "RoomID" name = "RoomID">
-                    <option value = "0">Select Room</option>
-                    </select>
-                  </div>
-                </div>
-              </form>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-saveSchedule" class="btn btn-primary"><i class = "fa fa-save fa-fw"></i>Save Schedule</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div>
-    <!-- end modal -->
+            <!-- end Intstructor modal -->
 
-    <!-- modal add Services -->
-    <div class="modal fade" id = "modal_addservices" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Service</h4>
+            <!-- modal add Room -->
+            <div class="modal fade" id = "modal_addRoom" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Room</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    <div class = "row">
+                    <div class="alert" role="alert" style = "display:none"></div>
+                      <form  id="formaddRoom">  
+                        <div class="col-md-8">
+                          <div class = "form-group">
+                            <label for = "RoomNo">Room # :</label>
+                            <input type = "text" placeholder="Room #" class = "form-control" id = "RoomNo" name = "RoomNo"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "RoomName">Room Name :</label>
+                            <input type="text" class = "form-control" id = "RoomName" name = "RoomName" placeholder = "Room Name"/>
+                          </div>
+                          <div class = "form-group">
+                            <label for = "RoomStatus">Status</label>
+                            <select placeholder="Status" class = "form-control chosen-select" id = "RoomStatus" name = "RoomStatus">
+                              <option value = "0">Inactive</option>
+                              <option value = "1">Active</option>
+                            </select>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+                    <button type="button" id= "btn-saveRoom" class="btn btn-primary">Save Room</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
           </div>
-          
-          <div class="modal-body">
-            <div class = "row">
-            <div class="alert" role="alert" style = "display:none"></div>
-              <form  id="formaddservice">  
-                <div class="col-md-6">
-                  <div class = "form-group">
-                    <label for = "ServiceType">Service Type</label>
-                    <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
-                      <option value = "">Please Select Service Type</option>
-                      <option value = "0">Sports</option>
-                      <option value = "1">Arts</option>
-                    </select>
-                    <br/>
-                    <label for = "interest_id" >Interest List</label>
-                    <select class = "form-control" id = "interest_id" name = "interest_id">
-                      <option value = "">Please select service type to populate this dropdown</option>
-                    </select>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "forserv_name">Name</label>
-                    <input type = "text" placeholder="Service Name" class = "form-control" id = "ServiceName" name = "ServiceName"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "forserv_desc">Description</label>
-                    <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_sched">Schedule</label>
-                    <input type="text" placeholder="Schedule" class = "form-control" id = "ServiceSchedule" name = "ServiceSchedule"/>
-                  </div>
-                </div>
-                <div class = "col-md-6">
-                  <div class = "form-group">
-                    <label for = "serv_reg_fee">Registration Fee</label>
-                    <input type="text" placeholder="Registration Fee" class = "form-control" id = "ServiceRegistrationFee" name = "ServiceRegistrationFee"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_walkin">Walk-in/Per Session</label>
-                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceWalkin" name = "serviceWalkin"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_walkin"># of Hour(s)/Session</label>
-                    <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceHour" name = "serviceHour"/>
-                  </div>
-                  <div class = "form-group">
-                    <label for = "serv_monthly">Monthly Fee</label>
-                    <input type="text" placeholder="Monthly Fee" class = "form-control" id = "ServicePrice" name = "ServicePrice"/>
-                  </div>
-                </div>
-              </form>
+            <!-- end Room modal -->
+            <!-- END MODAL -->
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-            <button type="button" id= "btn-saveServices" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div>
-    <!-- end modal -->
+        </div>
+      </div>
+    </div>
+    <!-- End Content -->
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/services.js"></script>

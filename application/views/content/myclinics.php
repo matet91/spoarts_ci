@@ -72,10 +72,6 @@
 						<form  id="formschedule">  
 							<div class="col-md-6">
 							  <div class = "form-group">
-								<label for = "forsched_name">Services</label>
-								<select class = "form-control" id = "Service" name = "Service"></select>
-							  </div>
-							  <div class = "form-group" id="schedform" style="display: none">
 								<label for = "forsched_name">Schedules</label>
 								<select class = "form-control" id = "Schedule" name = "Schedule"></select>
 							  </div>

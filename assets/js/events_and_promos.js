@@ -129,18 +129,17 @@ function eventCalendar(){ //showing the calendar event
       dataType:'JSON',
       type:'POST',
       success:function(msg){ 
-		var cnt = msg.length;
-		for(var ctr=0; ctr < cnt; ctr++){
+		$.each(msg, function(i,e){
 			var insertEvents = {};
-				insertEvents = {
-				id: msg[ctr].EventID,
-				title: msg[ctr].EventName,
-				description: msg[ctr].EventDesc,
-				start: msg[ctr].EventStartDate,
-				end: msg[ctr].EventEndDate
+			insertEvents = {
+				id: e.EventID,
+				title: e.EventName,
+				description: e.EventDesc,
+				start: e.EventStartDate,
+				end: e.EventEndDate
 			}
 			getEvent.push(insertEvents);
-		}
+		});
 		
 		var today = new Date();
 		var dd = today.getDate();
@@ -151,14 +150,6 @@ function eventCalendar(){ //showing the calendar event
 		var today = yyyy+'-'+mm+'-'+dd;
 
 		$('#calendar_events').fullCalendar({
-			customButtons: {
-				myCustomButton: {
-					text: 'custom!',
-					click: function() {
-						alert('clicked the custom button!');
-					}
-				}
-			},
 			header: {
 				left: 'prev,next today',
 				center: 'title',
@@ -218,15 +209,18 @@ function editEvent(id){
 			dataType:'JSON',
 			type:'POST',
 			success:function(msg){
-				var eventfor = msg[0].EventFor;
-				var dataarray = eventfor.split(",");
-				$("#EventName").val(msg[0].EventName);
-				$("#EventDesc").val(msg[0].EventDesc);
-				$("#EventStartDate").val(msg[0].EventStartDate);
-				$("#EventEndDate").val(msg[0].EventEndDate);
-				$("#EventLocation").val(msg[0].EventLocation);
-				$("#formaddevent").append("<input type='hidden' id='EventID' name='EventID' value='"+msg[0].EventID+"' />");
-				getService(dataarray);
+				$.each(msg, function(i,e){
+					var eventfor = e.EventFor;
+					var dataarray = eventfor.split(",");
+					$("#EventName").val(e.EventName);
+					$("#EventDesc").val(e.EventDesc);
+					$("#EventStartDate").val(e.EventStartDate);
+					$("#EventEndDate").val(e.EventEndDate);
+					$("#EventLocation").val(e.EventLocation);
+					$("#formaddevent").append("<input type='hidden' id='EventID' name='EventID' value='"+e.EventID+"' />");
+					getService(dataarray);
+				});
+				
 			}
 		});	
 }
@@ -272,31 +266,27 @@ function getPromos(){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){ 
-			var cnt = msg.length;
-			var result = "";
-			for(var ctr=0; ctr < cnt; ctr++){
+			var result = "";		
+			$.each(msg, function(i,e){
+				var param = [e.PromoID,e.PromoName,e.PromoDesc,e.PromoStartDate,e.PromoEndDate];
 				
-				var param = [msg[ctr].PromoID,msg[ctr].PromoName,msg[ctr].PromoDesc,msg[ctr].PromoStartDate,msg[ctr].PromoEndDate];
-				
-				var listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="removeEventsPromos('+msg[ctr].PromoID+','+'\'removePromos\')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
+				var listbutton = '<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="removeEventsPromos('+e.PromoID+','+'\'removePromos\')"><span class = "glyphicon glyphicon-trash"></span></button>&nbsp;'+
 					'<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Edit" onclick="editPromo(\''+param+'\')"><span class = "glyphicon glyphicon-pencil"></span></button>';
 				
 				result = '<div class="blog-post standard-post">'+
 						 '<div class="post-content">'+
 						 '<div>'+listbutton+'</div>'+
-						 '<h2><a href="#">'+msg[ctr].PromoName+'</a></h2>'+
+						 '<h2><a href="#">'+e.PromoName+'</a></h2>'+
 						 '<ul class="post-meta">'+
-							'<li>By '+msg[ctr].SPname+'</li>'+
-							'<li>'+msg[ctr].PromoStartDate+'</li>'+
-							'<li>'+msg[ctr].PromoEndDate+'</li>'+
+							'<li>By '+e.SPname+'</li>'+
+							'<li>'+e.PromoStartDate+'</li>'+
+							'<li>'+e.PromoEndDate+'</li>'+
 						 '</ul>'+
-						 '<p>'+msg[ctr].PromoDesc+'</p>'+
+						 '<p>'+e.PromoDesc+'</p>'+
 						 '</div>'+
 						 '</div>';
 				$("#promo-result").append(result);
-			}
-			
-			
+			});	
 		}
     });
 }
@@ -307,16 +297,15 @@ function getService(sel){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){ 
-			var cnt = msg.length;
 			var result = "";
 			$("#EventFor").html("");
-			for(var ctr=0; ctr < cnt; ctr++){
+			$.each(msg, function(i,e){
 				
-				var checkAr = sel.indexOf(msg[ctr].ServiceID); 
+				var checkAr = sel.indexOf(e.ServiceID); 
 				if( checkAr < 0) { var opt = ""; }else{var opt = "SELECTED";}
-				result += '<option value='+msg[ctr].ServiceID+' ' +opt+'>'+msg[ctr].ServiceName+'</option>';
+				result += '<option value='+e.ServiceID+' ' +opt+'>'+e.ServiceName+'</option>';
 				
-			}		
+			});			
 			$("#EventFor").html(result);		
 			$('#EventFor').multiselect({includeSelectAllOption: true});		
 			$("#EventFor").multiselect("refresh");
