@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2016 at 10:45 AM
+-- Generation Time: Feb 11, 2016 at 09:55 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -47880,7 +47880,7 @@ INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPA
 (24, 30, '', 'inside-of-gym.jpg', '', '', 0, '0000-00-00 00:00:00', 0),
 (25, 32, '', '', '', '', 0, '0000-00-00 00:00:00', 0),
 (26, 26, '', '', '', '', 0, '0000-00-00 00:00:00', 0),
-(27, 60, 'Sponge', 'CYMERA_20141120_071942.jpg', 'we lived in a deep blue sea', 'cebu city', 0, '0000-00-00 00:00:00', 0);
+(27, 60, 'Sponge', 'CYMERA_20141120_071942.jpg', 'We lived in a deep blue sea', 'Cebu city', 0, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -48319,6 +48319,32 @@ CREATE TABLE IF NOT EXISTS `payment_logs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `paypal_logs`
+--
+
+CREATE TABLE IF NOT EXISTS `paypal_logs` (
+  `paypal_id` int(11) NOT NULL,
+  `transaction_id` varchar(50) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `paypal_amount` int(11) NOT NULL,
+  `paypal_invoice` varchar(50) NOT NULL,
+  `buyer_name` varchar(50) NOT NULL,
+  `paypal_createTime` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `paypal_logs`
+--
+
+INSERT INTO `paypal_logs` (`paypal_id`, `transaction_id`, `UserID`, `paypal_amount`, `paypal_invoice`, `buyer_name`, `paypal_createTime`) VALUES
+(3, '40D950746K1142524', 60, 1500, '56bce270f3fa1', 'leanne arnoza', '2016-02-11 19:35:17'),
+(4, '3JD87170XE932934J', 60, 1500, '56bce29916c9a', 'leanne arnoza', '2016-02-11 19:35:56'),
+(5, '3BS38675JC6561244', 60, 1500, '56bce2bdb94dc', 'leanne arnoza', '2016-02-11 19:36:33'),
+(6, '33135928RK402773P', 60, 1500, '56bce2c43467a', 'leanne arnoza', '2016-02-11 19:36:39');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `promos`
 --
 
@@ -48402,14 +48428,18 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `RoomName` varchar(30) NOT NULL,
   `RoomStatus` int(11) NOT NULL,
   `UserID` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
 --
 
 INSERT INTO `rooms` (`RoomID`, `RoomNo`, `RoomName`, `RoomStatus`, `UserID`) VALUES
-(1, 243, 'Orchid', 1, 60);
+(1, 243, 'Orchid', 1, 60),
+(2, 0, 'how are you room', 1, 27),
+(3, 0, 'rwewewe', 1, 27),
+(4, 0, 'fghfgh', 0, 27),
+(5, 23345345, 'jkldfls', 1, 27);
 
 -- --------------------------------------------------------
 
@@ -48500,7 +48530,6 @@ INSERT INTO `services` (`ServiceID`, `ServiceName`, `ServiceDesc`, `ServiceSched
 (12, 'Kick-boxing', 'Kick-boxing', 'Monday-Saturday 09:00am-10:00pm', 500, 1, '2000', 0, 27, 200, 0, '', 36),
 (13, 'Badminton', 'Badminton', 'Monday-Sunday 07:00am-08:00pm', 500, 1, '1000', 0, 27, 100, 0, '', 36),
 (19, 'test', 'kjfjskdl', '235fbdfg', 5645, 1, '232', 0, 27, 345, 67, '', 0),
-(21, 'dfskdfj', 'dskhkds', 'rhkgher', 21424, 1, '345', 0, 27, 234823, 23432, '', 34),
 (22, 'archery ', 'dsfkskf', 'Monday-Friday 09:00am-06:00pm', 1000, 1, '3000', 0, 27, 500, 3, '', 29),
 (23, 'zumba', 'zumba', 'Monday-Sunday 04:00AM-09:00AM', 300, 1, '500', 0, 27, 150, 3, '', 37),
 (24, 'animated sponge bob tutorial', 'this is a tutorial. sponge bob reborn', 'Monday-Friday 09:00AM-007:00PM', 1000, 1, '3000', 1, 60, 300, 3, '', 1);
@@ -52747,7 +52776,7 @@ INSERT INTO `subscriptions` (`SubscID`, `SubscType`, `SubscStartDate`, `SubscEnd
 (9, 0, '2016-01-19', '2016-02-19', 32, 0),
 (10, 0, '2016-01-21', '2016-02-21', 33, 0),
 (12, 1, '2016-02-08', '0000-00-00', 38, 0),
-(13, 1, '2016-02-08', '2017-02-09', 60, 0),
+(13, 2, '2016-02-11', '2017-02-11', 60, 0),
 (14, 1, '2016-02-09', '2016-03-10', 62, 0);
 
 -- --------------------------------------------------------
@@ -52811,7 +52840,7 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
 
 INSERT INTO `user_accounts` (`UserID`, `UserName`, `Password`, `UserType`, `UserStatus`, `security_question_id`, `security_password`, `first_login`, `verification_code`, `verify_expiry`) VALUES
 (26, 'fire', '81dc9bdb52d04dc20036dbd8313ed055', 0, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(27, 'test', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '03d25b3dc4f4a37fc9ceb5baa455d594', 1, '', ''),
+(27, 'test', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 1, '', ''),
 (28, 'urgillo2', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
 (29, 'r', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
 (30, 'v', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
@@ -52933,6 +52962,12 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `payment_logs`
   ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `paypal_logs`
+--
+ALTER TABLE `paypal_logs`
+  ADD PRIMARY KEY (`paypal_id`);
 
 --
 -- Indexes for table `rooms`
@@ -53060,10 +53095,15 @@ ALTER TABLE `notifications`
 ALTER TABLE `payment_logs`
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `paypal_logs`
+--
+ALTER TABLE `paypal_logs`
+  MODIFY `paypal_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `RoomID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `RoomID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `schedules`
 --
