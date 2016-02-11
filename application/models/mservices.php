@@ -233,16 +233,34 @@ class mservices extends CI_Model {
 		switch($type){
 			case 1: //services
 					$sql = "SELECT * FROM services WHERE ServiceID = '$id'";
+					$q = $this->db->query($sql);
+					return $q->result();
 			break;
 
 			case 2: //instructors
 					$sql = "SELECT * FROM instructor_masterlist WHERE MasterInsID = '$id'";
+					$q = $this->db->query($sql);
+					return $q->result();
+			break;
+
+			case 3: //schedules
+					$sql = "SELECT * FROM schedules WHERE SchedID = '$id'";
+					$q = $this->db->query($sql);
+					$row = $q->row();
+						$schedule = explode('-',$row->SchedTime);
+						$data['startTime'] = $schedule[0];
+						$data['endTime'] = $schedule[1];
+						$data['SchedDays'] = $row->SchedDays;
+						$data['RoomID'] = $row->RoomID;
+						$data['InstructorID'] = $row->InstructorID;
+						$data['ServiceID'] = $row->ServiceID;
+						$data['SchedSlots'] = $row->SchedSlots;
+					$qresult[] = $data;
+
+					return $qresult;
 			break;
 		}
-
-		$q = $this->db->query($sql);
-
-		return $q->result();
+		
 	}
 	function UpdateData($id, $type){
 		switch($type){

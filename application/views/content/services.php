@@ -354,7 +354,7 @@
                         <div class = "form-group">
                           
                           <label for = "SchedDate">Days (You can select Multiple)</label>
-                              <select type="text" placehoder="Day From" name="SchedDays" id="SchedDays" class = "chosen-select form-control" multiple>
+                              <select name="SchedDays" id="SchedDays" class = "chosen-select form-control" multiple>
                                 <option value = "">Select Days</option>
                                 <option value = "Monday">Monday</option>
                                 <option value = "Tuesday">Tuesday</option>

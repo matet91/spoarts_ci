@@ -189,7 +189,7 @@ function getSchedules(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[8] == 1 ){
-        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editSchedules('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -424,14 +424,16 @@ function addInstructor(data){
 }
 
 function editServices(id){
-  var height = $(window).height();
-  var dialogHeight = $("#modal_viewlist").find('.modal-dialog').outerHeight(true);
-  var top = parseInt(height)/5-parseInt(dialogHeight);
-  $("#modal_addservices").modal('show').attr('style','top:'+top+'px !important;');
   $("#modal_addservices").modal('show');
   $('#modal_addservices .modal-title').html("Edit Services");
   
   getData(id, 1);
+}
+
+function editSchedules(id){
+  $("#modal_addschedule").modal('show');
+  $('#modal_addschedule .modal-title').html("Edit Schedules");
+   getData(id, 3);
 }
 
 function updateInstructor(id){
@@ -446,7 +448,11 @@ function getData(id, type){
     case 2: //instructors
           $('#instHiddenVal').val(id);
     break;
+    case 2: //schedules
+          $('#instHiddenVal').val(id);
+    break;
   }
+
   
   $.ajax({
     url:'services/getData',
@@ -454,6 +460,7 @@ function getData(id, type){
     dataType:'JSON',
     type:'POST',
     success: function(msg){
+
       switch(type){
         case 1: //services
               var frmName = "#formaddservice";
@@ -462,12 +469,28 @@ function getData(id, type){
         case 2: //instructors
               var frmName = "#formaddInstructor";
         break;
+
+        case 3: //schedules
+              var frmName = "#formaddschedule";
+        break;
       }
       var frmdata = $(frmName).serializeArray();
       $.each(frmdata, function(i,e){
           var name = e.name;
-          $(frmName+" #"+name).val(msg[0][name]);
+          console.log(name);
+          if(name == 'SchedDays'){
+            var split = msg[0][name].split(',');
+            console.log(split+"sdfsd");
+            $.each(split,function(i,e){
+              console.log(e);
+                $(frmName+" #SchedDays option[value="+e+"]").attr('selected','selected');
+            });
+          }else{
+            $(frmName+" #"+name).val(msg[0][name]);
+          }
+          
       });
+      $(".chosen-select").trigger("chosen:updated");
     }
   });
 }
