@@ -477,12 +477,12 @@ function getData(id, type){
       var frmdata = $(frmName).serializeArray();
       $.each(frmdata, function(i,e){
           var name = e.name;
-          console.log(name);
+         // console.log(name);
           if(name == 'SchedDays'){
             var split = msg[0][name].split(',');
-            console.log(split+"sdfsd");
+            //console.log(split+"sdfsd");
             $.each(split,function(i,e){
-              console.log(e);
+              //console.log(e);
                 $(frmName+" #SchedDays option[value="+e+"]").attr('selected','selected');
             });
           }else{
