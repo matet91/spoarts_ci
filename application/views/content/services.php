@@ -482,7 +482,7 @@
             </div>
             
             <div class="modal-body">
-              <div class = "row" style ="margin3%">
+              <div class = "row" style ="margin:3%">
                 <form  id="formaddRoom">  
                     <div class = "form-group">
                       <label for = "RoomNo">Room # </label>

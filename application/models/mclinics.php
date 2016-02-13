@@ -35,7 +35,7 @@ class mclinics extends CI_Model {
 			$search = "";
 		}
 		
-		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=1 GROUP BY SPID,ServiceType $search";
+		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=1 $search GROUP BY SPID,ServiceType";
 		
 		$q = $this->db->query($sql);
 		return $q->result();
@@ -113,10 +113,11 @@ class mclinics extends CI_Model {
 	}
 	
 	function saveEnroll(){
+		$userid = $this->session->userdata('userid');
 		$frmdata = $this->input->post('data');
 		if($frmdata['studType'] ==0){ //new student
 			
-			$ch = $this->checkData("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$this->session->userdata('userid')."'");
+			$ch = $this->checkData("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=1");
 	
 			if($ch){
 				$error = 3; //existing student in a clinic
@@ -125,13 +126,14 @@ class mclinics extends CI_Model {
 				$data_stud['stud_age'] = $frmdata['stud_age'];
 				$data_stud['stud_address'] = $frmdata['stud_address'];
 				$data_stud['clinic_id'] = $frmdata['clinic_id'];
-				$data_stud['client_id'] = $this->session->userdata('userid');
+				$data_stud['client_id'] = $userid;
 				$data_stud['stud_status'] = 1;
+				$data_stud['stud_type'] = 1;
 				
 				$insert = $this->db->insert('students',$data_stud);
 				
-				$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$this->session->userdata('userid')."'");;
-				$data_enroll['client_id'] = $this->session->userdata('userid');
+				$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=1");
+				$data_enroll['client_id'] = $userid;
 				$data_enroll['service_id'] = $frmdata['service_id'];
 				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 				$data_enroll['ins_id'] = $frmdata['ins_id'];
@@ -144,13 +146,65 @@ class mclinics extends CI_Model {
 				}else{$error = 1;}
 			}
 		}else if($frmdata['studType'] ==1){ //existing
-			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$this->session->userdata('userid')."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
+			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
 			
 			if($ch){
 				$error = 4; //student already enrolled in this schedule
 			}else{
 				$data_enroll['stud_id'] = $frmdata['stud_id'];
-				$data_enroll['client_id'] = $this->session->userdata('userid');
+				$data_enroll['client_id'] = $userid;
+				$data_enroll['service_id'] = $frmdata['service_id'];
+				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
+				$data_enroll['ins_id'] = $frmdata['ins_id'];
+				$data_enroll['SchedID'] = $frmdata['SchedID'];
+				$data_enroll['StudEnrolledStatus'] = 1;
+				$data_enroll['stud_type'] = 1;
+				$insert = $this->db->insert('students_enrolled',$data_enroll);
+				
+				if($insert){$error = 0;
+				}else{$error = 1;}
+			}
+		}else if($frmdata['studType'] ==2){ //client_id
+			//check first if the client is already in students
+			$ch_stud = $this->checkData("students", "stud_id", "WHERE client_id='".$userid."' AND clinic_id='".$frmdata['clinic_id']."' AND stud_type=0 AND stud_status=1");
+			if(!$ch_stud){
+				$this->db->where('UserID',$userid);
+				$this->db->select('spfirstname,splastname,spaddress,spbirthday');
+				$q = $this->db->get('user_details');	
+				foreach ($q->result() as $row){
+				   $rows['spfirstname'] = $row->spfirstname;
+				   $rows['splastname'] = $row->splastname;
+				   $rows['spaddress'] = $row->spaddress;
+				   $rows['spbirthday'] = $row->spbirthday;
+				}
+				
+				$then = DateTime::createFromFormat("Y-m-d", $rows['spbirthday']);
+				$diff = $then->diff(new DateTime());
+				$age = $diff->format("%y");
+				
+				//insert client data at first 
+				$data_stud['stud_name'] = $rows['spfirstname'].' '.$rows['splastname'];
+				$data_stud['stud_age'] = $age;
+				$data_stud['stud_address'] = $rows['spaddress'];
+				$data_stud['clinic_id'] = $frmdata['clinic_id'];
+				$data_stud['client_id'] = $userid;
+				$data_stud['stud_status'] = 1;
+				$data_stud['stud_type'] = 0;
+				
+				$insert = $this->db->insert('students',$data_stud);
+				
+				if($insert){$error = 0;
+				}else{$error = 1;}
+			}
+			
+			$stud_id = $this->getID("students", "stud_id", "WHERE clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=0");
+			
+			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
+			if($ch){
+				$error = 4; //student already enrolled in this schedule
+			}else{	
+				$data_enroll['stud_id'] = $stud_id;
+				$data_enroll['client_id'] = $userid;
 				$data_enroll['service_id'] = $frmdata['service_id'];
 				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 				$data_enroll['ins_id'] = $frmdata['ins_id'];

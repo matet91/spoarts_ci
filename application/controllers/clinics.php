@@ -73,10 +73,10 @@ class Clinics extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	function getexistStud(){
+	function getexistStud($clinicid){
 		$table = "students";
 		$fields = "stud_id, stud_name, stud_age";
-		$where = "WHERE client_id = '".$this->session->userdata('userid')."' AND stud_status = 1";
+		$where = "WHERE client_id = '".$this->session->userdata('userid')."' AND stud_status = 1 AND clinic_id = $clinicid";
 		$order = "";
 		
 		$data = $this->mclinics->getlist($table, $fields , $where, $order);

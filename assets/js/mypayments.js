@@ -45,7 +45,7 @@ $(document).ready(function() {
 
 function getlistinterest(){
 	var height = $(window).height();
-	$('#myinterest_list').DataTable( {
+	$('#mypayment_list').DataTable( {
 		"bJQueryUI":true,
 		"sPaginationType":"simple",
 		"bProcessing":true,	
@@ -55,31 +55,16 @@ function getlistinterest(){
 		"bDestroy":true,
 		"sLimit":10,
 		"dom": 'T<"clear">lfrtip',
-		 "tableTools": {
-					"sRowSelect": "multi",
-					"aButtons": [ "print","select_all", "select_none",{"sExtends":'text',"sButtonText":'Delete Selected Record',"fnClick": function ( nButton, oConfig, oFlash ) {
-						var oTT = TableTools.fnGetInstance( 'position_list' ),
-						aData = oTT.fnGetSelectedData(),
-						values = [];
-
-					for(i = 0; i < aData.length; i++){
-						values.push(aData[i][0]);
-					}
-						deldata(values.join(','),2);
-					}}]
-			},
 		"sPaginationType":"simple",
-		"sAjaxSource": "service_provider/dataTables/3",
+		"sAjaxSource": "service_provider/dataTables/4",
 		"aoColumns":[	{"sTitle":"ID","bVisible":false},
-						{"sTitle":"Name","bSearchable": true},
-						{"sTitle":"Type","bSearchable": true},
-						{"sTitle":"Actions"}
+						{"sTitle":"Date","bSearchable": true},
+						{"sTitle":"Amount","bSearchable": true},
+						{"sTitle":"Balance","bSearchable": true},
+						{"sTitle":"Description","bSearchable": true},
+						{"sTitle":"Student","bSearchable": true},
+						{"sTitle":"Type","bSearchable": true}
 		],
-		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-			if ( aData[3] == "1" ){
-				$('td:eq(2)', nRow).html('<button class = "btn btn-primary btn-remove" data-toggle="tooltip" data-placement="top" title="Remove Interest" onclick="removeIntererst('+aData[0]+');"><span class = "glyphicon glyphicon-trash"></span></button>' );
-			}
-		},
 		"fnInitComplete": function(oSettings, json) {
 		}
 	}).on('processing.dt',function(oEvent, settings, processing){
@@ -159,8 +144,10 @@ function getselInterest(type){
 			$("#interest_id").html("");
 			$.each(msg, function(i,e){
 				result += '<option value='+e.interest_id+'>'+e.interest_name+'</option>';	
-			});		
-			$('#interest_id').html(result).trigger("chosen:updated");
+			});			
+			$("#interest_id").append(result);	
+			$('#interest_id').chosen();
+			$('#interest_id').trigger("chosen:updated");
 			$('#interest_id_chosen').css({ width: "550px" });
 		}
     });

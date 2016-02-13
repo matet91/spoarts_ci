@@ -259,6 +259,11 @@ class mservices extends CI_Model {
 
 					return $qresult;
 			break;
+			case 4: //rooms
+					$sql = "SELECT * FROM rooms WHERE RoomID = '$id'";
+					$q = $this->db->query($sql);
+					return $q->result();
+			break;
 		}
 		
 	}
@@ -271,6 +276,15 @@ class mservices extends CI_Model {
 			case 2: //instructor
 					$field = "MasterInsID";
 					$table = "instructor_masterlist";
+			break;
+			case 3: //schedules
+					$field = "SchedID";
+					$table = "schedules";
+			break;
+
+			case 4: //rooms
+					$field = "RoomID";
+					$table = "rooms";
 			break;
 		}
 		$data = $this->input->post('data');

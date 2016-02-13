@@ -87,8 +87,8 @@
 								<textarea class = "form-control" id = "EventDesc" name = "EventDesc"></textarea>
 							  </div>
 							  <div class = "form-group">
-								<label for = "forevent_for">For</label>
-								<select class = "form-control" multiple="multiple" id = "EventFor" name = "EventFor"></select>
+								<label for = "forevent_for">Services</label>
+								<select multiple="multiple" class="chosenElement" id = "EventFor" name = "EventFor"></select>
 							  </div>
 							</div>
 							<div class = "col-md-6">

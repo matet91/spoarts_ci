@@ -546,7 +546,6 @@
                         <!-- Classic Heading -->
                         <h4 class="classic-title"><span>STEP 3 : Personal Information</span></h4>
                         <div class = "row">
-                          <div class = "col-md-6">
                             <div class = "form-group">
                               <label for = "spfirstname">First Name :</label>
                               <input type = "text" class = "form-control" id = "spfirstname" name = "spfirstname" placeholder="First Name"/>
@@ -563,31 +562,10 @@
                               <label for = "SPContactNo">Contact # :</label>
                               <input type = "text" class = "form-control" id = "SPContactNo" name = "SPContactNo" placeholder="Contact Number"/>
                             </div>
-                          </div>
-                          <div class = "col-md-6">
                             <div class = "form-group">
                               <label for = "country">House #, Street, Barangay :</label>
                               <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="House #, Street, Barangay"/>
                             </div>
-                            <div class = "form-group">
-                              <label for = "country">Country :</label>
-                              <select class = "form-control chosen-select" id = "country_id" name = "country_id" placeholder="Country">
-                                  <option value = "">Select Country</option>
-                              </select>
-                            </div>
-                            <div class = "form-group">
-                              <label for = "state">State :</label>
-                              <select class = "form-control chosen-select" id = "state_id" name = "state_id" placeholder="State" disabled>
-                                  <option value = "">Select State</option>
-                              </select>
-                            </div>
-                            <div class = "form-group">
-                              <label for = "city">City :</label>
-                              <select class = "form-control chosen-select" id = "city_id" name = "city_id" placeholder="City" disabled>
-                                  <option value = "">Select City</option>
-                              </select>
-                            </div>
-                          </div>
                         </div>
                       </div>
                       <!-- registration 3 -->
@@ -631,3 +609,26 @@
     <!-- end modal -->
 
     <script type="text/javascript" src="assets/js/login.js"></script>
+
+    <script>
+      var autocomplete;
+    function initAutocomplete() {
+      // Create the autocomplete object, restricting the search to geographical
+      // location types.
+      
+      autocomplete = new google.maps.places.Autocomplete(
+          /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
+          {types: ['geocode']});
+
+      // When the user selects an address from the dropdown, populate the address
+      // fields in the form.
+      autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    // [START region_fillform]
+    function fillInAddress() {
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+          var lat=place.geometry.location.lat;
+    }
+    </script>

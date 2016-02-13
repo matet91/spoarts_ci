@@ -339,7 +339,7 @@ function listings(c,id){
 						opt = "<option value=''>Assign Instructor</option>";
 			break;
 
-			case 5://instructors
+			case 5://rooms
 					var selectid = "RoomID",
 						opt = "<option value=''>Assign Room</option>";
 			break;

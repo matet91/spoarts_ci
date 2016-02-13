@@ -68,7 +68,6 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
-						<div class="alert" role="alert" style = "display:none"></div>
 						<form  id="formschedule">  
 							<div class="col-md-6">
 							  <div class = "form-group">

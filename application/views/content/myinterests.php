@@ -46,21 +46,18 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
-						<div class="alert" role="alert" style = "display:none"></div>
 						<form  id="formschedule">  
 							<div class="col-md-6">
 							  <div class = "form-group">
 								<label for = "forsched_name">Type</label>
-								<select class = "form-control" id = "interest_type" name = "interest_type">
-									<option value=0>Arts</option>
-									<option value=1>Sports</option>
+								<select class = "form-control chosen-select" id = "interest_type" name = "interest_type">
+									<option value=1>Arts</option>
+									<option value=0>Sports</option>
 								</select>
 							  </div>
 							  <div class = "form-group">
 								<label for = "forsched_name">Interest Names</label>
-							  </div>
-							  <div class = "form-group">
-								<select multiple="multiple" class="chosenElement" id = "interest_id" name = "interest_id"></select>
+								<select multiple="multiple" class="form-control chosen-select" id = "interest_id" name = "interest_id"></select>
 							  </div>
 							</div>
 						</form>

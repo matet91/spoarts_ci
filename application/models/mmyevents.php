@@ -8,8 +8,12 @@ class mmyevents extends CI_Model {
 			parent::__construct();
 	}
 		
-	function getlist($table, $fields , $where, $order){
-		$query = $this->db->query("SELECT $fields FROM $table $where $order");
-		return $query->result();
+	function getlistid($table, $fields , $where, $order, $leftjoin){
+		$query = $this->db->query("SELECT $fields FROM $table $leftjoin $where $order");
+
+		foreach ($query->result() as $row){
+		   $rowid[] = $row->$fields;
+		}
+		return $rowid;
 	}
 }

@@ -436,7 +436,15 @@ function editSchedules(id){
    getData(id, 3);
 }
 
+function updateRoom(id){
+  $("#modal_addRoom").modal('show');
+  $('#modal_addRoom .modal-title').html("Edit Room");
+   getData(id, 4);
+}
+
 function updateInstructor(id){
+  $("#modal_addInstructor").modal('show');
+  $('#modal_addInstructor .modal-title').html("Edit Instructor");
   getData(id, 2);
 }
 
@@ -446,10 +454,14 @@ function getData(id, type){
           $("#txtHiddenService").val(id); //2 for update
     break;
     case 2: //instructors
-          $('#instHiddenVal').val(id);
+          $('#txtHiddenService').val(id);
     break;
-    case 2: //schedules
-          $('#instHiddenVal').val(id);
+    case 3: //schedules
+          $('#txtHiddenService').val(id);
+    break;
+
+    case 4: //room
+          $('#txtHiddenService').val(id);
     break;
   }
 
@@ -472,6 +484,10 @@ function getData(id, type){
 
         case 3: //schedules
               var frmName = "#formaddschedule";
+        break;
+
+        case 4: //room
+              var frmName = "#formaddRoom";
         break;
       }
       var frmdata = $(frmName).serializeArray();
@@ -801,9 +817,11 @@ var error = $("#"+frmid+" .has-error").length;
               $("#message .alert").html("").removeClass("alert-success").hide();
               $("#"+modal).modal('hide');
             },3000);
-
+            if(t == 5){
+              window.location = "services";
+            }
              dtable.ajax.reload();
-             $('#txtHiddenService').val(1);
+             $('#txtHiddenService').val('');
         }else{
           $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
         }

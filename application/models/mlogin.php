@@ -85,14 +85,7 @@ class Mlogin extends CI_Model {
             }
 
        	}else{
-            $this->db->where("UserName",'$uname');
-            $this->db->select("*");
-            $get = $this->db->get("user_accounts");
-            if($get->num_rows() > 0){
-                return 4; exit(); //incorrect password
-            }else{
-       		   return 0; exit();//account does not exist 
-            }
+       		return 0; exit();//account does not exist or incorrect passsword
        	}  
      }
 
@@ -153,6 +146,7 @@ class Mlogin extends CI_Model {
         //verify expiry settings
         $d = date('Y-m-d h:i:s');
         $datetime = new DateTime($d);
+        $datetime->add(new DateInterval('P1D'));
         $UAData['verify_expiry'] = $datetime->format('Y-m-d H:i:s');
         //insert to user_accounts and get the userid
         $d = $this->db->insert('user_accounts',$UAData);

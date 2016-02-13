@@ -51,10 +51,10 @@ $(document).ready(function(){
 
 				if(pwd.val() == ''){
 					pwd.parent().addClass('has-error');
-					$("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
+					$("#message .alert").html("Please enter the password of your security question.").addClass("alert-danger").show();
 				}else{
 					pwd.parent().removeClass('has-error');
-					$("#modal_security .alert").html("").removeClass("alert-danger").hide();
+					$("#message .alert").html("").removeClass("alert-danger").hide();
 					checkSecurityPwd(pwd.val(),"updateEvents",0);
 				}
 			});
@@ -76,10 +76,10 @@ $(document).ready(function(){
 
 				if(pwd.val() == ''){
 					pwd.parent().addClass('has-error');
-					$("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
+					$("#message .alert").html("Please enter the password of your security question.").addClass("alert-danger").show();
 				}else{
 					pwd.parent().removeClass('has-error');
-					$("#modal_security .alert").html("").removeClass("alert-danger").hide();
+					$("#message .alert").html("").removeClass("alert-danger").hide();
 					checkSecurityPwd(pwd.val(),"updatePromos",0);
 				}
 			});
@@ -236,7 +236,6 @@ function editPromo(param){
 	$("#PromoStartDate").val(promo[3]);
 	$("#PromoEndDate").val(promo[4]);
 	$("#title-promo").html("Update Promo");	
-	$("#modal_addpromos .alert").html("").hide();
 	$("#formaddpromo").append("<input type='hidden' id='PromoID' name='PromoID' value='"+promo[0]+"' />");
 }
 
@@ -305,10 +304,12 @@ function getService(sel){
 				if( checkAr < 0) { var opt = ""; }else{var opt = "SELECTED";}
 				result += '<option value='+e.ServiceID+' ' +opt+'>'+e.ServiceName+'</option>';
 				
-			});			
-			$("#EventFor").html(result);		
-			$('#EventFor').multiselect({includeSelectAllOption: true});		
-			$("#EventFor").multiselect("refresh");
+			});	
+			
+			$("#EventFor").append(result);	
+			$('#EventFor').chosen();
+			$('#EventFor').trigger("chosen:updated");
+			$('#EventFor_chosen').css({ width: "270px" });
 			
 		}
     });
@@ -354,15 +355,19 @@ function deleteEventsPromos(type,id){
 			$("#modal_alert").modal('show').attr('style','top:'+top+'px !important;');
 			
 			if(type == "removePromos"){
-				$("#modal_alert .modal-title").html("Information");
-				$("#message-alert").html("Promo has been removed successfully").addClass("alert-success");
+				$("#message .alert").html("Promo has been removed successfully").addClass("alert-success").show();
 			}else{
-				$("#modal_alert .modal-title").html("Information");
-				$("#message-alert").html("Event has been removed successfully").addClass("alert-success");
+				$("#message .alert").html("Event has been removed successfully").addClass("alert-success").show();
 			}
-           
+            setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-success').hide();
+				window.location = 'events_and_promos';
+			},2000);
         }else{
-          $("#modal_addpromos .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-success").show();
+		  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-danger').hide();
+			},2000);
         }
       }
     });
@@ -382,12 +387,14 @@ function saveEvents(type){
       }else{
         if(e.name == 'EventPrice'){
             if($.isNumeric(e.value)){
-              name.parent().removeClass('has-error');
-              data[e.name] = e.value;
-             
+				name.parent().removeClass('has-error');
+				data[e.name] = e.value;
             }else{
-              $("#modal_addevents .alert").html(name.prev().html()+" should be numeric.");
-              name.parent().addClass("has-error");
+				$("#message .alert").html(name.prev().html()+" should be numeric.").addClass("alert-danger").show();
+				name.parent().addClass("has-error");
+				setTimeout(function(){
+					$("#message .alert").html("").removeClass('alert-danger').hide();
+				},2000);
             }
         }else if(e.name == 'EventFor'){
 			var selected = $("#EventFor option:selected");
@@ -424,17 +431,22 @@ var error = $("#formaddevents .has-error").length;
       success:function(msg){ 
         if(msg == 0){
 			if(type == "addEvents"){
-				$("#modal_addevents .alert").html($("#EventName").val()+" Event has been added successfully.").addClass("alert-success").show();
-
+				$("#message .alert").html($("#EventName").val()+" Event has been added successfully.").addClass("alert-success").show();
 				$.each(dataForm, function(i,e){
 				  $("#"+e.name).val("");
 				});
 			}else if(type == "updateEvents"){
-				$("#modal_addevents .alert").html($("#EventName").val()+" Event has been updated successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#EventName").val()+" Event has been updated successfully.").addClass("alert-success").show();
 			}
-           
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-success').hide();
+				window.location = 'events_and_promos';
+			},2000);
         }else{
-          $("#modal_addevents .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-success").show();
+			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-danger').hide();
+			},2000);
         }
       }
     });
@@ -471,18 +483,25 @@ var error = $("#formaddpromos .has-error").length;
       success:function(msg){
         if(msg == 0){
 			if(type == "addPromos"){
-				$("#modal_addpromos .alert").html($("#PromoName").val()+" Promo has been added successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#PromoName").val()+" Promo has been added successfully.").addClass("alert-success").show();
 				$.each(dataForm, function(i,e){
 				  $("#"+e.name).val("");
 				});
 			}else if(type == "updatePromos"){
-				$("#modal_addpromos .alert").html($("#PromoName").val()+" Promo has been updated successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#PromoName").val()+" Promo has been updated successfully.").addClass("alert-success").show();
 			}
 			
-			getPromos();
-           
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-success').hide();
+				window.location = 'events_and_promos';
+			},2000);
+			//getPromos();
         }else{
-          $("#modal_addpromos .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-success").show();
+			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+			
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-danger').hide();
+			},2000);
         }
       }
     });

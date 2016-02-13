@@ -68,16 +68,16 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
-						<div class="alert" role="alert" style = "display:none"></div>
+						<input type="hidden" class = "form-control" id = "ctype"/>
 						<form  id="formschedule">  
 							<div class="col-md-6">
 							  <div class = "form-group">
 								<label for = "forsched_name">Services</label>
-								<select class = "form-control" id = "Service" name = "Service"></select>
+								<select class = "form-control chosen-select" id = "Service" name = "Service"></select>
 							  </div>
 							  <div class = "form-group" id="schedform" style="display: none">
 								<label for = "forsched_name">Schedules</label>
-								<select class = "form-control" id = "Schedule" name = "Schedule"></select>
+								<select class = "form-control chosen-select" id = "Schedule" name = "Schedule"></select>
 							  </div>
 							  <div id="sched-info" style="display:none">
 								  <div class = "form-group">
@@ -99,10 +99,11 @@
 							<div class="col-md-6">
 							  <div class = "form-group">
 								<label for = "forsched_name">Student Type</label>
-								<select class = "form-control" id = "StudType"><option value=0>New</option><option value=1>Existing</option></select>
+								<select class = "form-control chosen-select" id = "StudType"><option value=0>New</option><option value=1>Existing</option><option value=2>Client</option></select>
 							  </div>
 							  <div id="stud-exist" style="display:none"> 
-								  <select class = "form-control" id = "stud_id" name = "stud_id"></select>
+								  <label for = "forsched_name">Student</label>
+								  <select class = "form-control chosen-select" id = "stud_id" name = "stud_id"></select>
 							  </div>
 							  <div id="stud-new">
 								  <div class = "form-group">
@@ -124,6 +125,28 @@
 							  </div>
 							</div>
 						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+						<button type="button" id= "btn-Enroll" class="btn btn-primary">Enroll</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	</div>
+    <!-- end modal -->
+	
+	<!-- modal info -->
+    <div class="modal fade" id = "modal_info" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="title-promo">More Info</h4>
+				</div>
+				<div class="modal-body">
+					<div class = "row">
+						test
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>

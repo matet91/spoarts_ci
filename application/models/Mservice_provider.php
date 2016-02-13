@@ -78,6 +78,17 @@ class Mservice_provider extends CI_Model {
 				$groupby = "";
 				$aColumns_output = array("interest_id","interest_name", "interest_type","action");
 			break;
+			case 4:
+				$aColumns = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
+				$select = array("payment_id","payment_date", "payment_amt", "payment_balance","payment_desc","stud_name","(CASE WHEN payment_type=0 THEN 'Session'  WHEN payment_type=1 THEN 'Monthly' ELSE 'Membership' END)  as payment_type");
+				$sTable = "payment_logs p";
+				$leftjoin = " LEFT JOIN students s ON s.stud_id = p.stud_id";
+				$sWhere = "WHERE p.client_id = ".$this->session->userdata("userid")."";
+				if($sSearch){$sWhere .= " AND (payment_date like '%".$sSearch."%' OR payment_amt like '%".$sSearch."% OR payment_balance like '%".$sSearch."%  OR payment_desc like '%".$sSearch."% OR stud_name like '%".$sSearch."% OR payment_type like '%".$sSearch."%')";}
+				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+				$groupby = "";
+				$aColumns_output = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
+			break;
 		}
 		
 		$sIndexColumn = "*";
@@ -87,7 +98,7 @@ class Mservice_provider extends CI_Model {
 		//print_r("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
 		
 		$rResult = $this->db->query( $sQuery );
-		//echo $this->db->last_query();
+		// 	echo $this->db->last_query();
 		$sQuery = "SELECT FOUND_ROWS() as count";
 		$rResultFilterTotal = $this->db->query( $sQuery);
 
