@@ -45,6 +45,7 @@ class Services extends CI_Controller {
 		$title = "Services";
 		
 		$profile = $this->mservices->loadprofile();
+		$this->session->set_userdata('clinic_id',$profile->clinic_id);
 		$clubpic = $profile->clinic_logo;
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,

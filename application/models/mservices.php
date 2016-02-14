@@ -61,7 +61,7 @@ class mservices extends CI_Model {
 
 	function saveClinicInfo(){
 		$data = $this->input->post('data');
-		$clinicInfo = array('clinic_name','SPLocation','SPAboutMe');
+		$clinicInfo = array('clinic_name','SPLocation','SPAboutMe','latitude','longitude');
 
 		$subsInfo['SubscType'] = $data['SubscType'];
 

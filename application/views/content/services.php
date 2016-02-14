@@ -2,6 +2,11 @@
   #content-services .modal-dialog {
     width 95%; /* or whatever you wish */
   }
+   #map {
+        width: 500px;
+        height: 400px;
+      }
+
 </style>
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
@@ -77,7 +82,9 @@
                     <label for="inputEmail3" class="col-sm-2 control-label">Location</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>">
-                      <span class = "glyphicon glyphicon-map-marker" style = "cursorpointer !important;" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
+                      <input type="hidden" class="form-control" id="latitude" name = "latitude" value="<?php echo $data->latitude;?>">
+                      <input type="hidden" class="form-control" id="longitude" name = "longitude" value="<?php echo $data->longitude;?>">
+                      <span class = "glyphicon glyphicon-map-marker" style = "cursor:pointer !important;" id = "showmap" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
                     </div>
 
                   </div>
@@ -465,7 +472,26 @@
           </div>
             <!-- end Intstructor modal -->
 
-            
+             <!-- modal add Instructor -->
+            <div class="modal fade" id = "modal_map" tabindex="-1" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Map</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    <div id = "map"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+            <!-- end Intstructor modal -->
             <!-- END MODAL -->
           </div>
         </div>
@@ -587,3 +613,34 @@
     <!-- End Content -->
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/services.js"></script>
+    <script>
+var autocomplete;
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('SPLocation')),
+      {types: ['geocode']});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+// [START region_fillform]
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+      var lat=place.geometry.location.lat();
+      var lng = place.geometry.location.lng();
+      $("#latitude").val(lat), $("#longitude").val(lng);
+}
+
+  // [END region_getplaces]
+
+  function go(){ 
+  var d = document.getElementById('autocomplete');
+}
+
+</script>

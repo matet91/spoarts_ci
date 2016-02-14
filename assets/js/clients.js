@@ -61,14 +61,12 @@ function getDisapprovedStudents(){
             {"sTitle":"Instructor","sName":"instructor","bSearchable": true},
             {"sTitle":"Date Enrolled","sName":"date_enrolled","bSearchable": true},
             {"sTitle":"Schedule","sName":"SchedDays","bSearchable": true},
-            {"sTitle":"Total Payment for this Service","sName":"totalamt","bSearchable": true,"bSortable":false},
-            {"sTitle":"Total Outstanding for this Service","sName":"totalbalance","bSearchable": false,"bSortable":false},
             {"sTitle":"Actions"}
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-      if ( aData[15] == 1 ){
-        $('td:eq(11)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="approve('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-check-o fa-fw"></i></button>' );
+      if ( aData[14] == 1 ){
+        $('td:eq(9)', nRow).html('<button class = "btn btn-primary" data-toggle="tooltip" data-placement="top" title="Approve" onclick="approve('+aData[0]+','+aData[1]+');"><i class = "icon-thumbs-up-alt"></i>Approve</button>' );
       }
 
     },
@@ -346,8 +344,79 @@ function updateBalance(paymentid){
         }
     });
 }
+
+function approve(id,schedid){
+    $.ajax({
+        url:'clients/approve/'+id+'/'+schedid,
+        dataType:'JSON',
+        success: function(msg){
+            var table = $("#tbl-disapproved_students").DataTable(),
+                table2 = $("#tbl-approved_students").DataTable();
+            if(msg == true){
+                countPendings();
+                table.ajax.reload();
+                table2.ajax.reload();
+                $("#message .alert").html("Student Approved Successfully.").addClass("alert-success").show();
+                setTimeout(function(){
+                    $("#message .alert").html("").removeClass('alert-success').hide();
+                },2500);
+            }else{
+                $("#message .alert").html("The schedule that this student is trying to enroll is now full.").addClass('alert-danger').show();
+
+                setTimeout(function(){
+                    $("#message .alert").html("").removeClass('alert-danger').hide();
+                },2500);
+            }
+        }
+    });
+}
+
+function countPendings(){
+    $.ajax({
+        url:'clients/countPendings',
+        dataType:'JSON',
+        success:function(msg){
+            $("#countPending").html("<b>"+msg+"</b>");
+        }
+    });
+}
+
+function clients(){
+  $('#tbl-clients').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "clients/dataTables/4/"+id,
+    "aoColumns":[ {"sTitle":"ID","sName":"payment_id","bVisible":false},
+            {"sTitle":"Start Date","payment_date":"name"},
+            {"sTitle":"End Date","sName":"payment_end_date","bSearchable": true},
+            {"sTitle":"Payment Type","sName":"payment_type","bSearchable": true},
+            {"sTitle":"Amount Paid","sName":"payment_amt","bSearchable": true},
+            {"sTitle":"Outstanding Balance","sName":"payment_balance","bSearchable": true},
+            {"sTitle":"Log Date","sName":"date_added","bSearchable": true},
+            {"sTitle":"Log Updated","sName":"last_updated","bSearchable": true},
+            {"sTitle":"Action"}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+      if ( aData[8] == 1 ){
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="popover" data-placement="left" title="Update Payment" id = "btn-updatebalance" onclick="updateBalance('+aData[0]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;' );
+      }
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+}
+
+
 $(document).ready(function(){
     getApprovedStudents();
+    countPendings();
     getDisapprovedStudents();
     listings(6,null); //see main.js
     $("#service_id").change(function(){

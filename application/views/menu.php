@@ -19,9 +19,11 @@
             <!-- End Search -->
             <!-- Start Navigation List -->
             <ul class="nav navbar-nav navbar-right " id = "menus">
+            <?php if(!$this->session->userdata('userid') || $this->session->userdata('userid') == 2){?>
               <li>
                 <a class = "<?php echo ($content == 'home.php'?'active':'');?>" href="<?= (!$this->session->userdata('userid'))?'login':'index';?>">Home</a>
               </li>
+              <?php } ?>
               <li>
               <?php  if($this->session->userdata('userid') && $this->session->userdata('usertype') == '0'){?>
                 <a href="#" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Subscribers</a>

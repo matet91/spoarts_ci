@@ -91,5 +91,3 @@
   <script type="text/javascript" src="assets/js/chosen.proto.min.js"></script>
   <script type="text/javascript" src="assets/js/chosen.jquery.min.js"></script>
   <script src='assets/js/jquery.datetimepicker.full.min.js'></script>
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initAutocomplete"
-         async defer></script>

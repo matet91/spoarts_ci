@@ -383,4 +383,27 @@ class mclients extends CI_Model {
 		$q = $this->db->update('payment_logs',$data);
 		return $q;
 	}
+
+	function approve($id,$schedid){
+		$sql = "SELECT StudEnrolledID FROM students_enrolled WHERE SchedID='$schedid' and StudEnrolledStatus = 1";
+		$q = $this->db->query($sql);
+		$count = $q->num_rows()+1;
+		$update = "UPDATE schedules set SchedRemaining='$count' WHERE SchedID = '$schedid' AND SchedSlots < '$count'";
+		$qup = $this->db->query($update);
+		if($qup == true){
+			$this->db->where('StudEnrolledID',$id);
+			$qx = $this->db->update('students_enrolled',array('StudEnrolledStatus'=>1));
+			return $qx; exit();
+		}else{
+			return false; exit();
+		}
+	}
+
+	function countPendings(){
+		$clinic = $this->session->userdata('clinic_id');
+		$sql = "SELECT * FROM students_enrolled WHERE StudEnrolledStatus=0 and clinic_id = '$clinic'";
+		$q  = $this->db->query($sql);
+
+		return $q->num_rows();
+	}
 }

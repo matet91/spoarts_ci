@@ -4,8 +4,8 @@
     width: 65%; /* or whatever you wish */
     
   }
-  .owl-item{
-    padding:8px;
+  .pac-container{
+    z-index: 99999999 !important;
   }
 </style>
     <section id="home">
@@ -545,7 +545,6 @@
                       <div class="classic-testimonials item">
                         <!-- Classic Heading -->
                         <h4 class="classic-title"><span>STEP 3 : Personal Information</span></h4>
-                        <div class = "row">
                             <div class = "form-group">
                               <label for = "spfirstname">First Name :</label>
                               <input type = "text" class = "form-control" id = "spfirstname" name = "spfirstname" placeholder="First Name"/>
@@ -564,9 +563,10 @@
                             </div>
                             <div class = "form-group">
                               <label for = "country">House #, Street, Barangay :</label>
-                              <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="House #, Street, Barangay"/>
+                              <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="House #, Street, Barangay" />
+                              <input type = "hidden" class = "form-control" id = "longitude" name = "longitude"/>
+                              <input type = "hidden" class = "form-control" id = "latitude" name = "latitude" />
                             </div>
-                        </div>
                       </div>
                       <!-- registration 3 -->
                       <div class="classic-testimonials item">
@@ -611,24 +611,33 @@
     <script type="text/javascript" src="assets/js/login.js"></script>
 
     <script>
-      var autocomplete;
-    function initAutocomplete() {
-      // Create the autocomplete object, restricting the search to geographical
-      // location types.
-      
-      autocomplete = new google.maps.places.Autocomplete(
-          /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
-          {types: ['geocode']});
+var autocomplete;
 
-      // When the user selects an address from the dropdown, populate the address
-      // fields in the form.
-      autocomplete.addListener('place_changed', fillInAddress);
-    }
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
+      {types: ['geocode']});
 
-    // [START region_fillform]
-    function fillInAddress() {
-      // Get the place details from the autocomplete object.
-      var place = autocomplete.getPlace();
-          var lat=place.geometry.location.lat;
-    }
-    </script>
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+// [START region_fillform]
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+      var lat=place.geometry.location.lat();
+      var lng = place.geometry.location.lng();
+      $("#latitude").val(lat), $("#longitude").val(lng);
+}
+
+  // [END region_getplaces]
+
+  function go(){ 
+  var d = document.getElementById('autocomplete');
+}
+
+</script>

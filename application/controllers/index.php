@@ -44,8 +44,6 @@ class Index extends CI_Controller {
 				$title = "Home";
 				$content = "content/home.php";
 				$menu="menu.php";
-	  				
-
   			break;
   		}
 		$data = array('header'=>'header.php',

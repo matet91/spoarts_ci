@@ -116,7 +116,7 @@ class Mlogin extends CI_Model {
         $data = $this->input->post('data');
         $useraccount = array('UserName','Password','UserType');
 
-        $userdetails = array('spfirstname','splastname','spbirthday','SPContactNo','SPEmail','SPAddress','city_id','state_id','country_id');
+        $userdetails = array('spfirstname','splastname','spbirthday','SPContactNo','SPEmail','SPAddress','latitude','longitude');
 
         foreach($useraccount as $val){
             if($val == 'Password') $UAData[$val] = md5($data[$val]);
@@ -144,8 +144,8 @@ class Mlogin extends CI_Model {
         //END DUPLICATE VERIFICATION
 
         //verify expiry settings
-        $d = date('Y-m-d h:i:s');
-        $datetime = new DateTime($d);
+        $today = date('Y-m-d h:i:s');
+        $datetime = new DateTime($today);
         $datetime->add(new DateInterval('P1D'));
         $UAData['verify_expiry'] = $datetime->format('Y-m-d H:i:s');
         //insert to user_accounts and get the userid
@@ -173,7 +173,7 @@ class Mlogin extends CI_Model {
                 $splan = $get->row();
                 $sterm = $splan->PlanTerm;
                 
-                $termdate = new DateTime($d);
+                $termdate = new DateTime($today);
                 $termdate->add(new DateInterval('P'.$sterm));
                 $subscription['SubscEndDate'] = $termdate->format('Y-m-d');
 

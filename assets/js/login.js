@@ -151,16 +151,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	listings(1,null); //country dropdown
-	$("#country_id").change(function(){
-		var val = $(this).val();
-		listings(2,val); //states dropdown
-	});
-
-	$("#state_id").change(function(){
-		var val = $(this).val();
-		listings(3,val); //states dropdown
-	});
 });
 
 
@@ -270,16 +260,11 @@ function saveRegister(){
 	var frmdata = $("#form-reg").serializeArray(),data={};
 	$.each(frmdata, function(i,e){
 		if(e.name != 'regconfirmpwd'){
-			if(e.name == 'SPAddress'){
-				var city = $("#city_id").val(),
-					country = $("#country_id").val(),
-					state = $("#state_id").val();
-				data[e.name] = e.value+" "+$("#city_id option[value="+city+"]").text()+", "+$("#state_id option[value="+state+"]").text()+", "+$("#country_id option[value="+country+"]").text();
-			} else data[e.name] = e.value;
+			data[e.name] = e.value;
 		}
 		
 	});
-	$('#loader').show();
+	//$('#loader').show();
 	$.ajax({
 		url: 'login/saveRegister',
 		dataType:'JSON',

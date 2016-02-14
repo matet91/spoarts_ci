@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	 var height = $(window).height();
+var height = $(window).height();
    services();
 
 
@@ -126,6 +126,10 @@ $(document).ready(function(){
 });
   listings(4,null); //see main.js
   listings(5,null); //see main.js
+  $("#showmap").click(function(){
+      $("#modal_map").modal();
+      maps();
+  });
 }); 
 
 function getservices(){
@@ -824,4 +828,12 @@ var error = $("#"+frmid+" .has-error").length;
   }
 }
 
-
+function maps(){
+  var lat = $("#latitude").val(),
+      long = $("#longitude").val(),
+  mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+          center: {lat: parseFloat(lat), lng: parseFloat(long)},
+          zoom: 8
+        });
+}

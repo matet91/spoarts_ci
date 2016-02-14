@@ -319,20 +319,6 @@ function logout(){
 
 function listings(c,id){
 		switch(c){
-			case 1: //country
-					var selectid = "country_id",
-					 	opt = "<option value=''>Select Country</option>";
-			break;
-
-			case 2: //states
-					var selectid = "state_id",
-					 	opt = "<option value=''>Select State</option>";
-			break;
-
-			case 3: //cities
-					var selectid = "city_id",
-					 	opt = "<option value=''>Select City</option>";
-			break;
 
 			case 4://instructors
 					var selectid = "InstructorID",

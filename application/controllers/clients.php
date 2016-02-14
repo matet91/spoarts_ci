@@ -71,4 +71,14 @@ class Clients extends CI_Controller {
 		$data = $this->mclients->updateBalance($paymentid);
 		echo json_encode($data);
 	}
+
+	function approve($id,$schedid){
+		$data = $this->mclients->approve($id,$schedid);
+		echo json_encode($data);
+	}
+
+	function countPendings(){
+		$data = $this->mclients->countPendings();
+		echo json_encode($data);
+	}
 }

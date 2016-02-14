@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 14, 2016 at 02:16 PM
+-- Generation Time: Feb 14, 2016 at 08:58 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -73,21 +73,23 @@ CREATE TABLE IF NOT EXISTS `clinics` (
   `SPLocation` varchar(50) NOT NULL,
   `SPSubsPlan` int(11) NOT NULL COMMENT '1-trial;2-premium',
   `SPSubsDate` datetime NOT NULL COMMENT 'Subscription Date',
-  `clinic_status` int(11) NOT NULL COMMENT '0-deactivated;1-activated'
+  `clinic_status` int(11) NOT NULL COMMENT '0-deactivated;1-activated',
+  `longitude` text NOT NULL,
+  `latitude` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `clinics`
 --
 
-INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPAboutMe`, `SPLocation`, `SPSubsPlan`, `SPSubsDate`, `clinic_status`) VALUES
-(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Cebu City', 1, '0000-00-00 00:00:00', 0),
-(22, 28, '', 'IMG_0143-e1352505322542.jpg', '', '', 0, '0000-00-00 00:00:00', 0),
-(23, 29, '', '30324943-fitness-sport-trainin', '', '', 0, '0000-00-00 00:00:00', 0),
-(24, 30, '', 'inside-of-gym.jpg', '', '', 0, '0000-00-00 00:00:00', 0),
-(25, 32, '', '', '', '', 0, '0000-00-00 00:00:00', 0),
-(26, 26, '', '', '', '', 0, '0000-00-00 00:00:00', 0),
-(27, 60, 'Sponge', 'CYMERA_20141120_071942.jpg', 'We lived in a deep blue sea', 'Cebu city', 0, '0000-00-00 00:00:00', 0);
+INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPAboutMe`, `SPLocation`, `SPSubsPlan`, `SPSubsDate`, `clinic_status`, `longitude`, `latitude`) VALUES
+(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Cebu City, Central Visayas, Philippines', 1, '0000-00-00 00:00:00', 0, '123.88543660000005', '10.3156992'),
+(22, 28, '', 'IMG_0143-e1352505322542.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
+(23, 29, '', '30324943-fitness-sport-trainin', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
+(24, 30, '', 'inside-of-gym.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
+(25, 32, '', '', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
+(26, 26, '', '', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
+(27, 60, 'Sponge', 'CYMERA_20141120_071942.jpg', 'We lived in a deep blue sea', 'Cebu city', 0, '0000-00-00 00:00:00', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -270,8 +272,8 @@ CREATE TABLE IF NOT EXISTS `payment_logs` (
 --
 
 INSERT INTO `payment_logs` (`payment_id`, `payment_amt`, `payment_date`, `payment_type`, `payment_balance`, `stud_id`, `client_id`, `payment_desc`, `payment_end_date`, `SchedID`, `UserID`, `service_id`, `date_added`, `last_updated`) VALUES
-(2, '150', '2016-02-14 03:26:34', 0, '50', 1, 61, 'test', '2016-02-14 03:26:34', 1, 27, 8, '2016-02-14 16:48:35', '0000-00-00 00:00:00'),
-(4, '2000', '2016-02-14 03:32:56', 1, '50', 1, 61, 'test monthly', '2016-03-14 03:32:56', 1, 27, 8, '2016-02-14 16:48:35', '0000-00-00 00:00:00'),
+(2, '220', '2016-02-14 03:26:34', 0, '0', 1, 61, 'test', '2016-02-14 03:26:34', 1, 27, 8, '2016-02-14 16:48:35', '2016-02-15 00:38:51'),
+(4, '2050', '2016-02-14 03:32:56', 1, '0', 1, 61, 'test monthly', '2016-03-14 03:32:56', 1, 27, 8, '2016-02-14 16:48:35', '2016-02-15 00:39:14'),
 (5, '20000', '2016-02-14 03:58:38', 1, '150', 2, 61, 'test monthly ', '2016-03-14 03:58:38', 1, 27, 8, '2016-02-14 16:48:35', '0000-00-00 00:00:00'),
 (6, '200', '2016-02-14 04:37:11', 0, '50', 1, 61, 'test', '2016-02-14 04:37:11', 1, 27, 9, '2016-02-14 16:48:35', '0000-00-00 00:00:00'),
 (7, '2000', '2016-02-14 05:25:41', 1, '200', 2, 61, 'test log', '2016-03-14 05:25:41', 1, 27, 8, '2016-02-14 17:25:41', '0000-00-00 00:00:00');
@@ -555,7 +557,7 @@ INSERT INTO `students_enrolled` (`StudEnrolledID`, `stud_id`, `client_id`, `serv
 (4, 2, 61, 8, 21, 1, 1, 1, '2016-02-13 21:53:14'),
 (5, 3, 61, 8, 21, 1, 1, 1, '2016-02-13 21:53:14'),
 (6, 4, 61, 8, 21, 1, 1, 1, '2016-02-13 21:53:14'),
-(7, 5, 61, 8, 21, 1, 1, 1, '2016-02-13 21:53:14'),
+(7, 5, 61, 8, 21, 1, 1, 0, '2016-02-13 21:53:14'),
 (9, 7, 61, 8, 21, 1, 1, 1, '2016-02-13 21:53:14');
 
 -- --------------------------------------------------------
@@ -571,7 +573,7 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `SubscEndDate` date NOT NULL,
   `UserID` int(11) NOT NULL,
   `SubsStatus` int(11) NOT NULL COMMENT '0-unpaid;1-paid'
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscriptions`
@@ -586,7 +588,8 @@ INSERT INTO `subscriptions` (`SubscID`, `SubscType`, `SubscStartDate`, `SubscEnd
 (10, 0, '2016-01-21', '2016-02-21', 33, 0),
 (12, 1, '2016-02-08', '0000-00-00', 38, 0),
 (13, 2, '2016-02-13', '2017-02-13', 60, 1),
-(14, 1, '2016-02-09', '2016-03-10', 62, 0);
+(14, 1, '2016-02-09', '2016-03-10', 62, 0),
+(15, 2, '2016-02-14', '2017-02-14', 66, 0);
 
 -- --------------------------------------------------------
 
@@ -626,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `time_logs` (
   `tl_paid` int(11) NOT NULL COMMENT '0-unpaid;1-paid;2-partial',
   `service_id` int(11) NOT NULL,
   `clinic_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `time_logs`
@@ -635,7 +638,8 @@ CREATE TABLE IF NOT EXISTS `time_logs` (
 INSERT INTO `time_logs` (`tl_id`, `tl_in`, `tl_out`, `stud_id`, `SchedID`, `StudEnrolledID`, `tl_paid`, `service_id`, `clinic_id`) VALUES
 (26, '2016-02-14 04:19:20', '2016-02-14 04:30:09', 1, 1, 1, 1, 8, 21),
 (27, '2016-02-14 04:31:22', '2016-02-14 05:30:17', 1, 1, 2, 2, 9, 21),
-(28, '2016-02-14 05:25:59', NULL, 2, 1, 4, 2, 8, 21);
+(28, '2016-02-14 05:25:59', NULL, 2, 1, 4, 2, 8, 21),
+(29, '2016-02-15 12:43:17', NULL, 1, 1, 1, 1, 8, 21);
 
 -- --------------------------------------------------------
 
@@ -654,7 +658,7 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
   `first_login` int(11) NOT NULL COMMENT '0-firstlogin;1-alreadyloginMultipleTimes',
   `verification_code` varchar(10) NOT NULL,
   `verify_expiry` varchar(25) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_accounts`
@@ -674,7 +678,8 @@ INSERT INTO `user_accounts` (`UserID`, `UserName`, `Password`, `UserType`, `User
 (60, 'sponge', 'aa19ba73252e50e36a6a009c8808aaa3', 1, 1, 1, 'aa19ba73252e50e36a6a009c8808aaa3', 1, '1203391043', '2016-02-09 09:39:32'),
 (61, 'patrick', '7cc2ae164fbe5a3b4fb70c2ecf667fe2', 2, 1, 0, '', 0, '576900437', '2016-02-09 11:32:17'),
 (62, 'goku', '885b91dd01e1d7bad1eb473dcfe75bb6', 1, 0, 0, '', 0, '248169158', '2016-02-10 08:15:37'),
-(63, 'inuyasha', 'ebeb757ff15e42e209af67037776f107', 2, 0, 0, '', 0, '1437996353', '2016-02-10 08:26:03');
+(63, 'inuyasha', 'ebeb757ff15e42e209af67037776f107', 2, 0, 0, '', 0, '1437996353', '2016-02-10 08:26:03'),
+(66, 'testma', '252c4a594c9a7f3579719eb1eefe8bc3', 1, 1, 0, '', 0, '624449391', '2016-02-15 08:26:25');
 
 -- --------------------------------------------------------
 
@@ -693,27 +698,27 @@ CREATE TABLE IF NOT EXISTS `user_details` (
   `splastname` varchar(50) NOT NULL,
   `SPRegisteredDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `spbirthday` date NOT NULL,
-  `city_id` int(11) NOT NULL,
-  `country_id` int(11) NOT NULL,
-  `state_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
+  `longitude` text NOT NULL,
+  `latitude` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_details`
 --
 
-INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `UserID`, `splogoName`, `spfirstname`, `splastname`, `SPRegisteredDate`, `spbirthday`, `city_id`, `country_id`, `state_id`) VALUES
-(21, 'Urgello Cebu City', '677-7898', 'our@yahoo.com', 27, 'Koala.jpg', 'test', 'test', '0000-00-00 00:00:00', '1997-02-19', 0, 0, 0),
-(22, 'Mabolo Cebu City', 'nine', 'none', 28, 'IMG_0143-e1352505322542.jpg', '', '', '0000-00-00 00:00:00', '0000-00-00', 0, 0, 0),
-(23, 'Cebu City', 'rrr', 'rere@yahoo.com', 33, '', '', '', '0000-00-00 00:00:00', '0000-00-00', 0, 0, 0),
-(24, 'Dsds', 'v', 'dsds', 30, 'inside-of-gym.jpg', '', '', '0000-00-00 00:00:00', '0000-00-00', 0, 0, 0),
-(25, 'Aljay mongo', '1234', 'aljaymonggo@gmail.com', 32, '', '', '', '0000-00-00 00:00:00', '0000-00-00', 0, 0, 0),
-(26, 'Secret', '123456', 'nalmonicar1988@gmail.com', 26, 'Chrysanthemum.jpg', 'Admin', 'Admin', '0000-00-00 00:00:00', '0000-00-00', 0, 0, 0),
-(28, '', '123456789', NULL, 38, '', 'mickey', 'mouse', '0000-00-00 00:00:00', '1991-02-08', 0, 0, 0),
-(50, '', '89534808035', 'saga_aquatic@yahoo.com.ph', 60, 'received_10203554023869584.jpeg', 'sponge', 'bob', '2016-02-08 16:39:32', '1991-02-03', 0, 0, 0),
-(51, '', '23859035034', 'mymiracle91@gmail.com', 61, '', 'Patrick', 'Spongebob', '2016-02-08 18:32:18', '1991-02-03', 0, 0, 0),
-(52, 'capitol site  Select CityAlcan', '2398380485', 'goku@gmail.com', 62, '', 'goku', 'ambot', '2016-02-09 15:15:37', '1966-02-09', 47593, 173, 4226),
-(53, 'ambot street Cebu City, Cebu, ', '345943883405', 'inu.yasha@yahoo.com', 63, '', 'inu', 'yasha', '2016-02-09 15:26:03', '1966-02-09', 47593, 173, 4226);
+INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `UserID`, `splogoName`, `spfirstname`, `splastname`, `SPRegisteredDate`, `spbirthday`, `longitude`, `latitude`) VALUES
+(21, 'Urgello Cebu City', '677-7898', 'our@yahoo.com', 27, 'Koala.jpg', 'test', 'test', '0000-00-00 00:00:00', '1997-02-19', '0', '0'),
+(22, 'Mabolo Cebu City', 'nine', 'none', 28, 'IMG_0143-e1352505322542.jpg', '', '', '0000-00-00 00:00:00', '0000-00-00', '0', '0'),
+(23, 'Cebu City', 'rrr', 'rere@yahoo.com', 33, '', '', '', '0000-00-00 00:00:00', '0000-00-00', '0', '0'),
+(24, 'Dsds', 'v', 'dsds', 30, 'inside-of-gym.jpg', '', '', '0000-00-00 00:00:00', '0000-00-00', '0', '0'),
+(25, 'Aljay mongo', '1234', 'aljaymonggo@gmail.com', 32, '', '', '', '0000-00-00 00:00:00', '0000-00-00', '0', '0'),
+(26, 'Secret', '123456', 'nalmonicar1988@gmail.com', 26, 'Chrysanthemum.jpg', 'Admin', 'Admin', '0000-00-00 00:00:00', '0000-00-00', '0', '0'),
+(28, '', '123456789', NULL, 38, '', 'mickey', 'mouse', '0000-00-00 00:00:00', '1991-02-08', '0', '0'),
+(50, '', '89534808035', 'saga_aquatic@yahoo.com.ph', 60, 'received_10203554023869584.jpeg', 'sponge', 'bob', '2016-02-08 16:39:32', '1991-02-03', '0', '0'),
+(51, '', '23859035034', 'mymiracle91@gmail.com', 61, '', 'Patrick', 'Spongebob', '2016-02-08 18:32:18', '1991-02-03', '0', '0'),
+(52, 'capitol site  Select CityAlcan', '2398380485', 'goku@gmail.com', 62, '', 'goku', 'ambot', '2016-02-09 15:15:37', '1966-02-09', '47593', '173'),
+(53, 'ambot street Cebu City, Cebu, ', '345943883405', 'inu.yasha@yahoo.com', 63, '', 'inu', 'yasha', '2016-02-09 15:26:03', '1966-02-09', '47593', '173'),
+(55, 'Cebu City, Central Visayas, Philippines , , ', '09283878475', 'testma@gmail.com', 66, '', 'testma', 'testma', '2016-02-15 03:26:25', '1966-02-04', '123.88543660000005', '10.3156992');
 
 --
 -- Indexes for dumped tables
@@ -923,7 +928,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `SubscID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+  MODIFY `SubscID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `subscription_plans`
 --
@@ -933,17 +938,17 @@ ALTER TABLE `subscription_plans`
 -- AUTO_INCREMENT for table `time_logs`
 --
 ALTER TABLE `time_logs`
-  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT for table `user_accounts`
 --
 ALTER TABLE `user_accounts`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=64;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=67;
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `SPID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=54;
+  MODIFY `SPID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=56;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
