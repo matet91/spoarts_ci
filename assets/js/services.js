@@ -241,14 +241,15 @@ function checkClinicFields(){
   if(count > 0){
     $("#content-services  .alert").html("All fields are required.").addClass('alert-danger').show();
   }else{
-      var height = $(window).height();
-      var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-      var top = parseInt(height)/5-parseInt(dialogHeight);
-      $("#modal_security").modal('show');
-      $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
+      // var height = $(window).height();
+      // var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
+      // var top = parseInt(height)/5-parseInt(dialogHeight);
+      // $("#modal_security").modal('show');
+      // $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
 
      $("#content-services  .alert").html("").removeClass('alert-danger').hide();
-      $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
+     saveClinicInfo();
+     // $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
   }
 }
 

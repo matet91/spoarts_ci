@@ -63,15 +63,11 @@ class mservices extends CI_Model {
 		$data = $this->input->post('data');
 		$clinicInfo = array('clinic_name','SPLocation','SPAboutMe','latitude','longitude');
 
-		$subsInfo['SubscType'] = $data['SubscType'];
 
 		foreach($clinicInfo as $key){
 			$clinicData[$key] = ucfirst($data[$key]);
 		}
 		$userid = $this->session->userdata('userid');
-
-		$this->db->where('UserID',$userid);
-		$q = $this->db->update('subscriptions',$subsInfo);
 
 		//check if existing
 		$this->db->where('UserID',$userid);
