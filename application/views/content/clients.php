@@ -138,29 +138,29 @@
 	             <div class = "col-md-6">
 	             	<div class = "form-group">
 	             		<label>Total Amount Spent :</label>
-	             		<input type = "text" id = "totalamt" name = "totalamt" class = "form-control"/>
+	             		<input type = "text" id = "totalamt" name = "totalamt" class = "form-control" disabled/>
 	             	</div>
 	             	<div class = "form-group">
 	             		<label>Service Name :</label>
-	             		<input type = "text" id = "servicename" name = "servicename" class = "form-control"/>
+	             		<input type = "text" id = "servicename" name = "servicename" class = "form-control" disabled/>
 	             	</div>
 	             	<div class = "form-group">
 	             		<label>Student Name :</label>
-	             		<input type = "text" id = "studentname" name = "studentname" class = "form-control"/>
+	             		<input type = "text" id = "studentname" name = "studentname" class = "form-control" disabled/>
 	             	</div>
 	             </div>
 	             <div class = "col-md-6">
 	             	<div class = "form-group">
 	             		<label>Total Outstanding Balance :</label>
-	             		<input type = "text" id = "totalBalance" name = "totalBalance" class = "form-control"/>
+	             		<input type = "text" id = "totalbalance" name = "totalbalance" class = "form-control" disabled/>
 	             	</div>
 	             	<div class = "form-group">
 	             		<label>Clinic Name :</label>
-	             		<input type = "text" id = "clinicname" name = "clinicname" class = "form-control"/>
+	             		<input type = "text" id = "clinicname" name = "clinicname" class = "form-control" disabled/>
 	             	</div>
 	             	<div class = "form-group">
 	             		<label>Client Name :</label>
-	             		<input type = "text" id = "clientname" name = "clientname" class = "form-control"/>
+	             		<input type = "text" id = "clientname" name = "clientname" class = "form-control" disabled/>
 	             	</div>
 	             </div>
 	         </form>

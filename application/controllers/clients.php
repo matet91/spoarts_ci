@@ -62,8 +62,8 @@ class Clients extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function getPaymentDetails($serviceid,$studid){
-		$data = $this->mclients->getPaymentDetails($serviceid,$studid);
+	function getPaymentDetails($id){
+		$data = $this->mclients->getPaymentDetails($id);
 		echo json_encode($data);
 	}
 }

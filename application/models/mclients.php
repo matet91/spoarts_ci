@@ -356,8 +356,8 @@ class mclients extends CI_Model {
 		return $d;
 	}
 
-	function getPaymentDetails($serviceid,$studid){
-		$sql = "SELECT SUM(f.payment_amt) as totalamt,SUM(f.payment_balance) as totalbalance,b.ServiceName as servicename,CONCAT(d.spfirstname,' ',d.splastname) as clientname,e.stud_name as studentname FROM students_enrolled a LEFT JOIN services b ON b.ServiceID=a.service_id LEFT JOIN students c ON c.stud_id=a.stud_id LEFT JOIN user_details d ON d.UserID=a.client_id LEFT JOIN students e ON e.stud_id = a.stud_id  LEFT JOIN payment_logs f ON f.stud_id = a.stud_id WHERE a.service_id='$serviceid' AND a.stud_id='$studid'";
+	function getPaymentDetails($id){
+		$sql = "SELECT SUM(f.payment_amt) as totalamt,SUM(f.payment_balance) as totalbalance,b.ServiceName as servicename,CONCAT(d.spfirstname,' ',d.splastname) as clientname,e.stud_name as studentname,g.clinic_name as clinicname FROM students_enrolled a LEFT JOIN services b ON b.ServiceID=a.service_id LEFT JOIN students c ON c.stud_id=a.stud_id LEFT JOIN user_details d ON d.UserID=a.client_id LEFT JOIN students e ON e.stud_id = a.stud_id  LEFT JOIN payment_logs f ON f.stud_id = a.stud_id and f.service_id=a.service_id LEFT JOIN clinics g ON g.clinic_id=a.clinic_id WHERE a.StudEnrolledID='$id'";
 
 		$q = $this->db->query($sql);
 

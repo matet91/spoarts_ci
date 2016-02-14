@@ -199,7 +199,7 @@ function payment_logs(id,schedid,clinicid,serviceid,clientid,studid){
     $("#serviceid").val(serviceid);
     $("#clientid").val(clientid);
     $("#modal_paymentlogs").modal();
-    getPaymentDetails(serviceid,studid); //get total amount spent and total outstanding balance
+    getPaymentDetails(id); //get total amount spent and total outstanding balance
     paymentlogs(id);
 }
 function paymentlogs(id){
@@ -223,31 +223,35 @@ function paymentlogs(id){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[8] == 1 ){
-        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Update Payment" onclick="updateBalance('+aData[0]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove Payment Log" onclick="removeStudent('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs"role="button" data-toggle="popover" data-trigger="focus" title="Update Payment" id = "btn-updatebalance" onclick="updateBalance('+aData[0]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove Payment Log" onclick="removeStudent('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
     "fnInitComplete": function(oSettings, json) {
+
     }
   }).on('processing.dt',function(oEvent, settings, processing){
   });
 }
 
-function getPaymentDetails(serviceid,studid){
+function getPaymentDetails(id){
     $.ajax({
-        url:'clients/getPaymentDetails/'+serviceid+'/'+studid,
+        url:'clients/getPaymentDetails/'+id,
         dataType:'JSON',
         success:function(msg){
-            var frm  =$("#frm-paymentdetails").serializeArray();
-            $.each(frm, function(i,e){
-                var name = e.name;
-                console.log(msg[0][name]);
-                $("#"+name).val(msg[0][name]).attr('disabled','disabled');
-            });
+            $("#totalamt").val(msg[0].totalamt);
+            $("#servicename").val(msg[0].servicename);
+            $("#studentname").val(msg[0].studentname);
+            $("#totalbalance").val(msg[0].totalbalance);
+            $("#clinicname").val(msg[0].clinicname);
+            $("#clientname").val(msg[0].clientname);
         }
     });
 }
-
+function updateBalance(paymentid){
+    var content = '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"><form id="frm-updateBalance"><div class="form-group"><label>Total Paid:</label><input type="text" id="pay_amt" name="pay_amt" class="form-control"/></div></form></div><div class="form-group"><label>Current Balance:</label><input type="text" id="pay_bal" name="pay_bal" class="form-control"/></div></form></div></div>';
+    $("#btn-updatebalance").attr('title',content).popover({html:true}).popover('show');
+}
 $(document).ready(function(){
     getApprovedStudents();
     listings(6,null); //see main.js
@@ -298,5 +302,7 @@ $(document).ready(function(){
         e.preventDefault();
         paynow();
     });
+
+
 });
 
