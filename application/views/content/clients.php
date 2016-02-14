@@ -4,12 +4,7 @@
 	}
 </style>
 
-<input type = "hidden" id = "studEnrolledID">
-<input type = "hidden" id = "SchedID"/>
-<input type = "hidden" id = "studid"/>
-<input type = "hidden" id = "clinicid"/>
-<input type = "hidden" id = "serviceid"/>
-<input type = "hidden" id = "clientid"/>
+
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
       <div class="container">
@@ -29,13 +24,20 @@
     <!-- End Page Banner -->
 <div id="content">
   <div class = "container" id = "clients">
+  <input type = "hidden" id = "studEnrolledID">
+<input type = "hidden" id = "SchedID"/>
+<input type = "hidden" id = "studid"/>
+<input type = "hidden" id = "clinicid"/>
+<input type = "hidden" id = "serviceid"/>
+<input type = "hidden" id = "clientid"/>
+<input type = "hidden" id = "paymentid"/>
     <!-- Page Content -->
     <div class="page-content">
       <div class="tabs-section" id = "tab-clients">
         <!-- Nav Tabs -->
         <ul class="nav nav-tabs">
           <li class="active"><a href="#tab-student_approved" data-toggle="tab"><i class="fa fa-group"></i>Approved Students</a></li>
-          <li class="active"><a href="#tab-students_pending" data-toggle="tab"><i class="fa fa-group"></i>Pending Students</a></li>
+          <li><a href="#tab-students_pending" data-toggle="tab"><i class="fa fa-group"></i>Pending Students</a></li>
         </ul>
         <!-- Tab panels -->
       	<div class="tab-content">
@@ -50,6 +52,9 @@
           </div>
 
           <div class="tab-pane fade in" id="tab-students_pending">
+      		<!-- Divider -->
+				<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+           		<table id="tbl-disapproved_students" class="display" cellspacing="0" width="100%"></table>
           </div>
 
         </div>
@@ -132,8 +137,7 @@
 
             <h4 class="modal-title">Payment Logs</h4>
           </div>
-          <div class="modal-body">
-             <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+          <div class="modal-body">	
              <form id = "frm-paymentdetails">
 	             <div class = "col-md-6">
 	             	<div class = "form-group">

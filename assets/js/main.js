@@ -385,7 +385,6 @@ function numbersOnly(val,id){
   if(!$.isNumeric(val)){
     $('#'+id).parent().addClass('has-error');
     $("#message .alert").html($("#"+id).prev().html()+" should be numeric.").addClass("alert-danger").show();
-    $("#"+id).val(0);
   }else{
     $("#"+id).parent().removeClass('has-error');
     $("#message .alert").html("").removeClass('has-error').hide();

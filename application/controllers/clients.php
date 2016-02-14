@@ -66,4 +66,9 @@ class Clients extends CI_Controller {
 		$data = $this->mclients->getPaymentDetails($id);
 		echo json_encode($data);
 	}
+
+	function updateBalance($paymentid){
+		$data = $this->mclients->updateBalance($paymentid);
+		echo json_encode($data);
+	}
 }

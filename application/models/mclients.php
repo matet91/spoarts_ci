@@ -71,6 +71,11 @@ class mclients extends CI_Model {
 
 			case 2://disapproved students
 					$select = array("a.StudEnrolledID as ID",
+									"a.SchedID as SchedID",
+									"a.clinic_id as clinicid",
+									"a.service_id as serviceid",
+									"a.client_id as clientid",
+									"b.stud_id as studid",
 									"b.stud_name as name",
 									"b.stud_age as age",
 									"b.stud_address as address",
@@ -89,10 +94,16 @@ class mclients extends CI_Model {
 						if(count($chkSearch) > 1){
 							$sWhere .= " AND d.ServiceID='".$chkSearch[1]."'";
 						}else{
-							$sWhere .= " AND (b.stud_name like '%".$sSearch."%' OR b.stud_age like '%".$sSearch."%' OR b.stud_address like '%".$sSearch."%' OR c.spfirstname like '%".$sSearch."%' OR c.splastname like '%".$sSearch."%' OR d.ServiceName like '%".$sSearch."%' OR a.date_enrolled like '%".$sSearch."%' OR e.ScedDays like '%".$sSearch."%' OR e.SchedTime like '%".$sSearch."%' OR f.MasterInsName like '%".$sSearch."%')";
+							$sWhere .= " AND (b.stud_name like '%".$sSearch."%' OR b.stud_age like '%".$sSearch."%' OR b.stud_address like '%".$sSearch."%' OR c.spfirstname like '%".$sSearch."%' OR c.splastname like '%".$sSearch."%' OR d.ServiceName like '%".$sSearch."%' OR a.date_enrolled like '%".$sSearch."%' OR e.ScedDays like '%".$sSearch."%' OR e.SchedTime like '%".$sSearch."%' OR f.MasterInsName like '%".$sSearch."%' OR b.stud_id like '%".$sSearch."%')";
 						}
 					}
-					$aColumns = array("a.StudEnrolledID","b.stud_name",
+					$aColumns = array("a.StudEnrolledID",
+									  "a.SchedID",
+									  "a.clinic_id",
+									  "a.service_id",
+									  "a.client_id",
+									  "b.studid",
+									  "b.stud_name",
 									  "b.stud_age",
 									  "b.stud_address",
 									  "c.spfirstname",
@@ -103,7 +114,7 @@ class mclients extends CI_Model {
 									);
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 					$groupby = "";
-					$aColumns_output = array("ID","name","age","address","client","service","instructor","date_enrolled","schedules","action");
+					$aColumns_output = array("ID","SchedID","clinicid","serviceid","clientid","studid","name","age","address","client","service","instructor","date_enrolled","schedules","action");
 			break;
 			case 3://time logs
 					$select = array("tl_id",
@@ -362,5 +373,14 @@ class mclients extends CI_Model {
 		$q = $this->db->query($sql);
 
 		return $q->result();
+	}
+
+	function updateBalance($paymentid){
+		$amt = $this->input->post('payment_amt');
+		$bal = $this->input->post('payment_balance');
+		$data = array('payment_amt'=>$amt,'payment_balance'=>$bal);
+		$this->db->where('payment_id',$paymentid);
+		$q = $this->db->update('payment_logs',$data);
+		return $q;
 	}
 }

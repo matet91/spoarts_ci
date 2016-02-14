@@ -28,7 +28,7 @@ function getApprovedStudents(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[16] == 1 ){
-        $('td:eq(11)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Time Logs" onclick="view_timelogs('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-clock-o fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="View Payment History" onclick="payment_logs('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove Student" onclick="removeStudent('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(11)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Time Logs" onclick="view_timelogs('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-clock-o fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="View Payment History" onclick="payment_logs('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-money fa-fw"></i></button>' );
       }
 
     },
@@ -38,12 +38,54 @@ function getApprovedStudents(){
   });
 }
 
+function getDisapprovedStudents(){
+  $('#tbl-disapproved_students').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "clients/dataTables/2",
+    "aoColumns":[ 
+            {"sTitle":"ID","sName":"ID","bVisible":false},
+            {"sTitle":"SchedID","sName":"SchedID","bVisible":false},
+            {"sTitle":"Clinic ID","sName":"clinic_id","bVisible":false},
+            {"sTitle":"Service ID","sName":"service_id","bVisible":false},
+            {"sTitle":"Client ID","sName":"clientid","bVisible":false},
+            {"sTitle":"Student ID","sName":"studid","bVisible":true},
+            {"sTitle":"Name","sName":"name"},
+            {"sTitle":"Age","sName":"age","bSearchable": true},
+            {"sTitle":"Address","sName":"address","bSearchable": true},
+            {"sTitle":"Client","sName":"client","bSearchable": true},
+            {"sTitle":"Service","sName":"service","bSearchable": true},
+            {"sTitle":"Instructor","sName":"instructor","bSearchable": true},
+            {"sTitle":"Date Enrolled","sName":"date_enrolled","bSearchable": true},
+            {"sTitle":"Schedule","sName":"SchedDays","bSearchable": true},
+            {"sTitle":"Total Payment for this Service","sName":"totalamt","bSearchable": true,"bSortable":false},
+            {"sTitle":"Total Outstanding for this Service","sName":"totalbalance","bSearchable": false,"bSortable":false},
+            {"sTitle":"Actions"}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+      if ( aData[15] == 1 ){
+        $('td:eq(11)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="approve('+aData[0]+','+aData[1]+','+aData[2]+','+aData[3]+','+aData[4]+','+aData[5]+');"><i class = "fa fa-check-o fa-fw"></i></button>' );
+      }
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+}
+
+
 function timelogs(id){
   $('#tbl-timelogs').DataTable( {
     "bProcessing":true, 
     "bServerSide":true,
     "bRetrieve": true,
     "bDestroy":true,
+    "order": [[ 1, "desc" ]],
     "sLimit":10,  
     "sAjaxSource": "clients/dataTables/3/"+id,
     "aoColumns":[ {"sTitle":"ID","sName":"ID","bVisible":false},
@@ -223,7 +265,7 @@ function paymentlogs(id){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[8] == 1 ){
-        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs"role="button" data-toggle="popover" data-trigger="focus" title="Update Payment" id = "btn-updatebalance" onclick="updateBalance('+aData[0]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove Payment Log" onclick="removeStudent('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="popover" data-placement="left" title="Update Payment" id = "btn-updatebalance" onclick="updateBalance('+aData[0]+');"><i class = "fa fa-money fa-fw"></i></button>&nbsp;' );
       }
 
     },
@@ -249,11 +291,64 @@ function getPaymentDetails(id){
     });
 }
 function updateBalance(paymentid){
-    var content = '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"><form id="frm-updateBalance"><div class="form-group"><label>Total Paid:</label><input type="text" id="pay_amt" name="pay_amt" class="form-control"/></div></form></div><div class="form-group"><label>Current Balance:</label><input type="text" id="pay_bal" name="pay_bal" class="form-control"/></div></form></div></div>';
-    $("#btn-updatebalance").attr('title',content).popover({html:true}).popover('show');
+    $("#paymentid").val(paymentid);
+    var content = '<form id="frm-updateBalance"><div class="form-group"><label>Total Paid:</label><input type="text" id="pay_amt" name="pay_amt" class="form-control" onkeypress="numbersOnly(this.value,this.name)"/></div></div><div class="form-group"><label>Current Balance:</label><input type="text" id="pay_bal" name="pay_bal" class="form-control" onkeypress="numbersOnly(this.value,this.name)"/></div><div class="form-group"><button type="button" class="btn btn-default btn-xs" id="btn-payclose"><i class="fa fa-close fa-fw"></i></button>&nbsp;<button type="button" class="btn btn-primary btn-xs" id = "btn-paysave"><i class="fa fa-save fa-fw" ></i></button></div></form>';
+    $("#btn-updatebalance").attr('data-content',content).popover({html:true}).popover('show');
+
+    $("#btn-payclose").click(function(e){
+        e.preventDefault();
+        $("#btn-updatebalance").popover('hide').on('hidden.bs.popover', function () {
+            $("#paymentid").val('');
+        });
+
+    });
+
+    $("#btn-paysave").click(function(e){
+        e.preventDefault();
+        var frm = $("#frm-updateBalance").serializeArray();
+        $.each(frm, function(i,e){
+            if(e.value == ''){
+                $("#"+e.name).parent().addClass('has-error');
+            }else{
+                $("#"+e.name).parent().removeClass('has-error');
+            }
+        });
+        var len = $("#frm-updateBalance .has-error").length;
+        if(len > 0){
+            $("#message .alert").html("All fields are required.").addClass('alert-danger').show();
+        }else{
+            $("#message .alert").html("").removeClass('alert-danger').hide();
+            $.ajax({
+                url:'clients/updateBalance/'+paymentid,
+                data:{'payment_amt':$("#pay_amt").val(),'payment_balance':$("#pay_bal").val()},
+                dataType:'JSON',
+                type:'POST',
+                success:function(msg){
+                    if(msg == true){
+
+                        var table = $("#tbl-paymentlogs").DataTable();
+                         table.ajax.reload();
+                        $("#message .alert").html("Payment Updated Successfully.").addClass('alert-success').show();
+
+                        setTimeout(function(){
+                             $("#message .alert").html("").removeClass('alert-success').hide();
+                        },2500);
+                        getPaymentDetails($("#studEnrolledID").val());
+                    }else{
+                        $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show();
+
+                        setTimeout(function(){
+                            $("#message .alert").html("").removeClass('alert-danger').hide();
+                        },2500);
+                    }
+                }
+            });
+        }
+    });
 }
 $(document).ready(function(){
     getApprovedStudents();
+    getDisapprovedStudents();
     listings(6,null); //see main.js
     $("#service_id").change(function(){
        var table = $("#tbl-approved_students").dataTable();
@@ -271,6 +366,14 @@ $(document).ready(function(){
         $("#clinicid").val("");
         $("#serviceid").val("");
         $("#clientid").val("");
+        var frm = $("#frm-paynow").serializeArray();
+        $.each(frm, function(i,e){
+            $("#"+e.name).val("");
+        });
+    });
+
+    $('#modal_paymentlogs').on('hidden.bs.modal', function (e) {
+        $("#clients input[type=hidden]").val("");
         var frm = $("#frm-paynow").serializeArray();
         $.each(frm, function(i,e){
             $("#"+e.name).val("");
