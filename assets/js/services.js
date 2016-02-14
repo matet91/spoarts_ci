@@ -830,11 +830,18 @@ var error = $("#"+frmid+" .has-error").length;
 }
 
 function maps(){
-  var lat = $("#latitude").val(),
-      long = $("#longitude").val(),
-  mapDiv = document.getElementById('map');
-        var map = new google.maps.Map(mapDiv, {
-          center: {lat: parseFloat(lat), lng: parseFloat(long)},
-          zoom: 8
-        });
+  var lat = parseFloat($("#latitude").val()),
+      long = parseFloat($("#longitude").val()),
+      myLatLng = {lat: lat, lng: long},
+      mapDiv = document.getElementById('map'),
+      map = new google.maps.Map(mapDiv, {
+          center: myLatLng,
+          zoom: 4
+        }),
+        marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: $("#SPLocation").val()
+      });
+
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 14, 2016 at 08:58 PM
+-- Generation Time: Feb 14, 2016 at 09:11 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `clinics` (
   `clinic_name` varchar(30) NOT NULL,
   `clinic_logo` varchar(30) NOT NULL,
   `SPAboutMe` longtext NOT NULL,
-  `SPLocation` varchar(50) NOT NULL,
+  `SPLocation` mediumtext NOT NULL,
   `SPSubsPlan` int(11) NOT NULL COMMENT '1-trial;2-premium',
   `SPSubsDate` datetime NOT NULL COMMENT 'Subscription Date',
   `clinic_status` int(11) NOT NULL COMMENT '0-deactivated;1-activated',
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `clinics` (
 --
 
 INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPAboutMe`, `SPLocation`, `SPSubsPlan`, `SPSubsDate`, `clinic_status`, `longitude`, `latitude`) VALUES
-(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Cebu City, Central Visayas, Philippines', 1, '0000-00-00 00:00:00', 0, '123.88543660000005', '10.3156992'),
+(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Capitol Site, Cebu City, Central Visayas, Philippi', 1, '0000-00-00 00:00:00', 0, '123.89065660000006', '10.3143431'),
 (22, 28, '', 'IMG_0143-e1352505322542.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
 (23, 29, '', '30324943-fitness-sport-trainin', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
 (24, 30, '', 'inside-of-gym.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),

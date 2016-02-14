@@ -31,5 +31,5 @@
 
       </div>
 </footer>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&callback=initAutocomplete"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
          async defer></script>
