@@ -194,6 +194,18 @@ class mglobal extends CI_Model {
 					$select = "RoomID as id,RoomName as name";
 					
 			break;
+
+			case 6: //services
+					$table = "services";
+					$select = "ServiceID as id,ServiceName as name";
+					$this->db->where('SPID',$this->session->userdata('userid'));
+			break;
+			case 7: //time logs
+					$table = "time_logs";
+					$select = "DATE(tl_in) as name,tl_id as id";
+					$this->db->where('StudEnrolledID',$id);
+					$this->db->where('tl_paid',0);
+			break;
 		}
 
 		$this->db->select($select);

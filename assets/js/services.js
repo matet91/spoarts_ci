@@ -1,13 +1,7 @@
 $(document).ready(function(){
 	 var height = $(window).height();
    services();
-	var table = $('#example,#example7,#example8,#example9').DataTable({
-          
-      "pagingType": "simple",
-      "info":false,
-      "searching":false,
-      "sDom": '<"top">rt<"bottom"flp><"clear">'
-    });
+
 
    $('#btn-addService').click(function(e){
 	    e.preventDefault();
@@ -831,12 +825,3 @@ var error = $("#"+frmid+" .has-error").length;
 }
 
 
-function numbersOnly(val,id){
-  if(!$.isNumeric(val)){
-    $('#'+id).parent().addClass('has-error');
-    $("#message .alert").html($("#"+id).prev().html()+" should be numeric.").addClass("alert-danger").show();
-  }else{
-    $("#"+id).parent().removeClass('has-error');
-    $("#message .alert").html("").removeClass('has-error').hide();
-  }
-}

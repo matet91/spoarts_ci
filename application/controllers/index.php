@@ -22,6 +22,7 @@ class Index extends CI_Controller {
 			parent::__construct();
 			$this->load->model('mservices');
 			$this->load->model('mglobal');
+			$this->load->helper('date');
 	}
 	public function index()
 	{

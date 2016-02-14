@@ -173,8 +173,9 @@ class Mlogin extends CI_Model {
                 $splan = $get->row();
                 $sterm = $splan->PlanTerm;
                 
-                $datetime->add(new DateInterval('P'.$sterm));
-                $subscription['SubscEndDate'] = $datetime->format('Y-m-d');
+                $termdate = new DateTime($d);
+                $termdate->add(new DateInterval('P'.$sterm));
+                $subscription['SubscEndDate'] = $termdate->format('Y-m-d');
 
                  //ADD UserID to $subscription
                  $subscription['UserID'] = $UserID;

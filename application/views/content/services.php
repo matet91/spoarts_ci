@@ -518,17 +518,16 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Choose Payment Option</h4>
+              <h4 class="modal-title">Upgrade to Premium</h4>
             </div>
             
             <div class="modal-body">
-              <div class = "row" style ="margin3%">
+              <div class = "row" style ="margin:3%">
                 <form  id="formpaymentMethod">  
                   <div class="tabs-section" id = "tab-management">
                     <!-- Nav Tabs -->
                     <ul class="nav nav-tabs">
                       <li class="active"><a href="#tab-creditcard" data-toggle="tab"><i class="fa fa-credit-card"></i>Credit Card</a></li>
-                      <li><a href="#tab-paypal" data-toggle="tab"><i class="fa fa-paypal"></i>Paypal</a></li>
                     </ul>
                     <!-- Tab panels -->
                   <div class="tab-content">
@@ -558,7 +557,7 @@
                             </div>
 
                             <div class = "col-md-4">
-                              <input type="text" class = "form-control" id = "expdateyear" name = "expdateyear" placeholder = "yy" maxlength = "4"/>
+                              <input type="text" class = "form-control" id = "expdateyear" name = "expdateyear" placeholder = "yyyy" maxlength = "4"/>
                             </div>
                           </div>
                         </div>
@@ -583,6 +582,8 @@
       </div><!-- /.modal -->
     </div>
   <!-- end payment method modal -->
+
+  
     <!-- End Content -->
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/services.js"></script>

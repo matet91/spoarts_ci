@@ -343,6 +343,15 @@ function listings(c,id){
 					var selectid = "RoomID",
 						opt = "<option value=''>Assign Room</option>";
 			break;
+			case 6://services
+					var selectid = "service_id",
+						opt = "<option value=''>Filter by Services</option>";
+			break;
+
+			case 7://time log get date log
+					var selectid = "date_log",
+						opt = "<option value=''>Select Dates</option>";
+			break;
 		}
 	$.ajax({
 			url:'login/listings/'+c+"/"+id,
@@ -370,4 +379,15 @@ function getHour24(timeString)
         }
     }
     return time;
+}
+
+function numbersOnly(val,id){
+  if(!$.isNumeric(val)){
+    $('#'+id).parent().addClass('has-error');
+    $("#message .alert").html($("#"+id).prev().html()+" should be numeric.").addClass("alert-danger").show();
+    $("#"+id).val(0);
+  }else{
+    $("#"+id).parent().removeClass('has-error');
+    $("#message .alert").html("").removeClass('has-error').hide();
+  }
 }
