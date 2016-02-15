@@ -67,6 +67,7 @@ class mservices extends CI_Model {
 		foreach($clinicInfo as $key){
 			$clinicData[$key] = ucfirst($data[$key]);
 		}
+		$clinicData['clinic_status'] = 1;
 		$userid = $this->session->userdata('userid');
 
 		//check if existing
@@ -80,7 +81,6 @@ class mservices extends CI_Model {
 			$clinicData['UserID'] = $userid;
 			$this->db->insert('clinics',$clinicData);
 		}
-		
 
 		return $q;
 	}
@@ -298,9 +298,19 @@ class mservices extends CI_Model {
 			break;
 
 			case 2: //instructors
-					$field = "isn_id";
-					$table = "instructors";
+					$field = "MasterInsID";
+					$table = "instructor_masterlist";
 			break;
+
+			case 3: //rooms
+					$field = "RoomID";
+					$table = "rooms";
+			break;
+			case 4: //schedules
+					$field = "SchedID";
+					$table = "schedules";
+			break;
+
 		}
 		$this->db->where($field,$id);
 		$q = $this->db->delete($table);
@@ -422,6 +432,9 @@ class mservices extends CI_Model {
 
 						$this->db->where('UserID',$userid);
 						$this->db->update('subscriptions',$subsData);
+
+						$this->db->where('UserID',$userid);
+						$this->db->update('clinics',array('clinic_status'=>1));
 						return true; exit();
 					}else{
 						return false; exit();

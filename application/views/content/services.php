@@ -56,7 +56,29 @@
 
                 <div class="row">
                   <div class="col-sm-10">
-                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
+                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php
+                    if($data->SubscType==2){
+
+                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
+                        {
+                          echo "";
+                        }else if($data->SubsStatus==0){
+                          echo "disabled";
+                        }else{
+                          echo "disabled";
+                        }
+                      }else{
+                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
+
+                            $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                            echo "";
+                          }else{
+                            echo "disabled";
+                          }
+                      }
+                  ?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
                   </div>
                 </div>
               </div>
@@ -116,7 +138,10 @@
                       if($data->SubscType==2){
                         if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
                         {
-                          echo "<p class='text-success'>Paid</p>";
+                           $datetime1 = date_create($data->SubscEndDate);
+                            $datetime2 = date_create(date('Y-m-d'));
+                            $interval = date_diff($datetime2, $datetime1);
+                          echo "<p class='text-success'>Paid. <p class='text-info'>You have ".$interval->format('%R%a days')." remaining.</span></p>";
                         }else if($data->SubsStatus==0){
                           echo "<p class='text-danger'>Unpaid. Please settle your balance for you to Manage Services Module.</p><button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Pay Now'><i class ='fa fa-cc-visa fa-2x'></i>&nbsp;<i class ='fa fa-cc-paypal fa-2x'></i>&nbsp;</i>&nbsp;<i class ='fa fa-credit-card fa-2x'></i>&nbsp;Pay Now</button>";
                         }else{
@@ -128,9 +153,9 @@
                             $datetime1 = date_create($data->SubscEndDate);
                             $datetime2 = date_create(date('Y-m-d'));
                             $interval = date_diff($datetime2, $datetime1);
-                            echo "<p class='text-info'>You have ".$interval->format('%R%a days')." remaining. <button class='btn btn-info btn-sm' id='btn-renew' data-toggle='tooltip' data-placement='top' title='Upgrade/Renew Subscription'><span class ='glyphicon glyphicon-king'></span>&nbsp;Upgrade to Premium</button></p>";
+                            echo "<p class='text-info'>You have ".$interval->format('%R%a days')." remaining. <button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Upgrade/Renew Subscription'><span class ='glyphicon glyphicon-king'></span>&nbsp;Upgrade to Premium</button></p>";
                           }else{
-                            echo "<p class='text-danger'>Your Free Trial has expired. You can upgrade your account to Premium to enjoy this service.</p><button class='btn btn-info btn-sm' id='btn-renew' data-toggle='tooltip' data-placement='top' title='Upgrade/Renew Subscription'><span class ='glyphicon glyphicon-king'></span>&nbsp;Upgrade to Premium</button>";
+                            echo "<p class='text-danger'>Your Free Trial has expired. You can upgrade your account to Premium to enjoy this service.</p><button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Upgrade/Renew Subscription'><span class ='glyphicon glyphicon-king'></span>&nbsp;Upgrade to Premium</button>";
                           }
                       }?></p>
                       

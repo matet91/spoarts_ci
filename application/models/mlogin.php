@@ -13,12 +13,15 @@ class Mlogin extends CI_Model {
 		$uname = $this->input->post('uname');
 		$pwd = md5($this->input->post('pwd'));
 
-        $sql = "SELECT * FROM user_accounts where UserName='$uname' and Password='$pwd'";
+        $sql = "SELECT * FROM user_accounts where UserName='$uname'";
         $q = $this->db->query($sql);
 
         if($q->num_rows() > 0){
         	$row = $q->row();
+            $password =  $row->Password;
             //check user status
+            if($password != $pwd){ return 4; exit(); }//incorrect password
+
             if($row->UserStatus == 0){ return 2; exit();//unverified
             }else if($row->UserStatus == 2) {return 3; exit(); //inactive
             }else{

@@ -2,7 +2,10 @@ $(document).ready(function(){
 var height = $(window).height();
    services();
 
-
+   $('.modal').on('hidden.bs.modal', function (e) {
+        $(".chosen-select").removeAttr('disabled').trigger('chosen:updated');
+        $("#startTime,#endTime").removeAttr('disabled');
+  });
    $('#btn-addService').click(function(e){
 	    e.preventDefault();
       var dialogHeight = $("#modal_viewlist").find('.modal-dialog').outerHeight(true);
@@ -56,7 +59,7 @@ var height = $(window).height();
   //hide after 6 seconds.
   setTimeout(function(){
     $("#clubimage").popover('hide');   
-  },6000);
+  },2000);
   $("#content-services #btn-update").click(function(){
     $("#action_type").val(1);
       checkClinicFields();
@@ -73,7 +76,7 @@ var height = $(window).height();
         setTimeout(function(){
           pwd.parent().removeClass('has-error');
           $("#modal_security .alert").html("").removeClass('alert-danger').hide();
-        },3000);
+        },1500);
       }else{
         pwd.parent().removeClass('has-error');
         $("#modal_security .alert").html("").removeClass("alert-danger").hide();
@@ -154,7 +157,7 @@ function getservices(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(8)', nRow).html('<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick=removeData('+aData[0]+',1,"tbl-services")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -187,7 +190,7 @@ function getSchedules(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[8] == 1 ){
-        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" onclick="view_studentinstructor('+aData[0]+');"><i class = "fa fa-list fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editSchedules('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick="removeService('+aData[0]+',1);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(7)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editSchedules('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick= removeData('+aData[0]+',4,"tbl-schedules")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -258,26 +261,27 @@ function saveClinicInfo(){
   $.each(frmdata,function(i,e){
     data[e.name] = e.value;
   });
-
+  $('#loader').show();
   $.ajax({
     url:'services/saveClinicInfo',
     data:{data:data},
     dataType:'json',
     type:'POST',
     success:function(msg){
+      $('#loader').fadeOut();
       if(msg == true){
         $("#modal_security .alert").html("").hide();
         $("#modal_security").modal('hide');
         $("#message .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();
         setTimeout(function(){
           window.location = 'services';
-        },3000);
+        },2000);
       }else{
         $("#modal_security .alert").html("Can't save right now. Please try again later or contact the WebDev Support Team.");
         setTimeout(function(){
           $("#modal_security").modal('hide');
           $('modal_security .alert').html("").hide();
-        },4000);
+        },3000);
       }
     }
   })
@@ -311,7 +315,7 @@ function instructorList(id){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[6] == 1 ){
-        $('td:eq(5)', nRow).html('<button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="deleteInstructor('+aData[0]+',2);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(5)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick=removeData('+aData[0]+',2,"tbl-instructor")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
     },
     "fnInitComplete": function(oSettings, json) {
@@ -340,7 +344,7 @@ function masterlistInstructors(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[7] == 1 ){
-        $('td:eq(6)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick="deleteInstructor('+aData[0]+',2);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(6)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick=removeData('+aData[0]+',2,"tbl-insmaterlist")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
     },
     "fnInitComplete": function(oSettings, json) {
@@ -366,7 +370,7 @@ function manageRooms(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[4] == 1 ){
-        $('td:eq(3)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateRoom('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick="deleteRoom('+aData[0]+',2);"><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(3)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateRoom('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick=removeData('+aData[0]+',3,"tbl-rooms")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
     },
     "fnInitComplete": function(oSettings, json) {
@@ -401,12 +405,14 @@ function addInstructor(data){
     var url = 'services/addInstructor';
     var errorMsg = "New Instructor has been added to your Service."
   }
+  $('#loader').show();
   $.ajax({
     url:url,
     data:{data:data},
     dataType:'JSON',
     type:'POST',
     success: function(msg){
+      $('#loader').fadeOut();
       var table = $("#tbl-instructor").DataTable();
       if(msg == true){
         $("#instructor-tab .alert").html(errorMsg).addClass('alert-success').show();
@@ -432,6 +438,8 @@ function editServices(id){
 function editSchedules(id){
   $("#modal_addschedule").modal('show');
   $('#modal_addschedule .modal-title').html("Edit Schedules");
+  $("#SchedDays,#ServiceID").attr('disabled','disabled').trigger('chosen:updated');
+  $("#startTime,#endTime").attr('disabled','disabled');
    getData(id, 3);
 }
 
@@ -483,17 +491,20 @@ function getData(id, type){
 
         case 3: //schedules
               var frmName = "#formaddschedule";
+               
         break;
 
         case 4: //room
               var frmName = "#formaddRoom";
+
         break;
       }
       var frmdata = $(frmName).serializeArray();
       $.each(frmdata, function(i,e){
           var name = e.name;
          // console.log(name);
-          if(name == 'SchedDays'){
+          if(name == 'SchedDays' && name.prop("disabled") == false){
+
             var split = msg[0][name].split(',');
             //console.log(split+"sdfsd");
             $.each(split,function(i,e){
@@ -505,49 +516,40 @@ function getData(id, type){
           }
           
       });
+
       $(".chosen-select").trigger("chosen:updated");
     }
   });
 }
 
-function removeService(id,t){
-  $("#action_type").val(2);
-  $('#deleteType').val(t);
-  $('#sid').val(id);
-  var height = $(window).height();
-  var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-  var top = parseInt(height)/5-parseInt(dialogHeight);
-  $("#modal_security").modal('show');
-  $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
+function removeData(id,t,dt){
+  if (confirm('Are you sure you want to remove this record in the database?')) {
+    // Save it!
+    $('#loader').show();
+    $("#content-services  .alert").html("").removeClass('alert-danger').hide();
+    $.ajax({
+        url: 'services/removeData/'+id+"/"+t,
+        dataType: 'JSON',
+        type:'GET',
+        success:function(msg){
+          $('#loader').fadeOut();
+          if(msg == true){
+               $('#deleteType').val('');
+              $("#modal_security .alert").html("").hide();
+              $("#modal_security").modal('hide');
+              $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-success").show();
+                var table = $("#"+dt).DataTable();
+                table.ajax.reload();
+              },1500);
+          }else{
 
- $("#content-services  .alert").html("").removeClass('alert-danger').hide();
-  $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-}
-
-function removeData(){
-  var deleteType =  $('#deleteType').val();
-  var sid = $("#sid").val();
-  $.ajax({
-      url: 'services/removeData/'+sid+"/"+deleteType,
-      dataType: 'JSON',
-      type:'GET',
-      success:function(msg){
-        if(msg == true){
-             $('#deleteType').val('');
-            $("#modal_security .alert").html("").hide();
-            $("#modal_security").modal('hide');
-            $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();
-            setTimeout(function(){
-              $("#message .alert").html("").removeClass("alert-success").show();
-              var table = $("#tbl-services").DataTable();
-              table.ajax.reload();
-            },2000);
-        }else{
+          }
 
         }
-
-      }
-  });
+    });
+  }
 }
 
 
@@ -630,7 +632,7 @@ function validateForm(t){
                             name.parent().addClass("has-error");
                             setTimeout(function(){
                               $("#message .alert").html("").removeClass("alert-danger").hide();
-                            },2000);  
+                            },1500);  
                           }
                       }else{
                         name.parent().removeClass('has-error');
@@ -649,13 +651,14 @@ function validateForm(t){
                             name.parent().addClass("has-error");
                             setTimeout(function(){
                               $("#message .alert").html("").removeClass("alert-danger").hide();
-                            },2000);  
+                            },1500);  
                         }
                       }else if(e.name == "endTime" || e.name == 'startTime'){
                         
                         data['SchedTime'] = $("#startTime").val()+" - "+$("#endTime").val();
                           name.parent().removeClass('has-error');
-                      }else if(e.name == 'SchedDays'){
+                      }else if(e.name == 'SchedDays' && name.prop("disabled") == false){
+                        
                          schedDays.push(e.value);
                         name.parent().removeClass('has-error');
                       }else{
@@ -675,7 +678,7 @@ function validateForm(t){
                             name.parent().addClass("has-error");
                             setTimeout(function(){
                               $("#message .alert").html("").removeClass("alert-danger").hide();
-                            },2000);  
+                            },1500);  
                           }
                       }else{
                         name.parent().removeClass('has-error');
@@ -694,7 +697,7 @@ function validateForm(t){
                               name.parent().addClass("has-error");
                               setTimeout(function(){
                                 $("#message .alert").html("").removeClass("alert-danger").hide();
-                              },2000);  
+                              },1500);  
                           }
                       }else{                        
                         name.parent().removeClass('has-error');
@@ -710,13 +713,13 @@ function validateForm(t){
               
         }
   }); 
-  if(t == 2) data['schedDays'] = schedDays.toString();
+  if(t == 2 && schedDays.toString() != '') {data['schedDays'] = schedDays.toString();}
   var count = $("#"+modal+" .has-error").lentgh;
   if(count > 0){
     $("#message .alert").html("All fields are required").addClass("alert-danger").show();
     setTimeout(function(){
       $("#message .alert").html("").removeClass('alert-danger').hide();
-    },2000);
+    },1500);
   }else{
 
             saveData(data,t);
@@ -798,12 +801,14 @@ var error = $("#"+frmid+" .has-error").length;
     $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();
   }else{
     $("#message .alert").html("").removeClass('alert-danger').hide();
+    $('#loader').show();
     $.ajax({
       url:url,
       data:{data},
       dataType:'JSON',
       type:'POST',
       success:function(msg){
+        $('#loader').fadeOut();
         var dtable = $("#"+table).DataTable(), dataForm = $("#"+frmid).serializeArray(); 
         if(msg == true){
 
@@ -815,7 +820,7 @@ var error = $("#"+frmid+" .has-error").length;
             setTimeout(function(){
               $("#message .alert").html("").removeClass("alert-success").hide();
               $("#"+modal).modal('hide');
-            },3000);
+            },1500);
             if(t == 5){
               window.location = "services";
             }

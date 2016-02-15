@@ -169,7 +169,6 @@
               <!-- Nav Tabs -->
               <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-key"></i>Login Password</a></li>
-                <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-key"></i>Security Question and Password</a></li>
               </ul>
 
               <!-- Tab panels -->
@@ -181,10 +180,6 @@
                           <div class = "form-group">
                             <label for = "oldpwd">Old Password :</label>
                             <input type = "password" class = "form-control" id = "oldpwd" name = "oldpwd" placeholder="Enter Old Password" data-placement="top" data-toggle="tooltip" data-placement="top" title="Click outside this textbox to verify inputted password.">
-                          </div>
-                          <div class = "form-group">
-                            <label for = "secpwd"><?=$this->session->userdata('securityquestion')."?"; ?></label>
-                            <input type = "password" class = "form-control" id = "secpwd" name = "secpwd" placeholder="Enter Security Password" data-placement="top" data-toggle="tooltip" title="Click outside this textbox to verify inputted password." disabled>
                           </div>
                           <div class = "form-group">
                             <label for = "newpwd" id="label_newpwd" data-placement="top" data-toggle="popover">New Password : <span class ="text-info">Minimum of 8 and maximum of 10 characters.<span></label>

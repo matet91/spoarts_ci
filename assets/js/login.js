@@ -1,76 +1,20 @@
 $(document).ready(function(){
 	$("#btn-login").click(function(){
-		var loginData = $("#loginForm").serializeArray();
-		var ph = [];
-		$.each(loginData,function(i,e){
-			if(e.value == ''){
-				$("#"+e.name).parent().parent().addClass('has-error');// addclass to its parent div with class form-group for empty textboxes
-			}else{
-				$("#"+e.name).parent().parent().removeClass('has-error');
-			}
-		});
-		var count = $(".has-error").length; //coutn how many textboxes is in red border or empty
-		if(count > 0){
-			$(".switcher-box span#error").attr('title',"<div style = 'color:red'>Please enter your username/password</div>").popover({
-				html:true
-			}).popover('show');
-			setTimeout(function(){
-				$(".switcher-box span#error").popover('hide');
-				$("#loginForm input").parent().parent().removeClass('has-error');
-			},2000);
-			
-		}else{
-			$.ajax({
-				url:'login/authenticate',
-				data:{pwd:$("#password").val(),uname:$("#username").val()},
-				dataType:'JSON',
-				type:'POST',
-				success:function(msg){
-					if(msg[0] == 1){
-
-						$("#message .alert").html("").removeClass('alert-danger').hide();
-						if(msg[1] == "0"){
-							window.location = "subscribers";
-						}else if(msg[1] == "1"){
-							window.location = "services";
-						}else{
-							window.location = "index";
-						}
-						
-					}else if(msg == 2){//inactive
-						$("#message .alert").html("Your account has not been verified. Please check your email. We sent you a new verification code.").addClass('alert-danger').show();
-							setTimeout(function(){
-								$("#message .alert").html("").removeClass('alert-danger').hide();
-							},3500);
-					}else if(msg == 3){
-						$("#message .alert").html("Your account is inactive. You may send an email request to spoarts.cebu@gmail.com to activate your account.").addClass('alert-danger').show();
-							setTimeout(function(){
-								$("#message .alert").html("").removeClass('alert-danger').hide();
-							},3500);
-					}else if(msg == 0){
-						$("#message .alert").html("Account not exist.").addClass('alert-danger').show();
-
-						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
-						},3500);
-					}else{
-
-						$("#message .alert").html("Incorrect Username/Password.").addClass("alert-danger").show();
-						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
-						},3500);
-					}
-
-				}
-			});
-		}
+		login();
 	});
 
+	$('#password').on('keydown', function(e){
+		if(e.which == 13){
+			login();
+		}
+	});
 	//registration 
 	$("#btn-reg").click(function(){
 		register();
+
 	});
 	$("#register").click(function(){
+		initAutocomplete();
 		var height = $(window).height();
 		var dialogHeight = $("#modal_registration").find('.modal-dialog').outerHeight(true);
     	var top = parseInt(height)/5-parseInt(dialogHeight);
@@ -153,6 +97,74 @@ $(document).ready(function(){
 	
 });
 
+function login(){
+	var loginData = $("#loginForm").serializeArray();
+		var ph = [];
+		$.each(loginData,function(i,e){
+			if(e.value == ''){
+				$("#"+e.name).parent().parent().addClass('has-error');// addclass to its parent div with class form-group for empty textboxes
+			}else{
+				$("#"+e.name).parent().parent().removeClass('has-error');
+			}
+		});
+		var count = $(".has-error").length; //coutn how many textboxes is in red border or empty
+		if(count > 0){
+			$(".switcher-box span#error").attr('title',"<div style = 'color:red'>Please enter your username/password</div>").popover({
+				html:true
+			}).popover('show');
+			setTimeout(function(){
+				$(".switcher-box span#error").popover('hide');
+				$("#loginForm input").parent().parent().removeClass('has-error');
+			},2000);
+			
+		}else{
+			$('#loader').show();
+			$.ajax({
+				url:'login/authenticate',
+				data:{pwd:$("#password").val(),uname:$("#username").val()},
+				dataType:'JSON',
+				type:'POST',
+				success:function(msg){
+					$('#loader').fadeOut();
+					if(msg[0] == 1){
+
+						$("#message .alert").html("").removeClass('alert-danger').hide();
+						if(msg[1] == "0"){
+							window.location = "subscribers";
+						}else if(msg[1] == "1"){
+							window.location = "services";
+						}else{
+							window.location = "index";
+						}
+						
+					}else if(msg == 2){//inactive
+						$("#message .alert").html("Your account has not been verified. Please check your email. We sent you a new verification code.").addClass('alert-danger').show();
+							setTimeout(function(){
+								$("#message .alert").html("").removeClass('alert-danger').hide();
+							},3500);
+					}else if(msg == 3){
+						$("#message .alert").html("Your account is inactive. You may send an email request to spoarts.cebu@gmail.com to activate your account.").addClass('alert-danger').show();
+							setTimeout(function(){
+								$("#message .alert").html("").removeClass('alert-danger').hide();
+							},3500);
+					}else if(msg == 0){
+						$("#message .alert").html("Account not exist.").addClass('alert-danger').show();
+
+						setTimeout(function(){
+							$("#message .alert").html("").removeClass('alert-danger').hide();
+						},3500);
+					}else{
+
+						$("#message .alert").html("Incorrect Username/Password.").addClass("alert-danger").show();
+						setTimeout(function(){
+							$("#message .alert").html("").removeClass('alert-danger').hide();
+						},3500);
+					}
+
+				}
+			});
+		}
+}
 
 function register(){
 	var regdata = $("#form-reg").serializeArray(),err=new Array();
@@ -264,7 +276,7 @@ function saveRegister(){
 		}
 		
 	});
-	//$('#loader').show();
+	$('#loader').show();
 	$.ajax({
 		url: 'login/saveRegister',
 		dataType:'JSON',

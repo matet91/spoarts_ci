@@ -54,10 +54,6 @@ $('#btn-changepwd').click(function(){
 $("#oldpwd").change(function(){
 	verifyPassword(1);
 });
-$("#secpwd").change(function(){
-	verifyPassword(2);
-});
-
 $("#newpwd").change(function(){
 	//check password length
 	var length = $(this).val();
@@ -239,9 +235,6 @@ function verifyPassword(c){
 			var pwd = $("#oldpwd").val();
 		break;
 
-		case 2://security password
-			var pwd = $('#secpwd').val();
-		break;
 	}
 	$.ajax({
 		url:'index/verifyPassword',
@@ -255,10 +248,6 @@ function verifyPassword(c){
 
 					case 1://login password
 						$("#oldpwd").parent().removeClass('has-error');
-						$("#secpwd").removeAttr('disabled');
-					break;
-					case 2: //security password validation
-						$("#secpwd").parent().removeClass('has-error');
 						$("#newpwd").removeAttr('disabled');
 					break;
 				}
@@ -267,12 +256,6 @@ function verifyPassword(c){
 					case 1: //login password
 						$("#modal_secsettings .alert").html('Incorrect Login Password.').addClass('alert-danger').show();
 						$("#oldpwd").parent().addClass('has-error');
-						$("#secpwd").attr('disabled','disabled');
-					break;
-
-					case 2://security password
-						$("#modal_secsettings .alert").html('Incorrect Login Password.').addClass('alert-danger').show();
-						$("#secpwd").parent().addClass('has-error');
 						$("#newpwd").attr('disabled','disabled');
 					break;
 				}
