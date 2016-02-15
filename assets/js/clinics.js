@@ -60,6 +60,10 @@ $(document).ready(function(){
 	$('#btn-Enroll').click(function(){
 		saveEnroll();
 	});
+	$("#ServiceInfo").click(function(){
+		$("#services-div").toggle();
+	});
+	
 });
 
 /*function loadServices(c,search){
@@ -111,7 +115,7 @@ function loadServices(c,search){
 				          "</div>"+
 				          "<a href='#' onclick = bookmark('"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Bookmark'><i class='more fa fa-bookmark' style = 'left:30% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></button>"+
 				          "<a href='#' onclick = enroll('"+c+"','"+e.UserID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Enroll' ><i class='more fa fa-sign-in' style = 'left:55% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
-				          "<a href='#' onclick = info('"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
+				          "<a href='#' onclick = info('"+e.clinic_id+"','"+e.clinic_name+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
 				        "</li>";
 
 			});
@@ -122,6 +126,10 @@ function loadServices(c,search){
 
 		}
 	});
+	
+	 $("#ServiceInfo").click(function(){
+        $("#mypayment_list").toggle();
+    });
 }
 
 function changeSchedule(schedid){
@@ -160,7 +168,7 @@ function changeService(serviceid){
 			var result = "<option value=0>Select</option>";
 			$("#Schedule").html("");
 			$.each(msg, function(i,e){	
-				result += '<option value='+e.SchedID+'>'+e.SchedDate+' @ '+e.SchedTime+'</option>';	
+				result += '<option value='+e.SchedID+'>'+e.SchedDays+' @ '+e.SchedTime+'</option>';	
 			});	
 			//$("#Schedule").append(result);	
 			//$('#Schedule').chosen().trigger("chosen:updated");
@@ -314,6 +322,8 @@ function saveEnroll(){
 					$("#stud_name").val("");$("#stud_age").val("");$("#stud_address").val("");
 				}else if(msg == 4){ //student already enrolled in schedule selected
 					$("#message .alert").html($("#stud_id option:selected").text()+" already enrolled in this schedule").addClass('alert-danger').show();
+				}else if(msg == 5){
+					$("#message .alert").html("The service hits its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();
 				}else{
 				  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
 				}
@@ -352,9 +362,67 @@ function bookmark(clinicid){
 	});
 }
 
-function info(clinicid){
+function info(clinicid,clinicname){
 	var height = $(window).height();
 	var dialogHeight = $("#modal_info").find('.modal-dialog').outerHeight(true);
 	var top = parseInt(height)/6-parseInt(dialogHeight);
 	$("#modal_info").modal('show').attr('style','top:'+top+'px !important;');
+	infoservice(clinicid);
+	reviewsratings(clinicid,clinicname,0);
+	$("#ReviewsRatings").click(function(){
+		reviewsratings(clinicid,clinicname,1);
+		$("#ReviewsRatings").hide();
+		$("#HideReviewsRatings").show();
+	});
+	$("#HideReviewsRatings").click(function(){
+		reviewsratings(clinicid,clinicname,0);
+		$("#ReviewsRatings").show();
+		$("#HideReviewsRatings").hide();
+	});
+}
+
+function reviewsratings(clinicid,clinicname,limit){
+	$.ajax({
+		url:'clinics/getReviewsRatings/'+clinicid+'/'+limit,
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){
+			var result = "";
+			$.each(msg, function(i,e){
+				var star = "";
+				for(var str = 0; str < e.Rating ; str++){
+					star += '<span class = "glyphicon glyphicon-star-empty"></span>';
+				}
+				 result += '<div class="classic-testimonials item">'+
+						  '<div class="testimonial-content">'+
+						  '<p>'+e.Message+'</p>'+
+						  '</div>'+
+						  '<div class="testimonial-author">'+star+' <span>'+e.Cname+'</span> - Customer of '+clinicname+'</div>'+
+						  '</div>';
+			});
+			$("#reviewsratings-div").html(result);
+		}
+	})
+	
+}
+
+function infoservice(clinicid){
+	$('#services_list').DataTable( {
+	"bProcessing":true, 
+	"bServerSide":true,
+	"bRetrieve": true,
+	"bDestroy":true,
+	"sAjaxSource": "clinics/dataTables/1/"+clinicid,
+	"aoColumns":[	{"sTitle":"ID","bVisible":false},
+					{"sTitle":"Service","bSearchable": true},
+					{"sTitle":"Registration Fee","bSearchable": true},
+					{"sTitle":"Monthly Fee","bSearchable": true},
+					{"sTitle":"Walkin Fee","bSearchable": true},
+					{"sTitle":"Service/Hour","bSearchable": true},
+					{"sTitle":"Type","bSearchable": true}
+	],
+	"fnInitComplete": function(oSettings, json) {
+	}
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
 }

@@ -73,4 +73,14 @@ class Login extends CI_Controller {
 		$data = $this->mglobal->listings($c, $id);
 		echo json_encode($data);
 	}
+
+	function changepassword(){
+		$data = $this->mlogin->changepassword();
+		echo json_encode($data);
+	}
+
+	function testimonials(){
+		$data = $this->mglobal->testimonials();
+		echo json_encode($data);
+	}
 }

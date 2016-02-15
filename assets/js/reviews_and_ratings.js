@@ -73,44 +73,7 @@ function getReviewList(typelist){
 	});
 }
 
-function reviewaction(stat, reviewsid){
-	var height = $(window).height();
-	var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-    var top = parseInt(height)/2-parseInt(dialogHeight);
-    $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-	  
-	$("#modal_security #btn-continue").click(function(){
-		var pwd = $("#modal_security #sec_pwd");
-
-		if(pwd.val() == ''){
-			pwd.parent().addClass('has-error');
-			$("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
-		}else{
-			pwd.parent().removeClass('has-error');
-			$("#modal_security .alert").html("").removeClass("alert-danger").hide();
-			checkSecurityPwd(pwd.val(), stat, reviewsid);
-		}
-	});
-}
-
-function checkSecurityPwd(pwd,stat,reviewsid){
-  $.ajax({
-    url:'services/checkSecurityPwd',
-    dataType:'JSON',
-    type:'POST',
-    data:{pwd:pwd},
-    success:function(msg){
-		if(msg == 1){ //if correct
-			saveReviewRatings(stat,reviewsid);
-		}else{//incorrect password
-			$("#modal_security #sec_pwd").parent().addClass('has-error');
-			$("#modal_security .alert").html("Incorrect Password.").addClass("alert-danger").show();
-		}
-    }
-  })
-}
-
-function saveReviewRatings(stat,reviewsid){
+function reviewaction(stat,reviewsid){
 	$.ajax({
 		url:'reviews_and_ratings/saveReviewRatings/',
 		dataType:'JSON',
@@ -118,21 +81,19 @@ function saveReviewRatings(stat,reviewsid){
 		data:{stat:stat,reviewsid:reviewsid},
 		success:function(msg){
 			if(msg == 1){
-				$("#modal_security .alert").html("").hide();
-				$("#modal_security").modal('hide');
-				$("#content-reviews_and_ratings .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();
-
+				$("#message .alert").html("Changes saved. Page will reload after 3 seconds").addClass('alert-success').show();
 				setTimeout(function(){
-				  window.location = 'reviews_and_ratings';
+					$("#message .alert").html("").removeClass('alert-success').hide();
+					window.location = 'reviews_and_ratings';
 				},3000);
 			}else{
+				$("#message .alert").html("Can't save right now. Please try again later or contact the WebDev Support Team.").addClass('alert-danger').show();
 				$("#modal_security .alert").html("Can't save right now. Please try again later or contact the WebDev Support Team.");
 				setTimeout(function(){
-				  $("#modal_security").modal('hide');
-				  $('modal_security .alert').html("").hide();
+				 $("#message .alert").html("").removeClass('alert-danger').hide();
 				},4000);
 			}
 		}
-	})
+	});
 	
 }

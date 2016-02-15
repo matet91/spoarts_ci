@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	$("#btn-newPwd").click(function(){
+		saveNewPassword();
+	});
 	$(".chosen-select").chosen({width: "95%"});
 	$('.modal').on('hidden.bs.modal', function(e){
 	      var table = $(".modal .dataTable").DataTable();
@@ -358,4 +361,30 @@ function numbersOnly(val,id){
     $("#"+id).parent().removeClass('has-error');
     $("#message .alert").html("").removeClass('has-error').hide();
   }
+}
+
+function saveNewPassword(){
+	$('#loader').show();
+	var newpwd = $("#newpwd").val();
+	$.ajax({
+		url: 'login/changepassword',
+		data:{pwd:newpwd},
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){
+			$("#loader").fadeOut();
+			if(msg == true){
+				$("#message .alert").html("Password changed successfully.").addClass("alert-success").show();
+				setTimeout(function(){
+					$("#message .alert").html("").removeClass("alert-success").hide();
+				},2000);
+			}else{
+				$("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
+				setTimeout(function(){
+					$("#message .alert").html("").removeClass("alert-danger").hide();
+				},2000);
+			}
+			$("#modal_secsettings").modal('close');
+		}
+	});
 }

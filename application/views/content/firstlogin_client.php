@@ -22,19 +22,6 @@
 		                	</div>
 		                	<!-- Divider -->
         					<div class="hr1 margin-60"></div>
-		                	<div class = "row">
-		                	<h3 class="classic-title"><span>Please select your Security Question</span></h3>
-		 						<div class = "form-group">
-		 							<select id = "security_question_id" name="security_question_id" class="form-control">
-		 							</select>
-		 						</div>
-		 					</div>
-		 					
-		 					<div class = "row">
-		 						<div class = "form-group">
-		 							<input type="password" id = "sec_pwd" name="sec_pwd" class="form-control">
-		 						</div>
-		 					</div>
 		                </form>
 		                <button type="button" id="btn-saveInterest" class="btn btn-lg btn-primary">Save Changes</button>
 	                </div>

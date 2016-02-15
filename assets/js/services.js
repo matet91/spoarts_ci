@@ -836,17 +836,25 @@ var error = $("#"+frmid+" .has-error").length;
 
 function maps(){
   var lat = parseFloat($("#latitude").val()),
+      infowindow = new google.maps.InfoWindow({
+        content: $("#SPLocation").val()
+      }),
       long = parseFloat($("#longitude").val()),
       myLatLng = {lat: lat, lng: long},
+      originalMapCenter = new google.maps.LatLng(lat, long);
       mapDiv = document.getElementById('map'),
       map = new google.maps.Map(mapDiv, {
-          center: myLatLng,
-          zoom: 4
+          center: originalMapCenter,
+          zoom: 16
         }),
         marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: $("#SPLocation").val()
+          position: originalMapCenter,
+          map: map,
+          title: $("#SPLocation").val(),
+        });
+        map.panTo(marker.getPosition());
+       marker.addListener('click', function() {
+        infowindow.open(marker.get('map'), marker);
       });
 
 }

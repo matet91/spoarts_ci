@@ -508,6 +508,7 @@
                   
                   <div class="modal-body">
                     <div id = "map"></div>
+                    <div id = "pano"></div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
@@ -637,8 +638,8 @@
   
     <!-- End Content -->
     <!-- javascripts -->
-    <script type="text/javascript" src="assets/js/services.js"></script>
-    <script>
+  <script type="text/javascript" src="assets/js/services.js"></script>
+  <script>
 var autocomplete;
 
 function initAutocomplete() {
@@ -662,10 +663,8 @@ function fillInAddress() {
       $("#latitude").val(lat), $("#longitude").val(lng);
 }
 
-  // [END region_getplaces]
+</script>
 
-  function go(){ 
-  var d = document.getElementById('autocomplete');
-}
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
+         async defer>
 </script>

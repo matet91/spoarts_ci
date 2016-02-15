@@ -22,8 +22,7 @@ class Mypayments extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('mreviews_and_ratings');
-		$this->load->model('mmyinterests');
+		$this->load->model('mmypayments');
 	}
 
 	public function index()
@@ -38,5 +37,10 @@ class Mypayments extends CI_Controller {
 					  'footer' => 'footer.php',
 					  'title' => $title);
 		$this->load->view('index',$data);
+	}
+	
+	function dataTables($switch){
+		$data = $this->mmypayments->dataTables($switch);
+		echo json_encode($data);
 	}
 }

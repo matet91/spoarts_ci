@@ -5,6 +5,23 @@
  #portfolio-list li:hover .more{
     top:68% !important;
   }
+@media screen and (min-width: 768px) {
+    .modalinfo {
+        width: 70%; /* either % (e.g. 60%) or px (400px) */
+    }
+}
+.col-md-6{
+	width: 100% !important;
+}
+
+#services-div,#HideReviewsRatings{
+	margin-bottom:10px;
+	display:none;
+}
+
+#ServiceInfo,.read-more{
+	margin-bottom:10px;
+}
 </style>
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
@@ -138,7 +155,7 @@
 	
 	<!-- modal info -->
     <div class="modal fade" id = "modal_info" tabindex="-1" role="dialog">
-		<div class="modal-dialog">
+		<div class="modal-dialog modalinfo">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -146,11 +163,22 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
-						test
+						<div class="col-md-6">
+							<a class="main-button" href="#" id="ServiceInfo">Services <i class="fa fa-angle-right"></i></a>
+							<div id="services-div">
+								<table id="services_list" class="display" cellspacing="0" width="100%"></table>
+							</div>
+							<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
+							<a class="read-more" href="#" id="ReviewsRatings">View All Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
+							<a class="read-more" href="#" id="HideReviewsRatings">Hide Some Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
+							<div id="reviewsratings-div">
+								test
+							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
-						<button type="button" id= "btn-Enroll" class="btn btn-primary">Enroll</button>
+						<!--button type="button" id= "btn-Enroll" class="btn btn-primary">Enroll</button-->
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
@@ -160,3 +188,31 @@
 	
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/clinics.js"></script>
+    <script>
+var autocomplete;
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
+      {types: ['geocode']});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+// [START region_fillform]
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+      var lat=place.geometry.location.lat();
+      var lng = place.geometry.location.lng();
+      $("#latitude").val(lat), $("#longitude").val(lng);
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
+         async defer>
+</script>

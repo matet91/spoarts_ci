@@ -359,13 +359,19 @@ function approve(id,schedid){
                 $("#message .alert").html("Student Approved Successfully.").addClass("alert-success").show();
                 setTimeout(function(){
                     $("#message .alert").html("").removeClass('alert-success').hide();
-                },2500);
-            }else{
-                $("#message .alert").html("The schedule that this student is trying to enroll is now full.").addClass('alert-danger').show();
+                },3000);
+            }else if(msg == 1){
+                $("#message .alert").html("This schedule is now FULL.").addClass('alert-danger').show();
 
                 setTimeout(function(){
                     $("#message .alert").html("").removeClass('alert-danger').hide();
-                },2500);
+                },3000);
+            }else{
+                 $("#message .alert").html("Schedule does not exist.").addClass('alert-danger').show();
+
+                setTimeout(function(){
+                    $("#message .alert").html("").removeClass('alert-danger').hide();
+                },3000);
             }
         }
     });

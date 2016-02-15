@@ -10,7 +10,7 @@ class mmyevents extends CI_Model {
 		
 	function getlistid($table, $fields , $where, $order, $leftjoin){
 		$query = $this->db->query("SELECT $fields FROM $table $leftjoin $where $order");
-
+		$rowid = array();
 		foreach ($query->result() as $row){
 		   $rowid[] = $row->$fields;
 		}

@@ -39,6 +39,11 @@ class Myinterests extends CI_Controller {
 					  'title' => $title);
 		$this->load->view('index',$data);
 	}
+	
+	function dataTables($switch){
+		$data = $this->mmyinterests->dataTables($switch);
+		echo json_encode($data);
+	}
 
 	//get all interest for dropdown in event
 	function getselInterest($type){

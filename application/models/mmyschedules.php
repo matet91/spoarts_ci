@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class mmypayments extends CI_Model {
+class mmyschedules extends CI_Model {
 	public function __construct()
 	{
 			// Call the CI_Model constructor
@@ -19,15 +19,15 @@ class mmypayments extends CI_Model {
 
 		switch($switch){
 			case 1:
-				$aColumns = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
-				$select = array("payment_id","payment_date", "payment_amt", "payment_balance","payment_desc","stud_name","(CASE WHEN payment_type=0 THEN 'Session'  WHEN payment_type=1 THEN 'Monthly' ELSE 'Membership' END)  as payment_type");
-				$sTable = "payment_logs p";
-				$leftjoin = " LEFT JOIN students s ON s.stud_id = p.stud_id";
-				$sWhere = "WHERE p.client_id = ".$this->session->userdata("userid")."";
-				if($sSearch){$sWhere .= " AND (payment_date like '%".$sSearch."%' OR payment_amt like '%".$sSearch."%' OR payment_balance like '%".$sSearch."%'  OR payment_desc like '%".$sSearch."%' OR stud_name like '%".$sSearch."%' OR payment_type like '%".$sSearch."%')";}
+				$aColumns = array("StudEnrolledID","stud_name","Schedule","Room","Instructor","Service","Clinic");
+				$select = array("se.StudEnrolledID","s.stud_name", "CONCAT(sc.SchedDays, '@',sc.SchedTime)as Schedule", "(CASE WHEN sc.RoomID=0 THEN 'TBA'  ELSE CONCAT(r.RoomNo, '-',r.RoomName) END)as Room","(CASE WHEN sc.InstructorID=0 THEN 'TBA'  ELSE m.MasterInsName END) as Instructor","ser.ServiceName as Service","c.clinic_name as Clinic");
+				$sTable = "students_enrolled se";
+				$leftjoin = " LEFT JOIN students s ON s.stud_id = se.stud_id LEFT JOIN schedules sc ON sc.SchedID = se.SchedID LEFT JOIN rooms r ON r.RoomID = sc.RoomID LEFT JOIN instructor_masterlist m ON m.MasterInsID = sc.InstructorID LEFT JOIN services ser ON ser.ServiceID = se.service_id LEFT JOIN clinics c ON c.clinic_id = se.clinic_id";
+				$sWhere = "WHERE se.client_id = ".$this->session->userdata("userid")."";
+				if($sSearch){$sWhere .= " AND (s.stud_name like '%".$sSearch."%' OR sc.scheddays like '%".$sSearch."%' OR sc.schedtime like '%".$sSearch."%'  OR r.RoomNo like '%".$sSearch."%' OR r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR ser.ServiceName like '%".$sSearch."%' OR c.clinic_name like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
+				$aColumns_output = array("StudEnrolledID","stud_name","Schedule","Room","Instructor","Service","Clinic");
 			break;
 		}
 		
@@ -38,7 +38,7 @@ class mmypayments extends CI_Model {
 		//print_r("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
 		
 		$rResult = $this->db->query( $sQuery );
-		// 	echo $this->db->last_query();
+		//echo $this->db->last_query();
 		$sQuery = "SELECT FOUND_ROWS() as count";
 		$rResultFilterTotal = $this->db->query( $sQuery);
 

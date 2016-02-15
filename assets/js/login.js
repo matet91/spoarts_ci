@@ -14,7 +14,7 @@ $(document).ready(function(){
 
 	});
 	$("#register").click(function(){
-		initAutocomplete();
+		initAutocomplete('SPAddress');
 		var height = $(window).height();
 		var dialogHeight = $("#modal_registration").find('.modal-dialog').outerHeight(true);
     	var top = parseInt(height)/5-parseInt(dialogHeight);

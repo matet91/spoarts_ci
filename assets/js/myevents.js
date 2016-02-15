@@ -12,18 +12,19 @@ function eventCalendar(){ //showing the calendar event
       dataType:'JSON',
       type:'POST',
       success:function(msg){ 
-		$.each(msg, function(i,e){
-			var insertEvents = {};
-			insertEvents = {
-				id: e.EventID,
-				title: e.EventName,
-				description: e.EventDesc,
-				start: e.EventStartDate,
-				end: e.EventEndDate
-			}
-			getEvent.push(insertEvents);
-		});
-		
+		if(msg!=""){
+			$.each(msg, function(i,e){
+				var insertEvents = {};
+				insertEvents = {
+					id: e.EventID,
+					title: e.EventName,
+					description: e.EventDesc,
+					start: e.EventStartDate,
+					end: e.EventEndDate
+				}
+				getEvent.push(insertEvents);
+			});
+		}
 		var today = new Date();
 		var dd = today.getDate();
 		var mm = today.getMonth()+1;

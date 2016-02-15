@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Myevents extends CI_Controller {
+class Myschedules extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,15 +22,14 @@ class Myevents extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('mreviews_and_ratings');
-		$this->load->model('mmyevents');
+		$this->load->model('mmyschedules');
 	}
 
 	public function index()
 	{
-		$content = 'myevents.php';
+		$content = 'myschedules.php';
 		$type = $this->input->get('type');
-		$title = "My Events";
+		$title = "My Schedules";
 		
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,
@@ -40,24 +39,8 @@ class Myevents extends CI_Controller {
 		$this->load->view('index',$data);
 	}
 	
-	//get all events
-	function getEvents(){
-		$userid = $this->session->userdata('userid');
-		//$spid = $this->mevents_and_promos->getspid();
-		
-		$service_ids = $this->mmyevents->getlistid("students_enrolled se","service_id","WHERE s.stud_type=0 AND se.client_id= $userid","","LEFT JOIN students s ON se.stud_id = s.stud_id");
-
-		if($service_ids){
-			$table = "events";
-			$fields = "EventID, EventName, EventDesc, EventFor, EventStartDate, EventEndDate,EventLocation";
-			$where = "WHERE EventFor in(".implode(",",$service_ids).") AND EventStatus = 1";
-			$order = "";
-
-			$data = $this->mreviews_and_ratings->getlist($table,$fields,$where,$order);
-		}else{
-			$data = "";
-		}
-		
+	function dataTables($switch){
+		$data = $this->mmyschedules->dataTables($switch);
 		echo json_encode($data);
 	}
 }

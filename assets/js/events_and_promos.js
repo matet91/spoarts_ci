@@ -41,23 +41,7 @@ $(document).ready(function(){
 	$("#btn-saveEvents").click(function(){	
 		var eventid = $("#EventID").val();
 		if(eventid){ //check if it is for updating an event
-			var height = $(window).height();
-			var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-			var top = parseInt(height)/2-parseInt(dialogHeight);
-			$("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-			  
-			$("#modal_security #btn-continue").click(function(){
-				var pwd = $("#modal_security #sec_pwd");
-
-				if(pwd.val() == ''){
-					pwd.parent().addClass('has-error');
-					$("#message .alert").html("Please enter the password of your security question.").addClass("alert-danger").show();
-				}else{
-					pwd.parent().removeClass('has-error');
-					$("#message .alert").html("").removeClass("alert-danger").hide();
-					checkSecurityPwd(pwd.val(),"updateEvents",0);
-				}
-			});
+			saveEvents("updateEvents");
 		}else{ // if adding an event
 			saveEvents("addEvents");
 		}
@@ -66,23 +50,7 @@ $(document).ready(function(){
 	$("#btn-savePromos").click(function(){
 		var promoid = $("#PromoID").val();
 		if(promoid){ // check if updating a promo
-			var height = $(window).height();
-			var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-			var top = parseInt(height)/2-parseInt(dialogHeight);
-			$("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-			  
-			$("#modal_security #btn-continue").click(function(){
-				var pwd = $("#modal_security #sec_pwd");
-
-				if(pwd.val() == ''){
-					pwd.parent().addClass('has-error');
-					$("#message .alert").html("Please enter the password of your security question.").addClass("alert-danger").show();
-				}else{
-					pwd.parent().removeClass('has-error');
-					$("#message .alert").html("").removeClass("alert-danger").hide();
-					checkSecurityPwd(pwd.val(),"updatePromos",0);
-				}
-			});
+			savePromos("updatePromos");
 		}else{ //if adding a promo
 			savePromos("addPromos");
 		}
@@ -171,24 +139,7 @@ function eventCalendar(){ //showing the calendar event
 }
 
 function removeEvent(id){
-	alert(id);
-	var height = $(window).height();
-	var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-	var top = parseInt(height)/2-parseInt(dialogHeight);
-	$("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-	  
-	$("#modal_security #btn-continue").click(function(){
-		var pwd = $("#modal_security #sec_pwd");
-
-		if(pwd.val() == ''){
-			pwd.parent().addClass('has-error');
-			$("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
-		}else{
-			pwd.parent().removeClass('has-error');
-			$("#modal_security .alert").html("").removeClass("alert-danger").hide();
-			checkSecurityPwd(pwd.val(),"removeEvents",id);
-		}
-	});
+	deleteEventsPromos("removeEvents",id);
 }
 
 function editEvent(id){
@@ -240,23 +191,7 @@ function editPromo(param){
 }
 
 function removeEventsPromos(id,type){
-	var height = $(window).height();
-	var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
-	var top = parseInt(height)/2-parseInt(dialogHeight);
-	$("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
-	  
-	$("#modal_security #btn-continue").click(function(){
-		var pwd = $("#modal_security #sec_pwd");
-
-		if(pwd.val() == ''){
-			pwd.parent().addClass('has-error');
-			$("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
-		}else{
-			pwd.parent().removeClass('has-error');
-			$("#modal_security .alert").html("").removeClass("alert-danger").hide();
-			checkSecurityPwd(pwd.val(),type,id);
-		}
-	});
+	deleteEventsPromos(type,id);
 }
 
 function getPromos(){
@@ -316,29 +251,15 @@ function getService(sel){
 }
 
 function checkSecurityPwd(pwd,type,id){
-  $.ajax({
-    url:'services/checkSecurityPwd',
-    dataType:'JSON',
-    type:'POST',
-    data:{pwd:pwd},
-    success:function(msg){
-		if(msg == 1){ //if correct
-			$("#modal_security").hide();
-			if(type == "updatePromos"){
-				savePromos("updatePromos");
-			}else if(type == "removePromos"){
-				deleteEventsPromos(type,id);
-			}else if(type=="updateEvents"){
-				saveEvents("updateEvents");
-			}else if(type == "removeEvents"){
-				deleteEventsPromos(type,id);
-			}
-		}else{//incorrect password
-			$("#modal_security #sec_pwd").parent().addClass('has-error');
-			$("#modal_security .alert").html("Incorrect Password.").addClass("alert-danger").show();
-		}
-    }
-  })
+  if(type == "updatePromos"){
+		
+	}else if(type == "removePromos"){
+		deleteEventsPromos(type,id);
+	}else if(type=="updateEvents"){
+		
+	}else if(type == ""){
+		deleteEventsPromos("removeEvents",id);
+	}
 }
 
 function deleteEventsPromos(type,id){

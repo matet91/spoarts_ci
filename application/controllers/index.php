@@ -40,6 +40,7 @@ class Index extends CI_Controller {
   				}else{
   					header('Location:service_provider');
   				}
+  				$menu = "";
   			break;
 
   			case 1: //old user

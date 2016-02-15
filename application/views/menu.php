@@ -41,10 +41,11 @@
                   <li><a href="clinics?type=0">Sports</a></li>
                 </ul>
                 <?php }} if($this->session->userdata('userid') && $this->session->userdata('usertype') == '2'){?>
-          				<li> <a href="myclinics" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Clinics</a></li>
-          				<li> <a href="myinterests" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Interest</a></li>
-          				<li> <a href="mypayments" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Payments</a></li>
-          				<li> <a href="myevents" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">My Events</a></li>
+          				<li> <a href="myclinics" class = "<?php echo ($content == 'content/myclinics.php'?'active':'');?>">My Clinics</a></li>
+          				<li> <a href="myschedules" class = "<?php echo ($content == 'content/myschedules.php'?'active':'');?>">My Schedules</a></li>
+          				<li> <a href="myinterests" class = "<?php echo ($content == 'content/myinterests.php'?'active':'');?>">My Interest</a></li>
+          				<li> <a href="mypayments" class = "<?php echo ($content == 'content/mypayments.php'?'active':'');?>">My Payments</a></li>
+          				<li> <a href="myevents" class = "<?php echo ($content == 'content/myevents.php'?'active':'');?>">My Events</a></li>
                 <?php } ?>
               </li>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>

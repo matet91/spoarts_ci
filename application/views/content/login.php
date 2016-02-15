@@ -184,28 +184,8 @@
             <h4 class="classic-title"><span>Testimonials</span></h4>
 
             <!-- Start Testimonials Carousel -->
-            <div class="custom-carousel show-one-slide touch-carousel" data-appeared-items="1">
-              <!-- Testimonial 1 -->
-              <div class="classic-testimonials item">
-                <div class="testimonial-content">
-                  <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                </div>
-                <div class="testimonial-author"><span>John Doe</span> - Customer</div>
-              </div>
-              <!-- Testimonial 2 -->
-              <div class="classic-testimonials item">
-                <div class="testimonial-content">
-                  <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                </div>
-                <div class="testimonial-author"><span>John Doe</span> - Customer</div>
-              </div>
-              <!-- Testimonial 3 -->
-              <div class="classic-testimonials item">
-                <div class="testimonial-content">
-                  <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                </div>
-                <div class="testimonial-author"><span>John Doe</span> - Customer</div>
-              </div>
+            <div id = "testimonials">
+              
             </div>
             <!-- End Testimonials Carousel -->
 
@@ -607,9 +587,6 @@
     </div><!-- /.modal -->
   </div>
     <!-- end modal -->
-
-    <script type="text/javascript" src="assets/js/login.js"></script>
-
     <script>
 var autocomplete;
 
@@ -634,10 +611,8 @@ function fillInAddress() {
       $("#latitude").val(lat), $("#longitude").val(lng);
 }
 
-  // [END region_getplaces]
-
-  function go(){ 
-  var d = document.getElementById('autocomplete');
-}
-
+</script>
+  <script type="text/javascript" src="assets/js/home.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
+         async defer>
 </script>

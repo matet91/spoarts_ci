@@ -388,14 +388,22 @@ class mclients extends CI_Model {
 		$sql = "SELECT StudEnrolledID FROM students_enrolled WHERE SchedID='$schedid' and StudEnrolledStatus = 1";
 		$q = $this->db->query($sql);
 		$count = $q->num_rows()+1;
-		$update = "UPDATE schedules set SchedRemaining='$count' WHERE SchedID = '$schedid' AND SchedSlots < '$count'";
-		$qup = $this->db->query($update);
-		if($qup == true){
-			$this->db->where('StudEnrolledID',$id);
-			$qx = $this->db->update('students_enrolled',array('StudEnrolledStatus'=>1));
-			return $qx; exit();
+		//check if schedule exist
+		$this->db->where('SchedID',$schedid);
+		$this->db->select('*');
+		$get = $this->db->get('schedules');
+		if($get->num_rows() > 0){
+			$update = "UPDATE schedules set SchedRemaining='$count' WHERE SchedID = '$schedid' AND SchedSlots > '$count'";
+			$qup = $this->db->query($update);
+			if($qup == true){
+				$this->db->where('StudEnrolledID',$id);
+				$qx = $this->db->update('students_enrolled',array('StudEnrolledStatus'=>1));
+				return $qx; exit();
+			}else{
+				return 1; exit(); //full
+			}
 		}else{
-			return false; exit();
+			return 0; exit(); //schedule does not exist
 		}
 	}
 

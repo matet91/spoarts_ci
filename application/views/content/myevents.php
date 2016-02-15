@@ -49,6 +49,5 @@
 <!--script src='assets/fullcalendar/lib/jquery.min.js'></script-->
 <script src='assets/fullcalendar/fullcalendar.min.js'></script>
 <script src='assets/js/jquery.datetimepicker.full.min.js'></script>
-<script type="text/javascript" src="assets/js/bootstrap-multiselect.js"></script>
 	
 	

@@ -55,11 +55,12 @@ class Clinics extends CI_Controller {
 	
 	function getSchedule($serviceid){
 		$table = "schedules";
-		$fields = "SchedID, SchedDate, SchedTime";
-		$where = "WHERE ServiceID = '".$serviceid."' AND SchedStatus = 1";
+		$fields = "SchedID, SchedDays, SchedTime";
+		//$where = "WHERE ServiceID = '".$serviceid."' AND SchedStatus = 1";
+		$where = "WHERE ServiceID = '".$serviceid."'";
 		$order = "";
-		
-		$data = $this->mclinics->getlist($table, $fields , $where, $order);
+		$leftjoin = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
 		echo json_encode($data);
 	}
 	
@@ -68,33 +69,56 @@ class Clinics extends CI_Controller {
 		$fields = "ServiceID, ServiceName";
 		$where = "WHERE SPID = '".$userid."' AND ServiceType='".$c."' AND ServiceStatus = 1";
 		$order = "";
-		
-		$data = $this->mclinics->getlist($table, $fields , $where, $order);
+		$leftjoin = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
 		echo json_encode($data);
 	}
 	
 	function getexistStud($clinicid){
 		$table = "students";
 		$fields = "stud_id, stud_name, stud_age";
-		$where = "WHERE client_id = '".$this->session->userdata('userid')."' AND stud_status = 1 AND clinic_id = $clinicid";
+		$where = "WHERE client_id = '".$this->session->userdata('userid')."' AND clinic_id = $clinicid";
 		$order = "";
-		
-		$data = $this->mclinics->getlist($table, $fields , $where, $order);
+		$leftjoin = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
 		echo json_encode($data);
 	}
 	
 	function changeSchedule($schedid){
-		$table = "schedules";
-		$fields = "SchedID, (SELECT RoomName from rooms WHERE RoomID = RoomID) as Room , (SELECT MasterInsName from instructor_masterlist WHERE MasterInsID = InstructorID)as Instructor, SchedSlots, RoomID, InstructorID";
-		$where = "WHERE SchedID = '".$schedid."' AND SchedStatus = 1";
+		$table = "schedules s";
+		$fields = "s.SchedID, CONCAT(r.RoomNo, ' ' ,r.RoomName) as Room , (m.MasterInsName) as Instructor, s.SchedSlots, s.RoomID, s.InstructorID";
+		//$where = "WHERE SchedID = '".$schedid."' AND SchedStatus = 1";
+		$leftjoin = "LEFT JOIN rooms r ON r.RoomID = s.RoomID LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
+		$where = "WHERE SchedID = '".$schedid."'";
 		$order = "";
 		
-		$data = $this->mclinics->getlist($table, $fields , $where, $order);
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
 		echo json_encode($data);
 	}
 	
 	function saveEnroll(){
 		$data = $this->mclinics->saveEnroll();
+		echo json_encode($data);
+	}
+	function getReviewsRatings($id,$limit){
+		
+		$table = "reviews_and_ratings r";
+		$fields = "r.ReviewsID, r.Message , r.DatePosted, r.Rating, CONCAT(u.spfirstname,' ',u.splastname) as Cname";
+		$leftjoin = "LEFT JOIN user_details u ON u.UserID = r.SPID";
+		$where = "WHERE r.ReviewStatus=2 AND r.clinic_id = ".$id."";
+		$order = "";
+		if($limit == 0 ){
+			$order = "LIMIT 2";
+		}
+		
+		
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
+
+		echo json_encode($data);
+	}
+	
+	function dataTables($switch,$id){
+		$data = $this->mclinics->dataTables($switch,$id);
 		echo json_encode($data);
 	}
 }

@@ -8,8 +8,8 @@ class mclinics extends CI_Model {
 			parent::__construct();
 	}
 	
-	function getlist($table, $fields , $where, $order){
-		$query = $this->db->query("SELECT $fields FROM $table $where $order");
+	function getlist($table, $fields , $where, $order, $leftjoin){
+		$query = $this->db->query("SELECT $fields FROM $table $leftjoin $where $order");
 		return $query->result();
 	}
 	
@@ -35,7 +35,7 @@ class mclinics extends CI_Model {
 			$search = "";
 		}
 		
-		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=1 $search GROUP BY SPID,ServiceType";
+		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=0 $search GROUP BY SPID,ServiceType";
 		
 		$q = $this->db->query($sql);
 		return $q->result();
@@ -117,33 +117,38 @@ class mclinics extends CI_Model {
 		$frmdata = $this->input->post('data');
 		if($frmdata['studType'] ==0){ //new student
 			
-			$ch = $this->checkData("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=1");
+			$ch = $this->checkData("students", "stud_id", "WHERE serviceHour='".$frmdata['serviceHour']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
 	
 			if($ch){
 				$error = 3; //existing student in a clinic
 			}else{
-				$data_stud['stud_name'] = $frmdata['stud_name'];
-				$data_stud['stud_age'] = $frmdata['stud_age'];
-				$data_stud['stud_address'] = $frmdata['stud_address'];
-				$data_stud['clinic_id'] = $frmdata['clinic_id'];
-				$data_stud['client_id'] = $userid;
-				$data_stud['stud_status'] = 1;
-				$data_stud['stud_type'] = 1;
+				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
+	
+				if($ch_sched['ch_sched'] == 0){
+					$data_stud['serviceHour'] = $frmdata['serviceHour'];
+					$data_stud['stud_age'] = $frmdata['stud_age'];
+					$data_stud['stud_address'] = $frmdata['stud_address'];
+					$data_stud['client_id'] = $userid;
+					$data_stud['stud_type'] = 1;
+					
+					$insert = $this->db->insert('students',$data_stud);
+					
+					$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE serviceHour='".$frmdata['serviceHour']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
+					$data_enroll['client_id'] = $userid;
+					$data_enroll['service_id'] = $frmdata['service_id'];
+					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
+					$data_enroll['ins_id'] = $frmdata['ins_id'];
+					$data_enroll['SchedID'] = $frmdata['SchedID'];
+					$data_enroll['StudEnrolledStatus'] = 1;
+					
+					$insert2 = $this->db->insert('students_enrolled',$data_enroll);
+					
+					if($insert and $insert2){$error = 0;
+					}else{$error = 1;}
+				}else{
+					$error = 5; //full capacity
+				}
 				
-				$insert = $this->db->insert('students',$data_stud);
-				
-				$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE stud_name='".$frmdata['stud_name']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=1");
-				$data_enroll['client_id'] = $userid;
-				$data_enroll['service_id'] = $frmdata['service_id'];
-				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
-				$data_enroll['ins_id'] = $frmdata['ins_id'];
-				$data_enroll['SchedID'] = $frmdata['SchedID'];
-				$data_enroll['StudEnrolledStatus'] = 1;
-				
-				$insert2 = $this->db->insert('students_enrolled',$data_enroll);
-				
-				if($insert and $insert2){$error = 0;
-				}else{$error = 1;}
 			}
 		}else if($frmdata['studType'] ==1){ //existing
 			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
@@ -151,22 +156,27 @@ class mclinics extends CI_Model {
 			if($ch){
 				$error = 4; //student already enrolled in this schedule
 			}else{
-				$data_enroll['stud_id'] = $frmdata['stud_id'];
-				$data_enroll['client_id'] = $userid;
-				$data_enroll['service_id'] = $frmdata['service_id'];
-				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
-				$data_enroll['ins_id'] = $frmdata['ins_id'];
-				$data_enroll['SchedID'] = $frmdata['SchedID'];
-				$data_enroll['StudEnrolledStatus'] = 1;
-				$data_enroll['stud_type'] = 1;
-				$insert = $this->db->insert('students_enrolled',$data_enroll);
-				
-				if($insert){$error = 0;
-				}else{$error = 1;}
+				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
+				if($ch_sched['ch_sched'] == 0){
+					$data_enroll['stud_id'] = $frmdata['stud_id'];
+					$data_enroll['client_id'] = $userid;
+					$data_enroll['service_id'] = $frmdata['service_id'];
+					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
+					$data_enroll['ins_id'] = $frmdata['ins_id'];
+					$data_enroll['SchedID'] = $frmdata['SchedID'];
+					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['stud_type'] = 1;
+					$insert = $this->db->insert('students_enrolled',$data_enroll);
+					
+					if($insert){$error = 0;
+					}else{$error = 1;}
+				}else{
+					$error = 5;
+				}
 			}
 		}else if($frmdata['studType'] ==2){ //client_id
 			//check first if the client is already in students
-			$ch_stud = $this->checkData("students", "stud_id", "WHERE client_id='".$userid."' AND clinic_id='".$frmdata['clinic_id']."' AND stud_type=0 AND stud_status=1");
+			$ch_stud = $this->checkData("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
 			if(!$ch_stud){
 				$this->db->where('UserID',$userid);
 				$this->db->select('spfirstname,splastname,spaddress,spbirthday');
@@ -183,12 +193,10 @@ class mclinics extends CI_Model {
 				$age = $diff->format("%y");
 				
 				//insert client data at first 
-				$data_stud['stud_name'] = $rows['spfirstname'].' '.$rows['splastname'];
+				$data_stud['serviceHour'] = $rows['spfirstname'].' '.$rows['splastname'];
 				$data_stud['stud_age'] = $age;
 				$data_stud['stud_address'] = $rows['spaddress'];
-				$data_stud['clinic_id'] = $frmdata['clinic_id'];
 				$data_stud['client_id'] = $userid;
-				$data_stud['stud_status'] = 1;
 				$data_stud['stud_type'] = 0;
 				
 				$insert = $this->db->insert('students',$data_stud);
@@ -197,24 +205,31 @@ class mclinics extends CI_Model {
 				}else{$error = 1;}
 			}
 			
-			$stud_id = $this->getID("students", "stud_id", "WHERE clinic_id='".$frmdata['clinic_id']."' AND client_id='".$userid."' AND stud_type=0");
+			$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
+			if($ch_sched['ch_sched'] == 0){
+				$stud_id = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
 			
-			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
-			if($ch){
-				$error = 4; //student already enrolled in this schedule
-			}else{	
-				$data_enroll['stud_id'] = $stud_id;
-				$data_enroll['client_id'] = $userid;
-				$data_enroll['service_id'] = $frmdata['service_id'];
-				$data_enroll['clinic_id'] = $frmdata['clinic_id'];
-				$data_enroll['ins_id'] = $frmdata['ins_id'];
-				$data_enroll['SchedID'] = $frmdata['SchedID'];
-				$data_enroll['StudEnrolledStatus'] = 1;
-				$insert = $this->db->insert('students_enrolled',$data_enroll);
-				
-				if($insert){$error = 0;
-				}else{$error = 1;}
+				$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
+				if($ch){
+					$error = 4; //student already enrolled in this schedule
+				}else{	
+					$data_enroll['stud_id'] = $stud_id;
+					$data_enroll['client_id'] = $userid;
+					$data_enroll['service_id'] = $frmdata['service_id'];
+					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
+					$data_enroll['ins_id'] = $frmdata['ins_id'];
+					$data_enroll['SchedID'] = $frmdata['SchedID'];
+					$data_enroll['StudEnrolledStatus'] = 1;
+					$insert = $this->db->insert('students_enrolled',$data_enroll);
+					
+					if($insert){$error = 0;
+					}else{$error = 1;}
+				}
+			}else{
+				$error = 5;
 			}
+			
+			
 		}
 		return $error;
 	}
@@ -237,5 +252,65 @@ class mclinics extends CI_Model {
 			}
 		}	
 		return $id;
+	}
+	
+	function dataTables($switch,$id){
+		$sSort = $this->input->get('iSortCol_0');
+		$sSortype = $this->input->get('sSortDir_0');
+		$sSearch = $this->input->get('sSearch');
+		$usertype = $this->session->userdata('usertype');
+		$sLimit = "";
+		if ( $this->input->get('iDisplayStart')!='' && $this->input->get('iDisplayLength') != '-1' )
+			$sLimit = "LIMIT ".intVal($this->input->get('iDisplayStart')).", ".intVal($this->input->get('iDisplayLength'));
+
+		switch($switch){
+			case 1:
+				$aColumns = array("serviceid","servicename", "ServiceRegistrationFee","ServicePrice","serviceWalkin","serviceHour","ServiceType");
+				$select = array("serviceid","servicename", "ServiceRegistrationFee", "ServicePrice","serviceWalkin","serviceHour","(CASE WHEN ServiceType=0 THEN 'Sports' ELSE 'Arts' END)  as ServiceType");
+				$sTable = "services";
+				$leftjoin = "";
+				$sWhere = "WHERE SPID = ".$id."";
+				if($sSearch){$sWhere .= " AND (servicename like '%".$sSearch."%' OR ServiceRegistrationFee like '%".$sSearch."%' OR ServicePrice like '%".$sSearch."%'  OR serviceWalkin like '%".$sSearch."%' OR serviceHour like '%".$sSearch."%' OR ServiceType like '%".$sSearch."%')";}
+				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+				$groupby = "";
+				$aColumns_output = array("serviceid","servicename", "ServiceRegistrationFee","ServicePrice","serviceWalkin","serviceHour","ServiceType");
+			break;
+		}
+		
+		$sIndexColumn = "*";
+			
+		$sQuery = "SELECT SQL_CALC_FOUND_ROWS ".implode(",", $select)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit";
+		
+		//print_r("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
+		
+		$rResult = $this->db->query( $sQuery );
+		// 	echo $this->db->last_query();
+		$sQuery = "SELECT FOUND_ROWS() as count";
+		$rResultFilterTotal = $this->db->query( $sQuery);
+
+		$aResultFilterTotal = $rResultFilterTotal->row();
+		$iFilteredTotal = $aResultFilterTotal->count;
+		
+		/* Total data set length */
+		$sQuery_total = "SELECT COUNT(".$sIndexColumn.") as count FROM $sTable";
+		$rResultTotal = $this->db->query( $sQuery_total);
+		$aResultTotal = $rResultTotal->row();
+		$iTotal = $aResultTotal->count;
+		
+		$output = array(
+			"sEcho" =>$this->input->get('sEcho'),
+			"iTotalRecords" => $iTotal,
+			"iTotalDisplayRecords" => $iFilteredTotal,
+			"aaData" => array()
+		);
+		
+		foreach($rResult->result() as $aRow){	
+			$row = array();
+			foreach ( $aColumns_output as $col ){
+				$row[] = ($aRow->$col =="0") ? '-' : ucfirst($aRow->$col);
+			}
+			$output['aaData'][] = $row;
+		}
+		return $output;
 	}
 }

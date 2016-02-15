@@ -151,15 +151,7 @@ class mglobal extends CI_Model {
 							'interest_ids'=>$interest
 						);
 		$this->db->insert('client_interest',$dataInterest);
-		if($q == true){
-			$this->db->where("sec_id",$sq);
-			$this->db->select("*");
-			$get = $this->db->get("security_questions");
-			$sqrow=$get->row();
 
-			$this->session->set_userdata('first_login',1);
-			$this->session->set_userdata('securityquestion',$sqrow->sec_questions);
-		}
 		return $q;
 	}
 
@@ -186,13 +178,13 @@ class mglobal extends CI_Model {
 			case 4: //instructors
 					$table = "instructor_masterlist";
 					$select = "MasterInsID as id,MasterInsName as name";
-					
+					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;
 
 			case 5: //room
 					$table = "rooms";
 					$select = "RoomID as id,RoomName as name";
-					
+					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;
 
 			case 6: //services
@@ -211,5 +203,11 @@ class mglobal extends CI_Model {
 		$this->db->select($select);
 		$data = $this->db->get($table);
 		return $data->result();
+	}
+
+	function testimonials(){
+		$sql = "SELECT a.ReviewsID,a.DatePosted,a.Message,a.Rating,b.clinic_name as clinic,CONCAT(c.spfirstname,'',c.splastname) as client FROM reviews_and_ratings a LEFT JOIN clinics b ON a.SPID=b.UserID LEFT JOIN user_details c ON a.EnrolledID = c.UserID WHERE a.ReviewStatus = 2";
+		$get = $this->db->query($sql);
+		return $get->result();
 	}
 }
