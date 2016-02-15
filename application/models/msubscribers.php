@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Mservice_provider extends CI_Model {
+class Msubscribers extends CI_Model {
 	public function __construct()
 	{
 			// Call the CI_Model constructor
@@ -56,15 +56,43 @@ class Mservice_provider extends CI_Model {
 				$aColumns_output = array("serviceid","servicename","servicedesc", "serviceschedule", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
 			break;
 			case 2:
-				$aColumns = array("memberid","membername", "memberaddress", "memberage", "memberenrolled", "clientid");
-				$select = array("memberid","membername", "memberaddress", "memberage", "memberenrolled", "clientid", "1 as action");
-				$sTable = "members";
-				$leftjoin = " ";
-				$sWhere = "WHERE memberstatus=1 AND spid = ". $this->session->userdata("userid");
-				if($sSearch){$sWhere .= " AND (membername like '%".$sSearch."%' OR memberaddress like '%".$sSearch."%' OR memberage like '%".$sSearch."%' OR memberenrolled like '%".$sSearch."%' OR clientid like '%".$sSearch."%'";}
+				$aColumns = array("a.UserID",
+								  "e.UserName", 
+								  "b.clinic_name", 
+								  "a.SPBirthday", 
+								  "a.SPContactNo", 
+								  "a.SPEmail",
+								  "a.SPRegisteredDate",
+								  "d.PlanName",
+								  "a.UserStatus");
+				$select = array("a.UserID as UserID",
+								 "CONCAT(a.spfirstname,' ',a.splastname) as name",
+								  "e.UserName", 
+								  "b.clinic_name", 
+								  "a.SPBirthday", 
+								  "a.SPContactNo", 
+								  "a.SPEmail",
+								  "a.SPRegisteredDate",
+								  "d.PlanName",
+								  "(CASE WHEN e.UserStatus=0 THEN 'UNVERIFIED' WHEN e.UserStatus=1 THEN 'ACTIVE' ELSE 'INACTIVE' END) as UserStatus",
+								  "1 as action");
+				$sTable = "user_details a";
+				$leftjoin = " LEFT JOIN clinics b ON b.UserID=a.UserID LEFT JOIN subscriptions c ON c.UserID=a.UserID LEFT JOIN subscription_plans d ON d.PlanID=c.SubscType LEFT JOIN user_accounts e ON e.UserID=a.UserID";
+				$sWhere = "WHERE e.UserType=1";
+				if($sSearch){$sWhere .= " AND (a.UserID like '%".$sSearch."%' OR e.UserName like '%".$sSearch."%' OR b.clinic_name like '%".$sSearch."%' OR a.SPBirthday like '%".$sSearch."%' OR a.SPContactNo like '%".$sSearch."%' OR a.SPRegisteredDate like '%".$sSearch."%' OR d.PlanName like '%".$sSearch."%' OR UserStatus like '%".$sSearch."%' OR a.spfirstname like '%".$sSearch."%' OR a.splastname like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("memberid","membername", "memberaddress", "memberage", "memberenrolled", "clientid","action");
+				$aColumns_output = array("UserID",
+										"name",
+										"UserName", 
+										"clinic_name", 
+										"SPBirthday", 
+										"SPContactNo", 
+										"SPEmail",
+										"SPRegisteredDate",
+										"PlanName",
+										"UserStatus",
+										"action");
 			break;
 			case 3:
 				$interestids = $this->getID("client_interest", "interest_ids" , "WHERE client_id = '".$this->session->userdata("userid")."'");

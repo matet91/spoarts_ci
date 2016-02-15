@@ -139,7 +139,7 @@ function getservices(){
     "bRetrieve": true,
     "bDestroy":true,
     "sLimit":10,  
-    "sAjaxSource": "service_provider/dataTables/1",
+    "sAjaxSource": "subscribers/dataTables/1",
     "aoColumns":[ {"sTitle":"ID","bVisible":false},
             {"sTitle":"Services"},
             {"sTitle":"Description","bSearchable": true},

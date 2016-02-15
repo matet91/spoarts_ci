@@ -1,5 +1,5 @@
 <style>
-  #modal_viewlist .modal-dialog {
+  #subscribers-content .modal-dialog {
     width: 95%; /* or whatever you wish */
   }
 </style>
@@ -10,12 +10,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6">
-					<h2>manage Service Providers</h2>
+					<h2>Manage Subscribers</h2>
 				</div>
 				<div class="col-md-6">
 					<ul class="breadcrumbs">
 						<li><a href="?content=home.php">Home</a></li>
-						<li>Service Providers</li>
+						<li>Subscribers</li>
 					</ul>
 				</div>
 			</div>
@@ -26,106 +26,39 @@
 
     <!-- Start Content -->
     <div id="content">
-		<div class="container">
+		<div class="container" id = "subscribers-content">
 			<div class="row sidebar-page">
 				<!-- Page Content -->
 				<div class="page-content">
 					<!-- Classic Heading -->
-					<h4 class="classic-title"><span>Service Providers' List with their Services and Clients</span></h4> 
+					<h4 class="classic-title"><span>Subscribers</span></h4> 
 					
 					<!-- Divider -->
 					<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+					<div class="tabs-section" id = "tab-subscription">
+			        <!-- Nav Tabs -->
+			        <ul class="nav nav-tabs">
+			        	<li class="active"><a href="#tab-subscribers" data-toggle="tab"><i class="fa fa-group"></i>Subscribers</a></li>
+			          	<li><a href="#tab-settings" data-toggle="tab"><i class="fa fa-group"></i>Subscription Settings</a></li>
+			        </ul>
+			        <!-- Tab panels -->
+			      	<div class="tab-content">
+
+			          <!-- Tab Content 1 -->
+			          <div class="tab-pane fade in active" id="tab-subscribers">
+			      		<!-- Divider -->
+							<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+			           		<table id="tbl-subscribers" class="display" cellspacing="0" width="100%"></table>
+			          </div>
+			          <div class="tab-pane fade in" id="tab-settings">
+			      		<select id = "service_id" class = "chosen-select">
+			      		</select>
+			      		<!-- Divider -->
+						<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+			          </div>
+			        </div>
+			      </div>
 					
-					<!-- carousel -->
-					<div class="custom-carousel show-one-slide touch-carousel" data-appeared-items="1">
-			   
-						<!-- Accordion -->
-						<div class = "item">
-							<div class="panel-group" id="accordion">
-								<!-- Start Accordion 1 -->
-								<div class="panel panel-default">
-									<!-- Toggle Heading -->
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion" href="#collapse-4">
-												<i class="fa fa-angle-up control-icon"></i>
-												<span class=" glyphicon glyphicon-user"></span> John Doe
-											</a>
-										</h4>
-									</div>
-								  
-									<!-- Toggle Content -->
-									<div id="collapse-4" class="panel-collapse collapse in">
-										<div class="col-md-2">
-											<div class = "row">
-												<img src="assets/images/member-02.jpg" alt="..." class="img-circle" style = "width:80px; height:80px">
-											</div>
-										</div>
-										<div class="col-md-8">
-											<form class="form-horizontal">
-												<div class="form-group">
-													<div class="col-sm-10">
-													  <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Service"><span class = "glyphicon glyphicon-floppy-save"></span> </button>
-													  <button class="btn btn-danger btn-sm" id="btn-end" data-toggle="tooltip" data-placement="top" title="Turn Off Account"><span class = "glyphicon glyphicon-off"></span> </button>
-													  <button class="btn btn-info btn-sm" id="btn-renew" data-toggle="tooltip" data-placement="top" title="Upgrade/Renew Subscription"><span class = "glyphicon glyphicon-king"></span> </button>
-													  <button class="btn btn-warning btn-sm" id="btn-reset" data-toggle="tooltip" data-placement="top" title="Reset Password"><span class = "glyphicon glyphicon-refresh"></span> </button>
-													</div>
-												</div>
-												<div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">Club Name</label>
-						                            <div class="col-sm-10">
-						                              <input type="text" class="form-control" id="clubname" placeholder="Club Name">
-						                            </div>
-						                          </div>
-						                          <div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">Owner Name: </label>
-						                            <div class="col-sm-10">
-						                              <input type="text" class="form-control" id="firstname" placeholder="First Name">
-						                              <br/>
-						                              <input type="text" class="form-control" id="firstname" placeholder="Last Name">
-						                            </div>
-						                          </div>
-
-						                          <div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">Location</label>
-						                            <div class="col-sm-10">
-						                              <input type="text" class="form-control" id="firstname" placeholder="Location">
-						                              <span class = "glyphicon glyphicon-map-marker" style = "cursor:pointer !important;" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
-						                            </div>
-
-						                          </div>
-						                          <div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">About Me</label>
-						                            <div class="col-sm-10">
-						                              <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia dolores</p>
-						                            </div>
-						                          </div>
-						                          <div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan</label>
-						                            <div class="col-sm-10">
-						                              <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia dolores.</p>
-						                            </div>
-						                          </div>
-						                          <div class="form-group">
-						                            <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan Expiry Date</label>
-						                            <div class="col-sm-10">
-						                              <p>January 01, 2017</p>
-						                            </div>
-						                          </div>
-												
-
-											</form>
-										</div>
-										<table id="service_list" class="display">
-										</table>
-									</div>
-								</div>
-							  <!-- End Accordion 1 -->
-							</div>
-							<!-- End Accordion -->
-						</div>
-					</div> 
-					<!-- end carousel -->
 				</div>
 				<!-- End Page Content-->
 
@@ -340,6 +273,6 @@
 	<!-- end modal -->
 	
     <!-- javascripts -->
-    <script type="text/javascript" src="assets/js/service_provider.js"></script>
+    <script type="text/javascript" src="assets/js/subscribers.js"></script>
 	
 	

@@ -42,7 +42,7 @@
           
         </ul>
         <!-- Tab panels -->
-      	<div class="tab-content"<span id='countPending' class='text-error'>
+      	<div class="tab-content">
 
           <!-- Tab Content 1 -->
           <div class="tab-pane fade in active" id="tab-clients">

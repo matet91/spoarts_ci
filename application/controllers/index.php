@@ -35,9 +35,11 @@ class Index extends CI_Controller {
   				$title = "Settings";
   				if($userType == 2) //client
   					$content = "content/firstlogin_client.php";
-  				else //service provider
-  					$content = "content/firstlogin_sp.php";
-  				$menu = "";
+  				else if($userType == 1){//service provider
+  					header('Location:services');
+  				}else{
+  					header('Location:service_provider');
+  				}
   			break;
 
   			case 1: //old user

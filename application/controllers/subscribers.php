@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Service_provider extends CI_Controller {
+class Subscribers extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,13 +22,13 @@ class Service_provider extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('Mservice_provider');
+		$this->load->model('msubscribers');
 	}
 	public function index()
 	{
 		
-		$content = 'service_provider.php';
-		$title = "Service Provider";
+		$content = 'subscribers.php';
+		$title = "Subscribers";
 
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,
@@ -39,16 +39,16 @@ class Service_provider extends CI_Controller {
 	}
 	
 	function dataTables($switch){
-		$data = $this->Mservice_provider->dataTables($switch);
+		$data = $this->msubscribers->dataTables($switch);
 		echo json_encode($data);
 	}
 	
 	function addservice(){
-		$data = $this->Mservice_provider->addservice();
+		$data = $this->msubscribers->addservice();
 		return $data;
 	}
 	function listall(){
-		$data = $this->Mservice_provider->listall();
+		$data = $this->msubscribers->listall();
 		echo json_encode($data);
 	}
 }

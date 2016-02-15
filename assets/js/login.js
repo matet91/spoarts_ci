@@ -30,11 +30,11 @@ $(document).ready(function(){
 
 						$("#message .alert").html("").removeClass('alert-danger').hide();
 						if(msg[1] == "0"){
-							window.location = "index";
+							window.location = "subscribers";
 						}else if(msg[1] == "1"){
 							window.location = "services";
 						}else{
-							window.location = "service_provider";
+							window.location = "index";
 						}
 						
 					}else if(msg == 2){//inactive

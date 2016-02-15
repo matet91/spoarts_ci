@@ -26,11 +26,7 @@
               <?php } ?>
               <li>
               <?php  if($this->session->userdata('userid') && $this->session->userdata('usertype') == '0'){?>
-                <a href="#" class = "<?php echo ($content == 'content/service_provider.php'?'active':'');?>">Subscribers</a>
-                <ul class="dropdown">
-                  <li><a href="service_provider" >Service Providers</a></li>
-                  <li><a href="?content=subscription_settings">Subscription Setttings</a></li>
-                </ul>
+                <a href="subscribers" class = "<?php echo ($content == 'content/subscribers.php'?'active':'');?>">Subscribers</a>
               </li>
                 <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
                  <li> <a href="services" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
@@ -69,13 +65,8 @@
           </li>
           <li>
           <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
-            <a href="#" class = "<?php echo ($content == 'service_provider.php'?'active':'');?>">Subscribers</a>
-            <ul class="dropdown">
-              <li><a href="service_provider">Service Providers</a>
-              </li>
-              <li><a href="?content=subscription_settings">Subscription Settings</a>
-              </li>
-            </ul>
+            <a href="#" class = "<?php echo ($content == 'subscribers.php'?'active':'');?>">Subscribers</a>
+            
           </li>
             <?php }else if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
             <li><a href="services" class = "<?php echo ($content == 'content/services.php'?'active':'');?>">Services</a></li>
@@ -88,7 +79,7 @@
               <li>
               <a href="clinics" class = "<?php echo ($content == 'clinics.php'?'active':'');?>">Clinics</a>
               <ul class="dropdown">
-                <li><a href="service_provider">Arts</a>
+                <li><a href="subscribers">Arts</a>
                 </li>
                 <li><a href="?content=subscription_settings">Sports</a>
                 </li>
