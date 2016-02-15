@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 14, 2016 at 09:11 PM
+-- Generation Time: Feb 15, 2016 at 05:34 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -31,19 +31,6 @@ CREATE TABLE IF NOT EXISTS `bookmark` (
   `clinic_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
   `service_id` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `client_clinics`
---
-
-CREATE TABLE IF NOT EXISTS `client_clinics` (
-  `cc_id` int(11) NOT NULL,
-  `clinic_id` int(11) NOT NULL,
-  `client_id` int(11) NOT NULL,
-  `service_id` mediumtext NOT NULL COMMENT 'values: 1,2,3,4'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -83,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `clinics` (
 --
 
 INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPAboutMe`, `SPLocation`, `SPSubsPlan`, `SPSubsDate`, `clinic_status`, `longitude`, `latitude`) VALUES
-(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Capitol Site, Cebu City, Central Visayas, Philippi', 1, '0000-00-00 00:00:00', 0, '123.89065660000006', '10.3143431'),
+(21, 27, 'Test Club', 'Desert.jpg', 'Test Club Descriptioqnsdfsd', 'Capitol Site, Cebu City, Central Visayas, Philippi', 1, '0000-00-00 00:00:00', 1, '123.89065660000006', '10.3143431'),
 (22, 28, '', 'IMG_0143-e1352505322542.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
 (23, 29, '', '30324943-fitness-sport-trainin', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
 (24, 30, '', 'inside-of-gym.jpg', '', '', 0, '0000-00-00 00:00:00', 0, '', ''),
@@ -161,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `instructor_masterlist` (
   `MasterInsStatus` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `instructor_masterlist`
@@ -169,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `instructor_masterlist` (
 
 INSERT INTO `instructor_masterlist` (`MasterInsID`, `MasterInsName`, `MasterInsAddress`, `MasterInsContactNo`, `MasterInsEmail`, `MasterInsExpertise`, `MasterInsStatus`, `UserID`, `date_added`) VALUES
 (1, 'Patrick The great', 'cebu city', 2147483647, 'patrick.great@gmail.com', 'mixed-martial artist, tattoo a', 1, 0, '2016-02-11 16:46:59'),
-(2, 'Goku', 'cebu city1', 2147483647, 'goku@gmail.com', 'hame hame wave', 1, 60, '2016-02-11 16:51:00');
+(3, 'gfdg', 'dfgdfgdfgsdsd', 2147483647, 'dfgdfg@gmail.com', 'sdfgdf', 1, 60, '2016-02-15 10:16:36');
 
 -- --------------------------------------------------------
 
@@ -292,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `paypal_logs` (
   `paypal_invoice` varchar(50) NOT NULL,
   `buyer_name` varchar(50) NOT NULL,
   `paypal_createTime` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `paypal_logs`
@@ -303,7 +290,8 @@ INSERT INTO `paypal_logs` (`paypal_id`, `transaction_id`, `UserID`, `paypal_amou
 (4, '3JD87170XE932934J', 60, 1500, '56bce29916c9a', 'leanne arnoza', '2016-02-11 19:35:56'),
 (5, '3BS38675JC6561244', 60, 1500, '56bce2bdb94dc', 'leanne arnoza', '2016-02-11 19:36:33'),
 (6, '33135928RK402773P', 60, 1500, '56bce2c43467a', 'leanne arnoza', '2016-02-11 19:36:39'),
-(7, '36B30604686862616', 60, 1500, '56befa2d1a0b6', 'test test', '2016-02-13 09:41:00');
+(7, '36B30604686862616', 60, 1500, '56befa2d1a0b6', 'test test', '2016-02-13 09:41:00'),
+(8, '7PJ60226L4978835V', 27, 1500, '56c1fb008b392', 'ad as', '2016-02-15 16:21:31');
 
 -- --------------------------------------------------------
 
@@ -391,18 +379,18 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `RoomName` varchar(30) NOT NULL,
   `RoomStatus` int(11) NOT NULL,
   `UserID` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
 --
 
 INSERT INTO `rooms` (`RoomID`, `RoomNo`, `RoomName`, `RoomStatus`, `UserID`) VALUES
-(1, 243, 'Orchid', 0, 60),
 (2, 0, 'how are you room', 1, 27),
 (3, 0, 'rwewewe', 1, 27),
 (4, 0, 'fghfgh', 0, 27),
-(5, 23345345, 'jkldfls', 1, 27);
+(5, 23345345, 'jkldfls', 1, 27),
+(6, 2342, 'gfdgf', 1, 60);
 
 -- --------------------------------------------------------
 
@@ -413,7 +401,6 @@ INSERT INTO `rooms` (`RoomID`, `RoomNo`, `RoomName`, `RoomStatus`, `UserID`) VAL
 CREATE TABLE IF NOT EXISTS `schedules` (
   `SchedID` int(11) NOT NULL,
   `SchedDays` varchar(50) NOT NULL,
-  `SchedStatus` int(11) NOT NULL,
   `RoomID` int(11) NOT NULL,
   `InstructorID` int(11) NOT NULL,
   `ServiceID` int(11) NOT NULL,
@@ -421,20 +408,19 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   `SchedTime` varchar(50) NOT NULL,
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `SchedRemaining` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schedules`
 --
 
-INSERT INTO `schedules` (`SchedID`, `SchedDays`, `SchedStatus`, `RoomID`, `InstructorID`, `ServiceID`, `SchedSlots`, `SchedTime`, `date_added`, `SchedRemaining`) VALUES
-(1, 'Wednesday', 0, 0, 0, 8, 15, '09:00 am - 12:00 pm', '2016-02-10 12:25:45', 0),
-(2, 'Saturday', 0, 0, 0, 8, 10, '05:00 am - 02:00 pm', '2016-02-10 12:30:24', 0),
-(3, 'Monday,Tuesday', 0, 0, 0, 8, 10, '06:00 pm - 07:00 pm', '2016-02-10 19:18:10', 0),
-(4, 'Monday,Tuesday,Wednesday', 0, 0, 0, 24, 10, '08:00 am - 07:00 pm', '2016-02-11 16:33:24', 0),
-(5, 'Tuesday', 0, 0, 0, 24, 10, '08:00 am  -  07:00 pm', '2016-02-13 17:44:36', 0),
-(6, 'Tuesday', 0, 0, 0, 24, 10, '08:00 am  -  07:00 pm', '2016-02-13 17:44:37', 0),
-(7, 'Saturday', 0, 0, 0, 24, 10, '08:00 am    -    07:00 pm', '2016-02-13 17:46:16', 0);
+INSERT INTO `schedules` (`SchedID`, `SchedDays`, `RoomID`, `InstructorID`, `ServiceID`, `SchedSlots`, `SchedTime`, `date_added`, `SchedRemaining`) VALUES
+(2, 'Saturday', 0, 0, 8, 10, '05:00 am - 02:00 pm', '2016-02-10 12:30:24', 0),
+(3, 'Monday,Tuesday', 0, 0, 8, 10, '06:00 pm - 07:00 pm', '2016-02-10 19:18:10', 0),
+(4, '', 0, 0, 24, 10, '08:00 am  -  07:00 pm', '2016-02-11 16:33:24', 0),
+(5, '', 3, 1, 24, 1021, '08:00 am  -  07:00 pm', '2016-02-13 17:44:36', 0),
+(10, 'Thursday', 4, 1, 24, 221, '11:00 am - 02:00 pm', '2016-02-15 10:54:39', 0),
+(11, 'Tuesday,Thursday', 3, 3, 24, 1, '11:00 am - 12:00 pm', '2016-02-15 10:56:50', 0);
 
 -- --------------------------------------------------------
 
@@ -477,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `services` (
   `serviceHour` int(11) NOT NULL,
   `clubpic` varchar(50) NOT NULL,
   `interest_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `services`
@@ -499,7 +485,8 @@ INSERT INTO `services` (`ServiceID`, `ServiceName`, `ServiceDesc`, `ServiceSched
 (19, 'test', 'kjfjskdl', '235fbdfg', 5645, 1, '232', 0, 27, 345, 67, '', 0),
 (22, 'archery ', 'dsfkskf', 'Monday-Friday 09:00am-06:00pm', 1000, 1, '3000', 0, 27, 500, 3, '', 29),
 (23, 'zumba', 'zumba', 'Monday-Sunday 04:00AM-09:00AM', 300, 1, '500', 0, 27, 150, 3, '', 37),
-(24, 'animated sponge bob tutorial', 'this is a tutorial. sponge bob reborn', 'Monday-Friday 09:00AM-007:00PM', 1000, 1, '3000', 1, 60, 300, 3, '', 1);
+(24, 'animated sponge bob tutorial', 'this is a tutorial. sponge bob reborn', 'Monday-Friday 09:00AM-007:00PM', 10003, 1, '3000', 0, 60, 300, 3, '', 1),
+(26, 'Hey', 'Sdjfjsdo', 'Jdkfsjkdl', 22, 1, '344', 0, 60, 2453, 89342, '', 35);
 
 -- --------------------------------------------------------
 
@@ -580,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
 --
 
 INSERT INTO `subscriptions` (`SubscID`, `SubscType`, `SubscStartDate`, `SubscEndDate`, `UserID`, `SubsStatus`) VALUES
-(5, 0, '2016-01-14', '2016-02-14', 27, 0),
+(5, 2, '2016-02-15', '2017-02-15', 27, 1),
 (6, 0, '2016-01-15', '2016-02-15', 28, 0),
 (7, 0, '2016-01-15', '2016-02-15', 29, 0),
 (8, 0, '2016-01-15', '2016-02-15', 30, 0),
@@ -629,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `time_logs` (
   `tl_paid` int(11) NOT NULL COMMENT '0-unpaid;1-paid;2-partial',
   `service_id` int(11) NOT NULL,
   `clinic_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `time_logs`
@@ -639,7 +626,8 @@ INSERT INTO `time_logs` (`tl_id`, `tl_in`, `tl_out`, `stud_id`, `SchedID`, `Stud
 (26, '2016-02-14 04:19:20', '2016-02-14 04:30:09', 1, 1, 1, 1, 8, 21),
 (27, '2016-02-14 04:31:22', '2016-02-14 05:30:17', 1, 1, 2, 2, 9, 21),
 (28, '2016-02-14 05:25:59', NULL, 2, 1, 4, 2, 8, 21),
-(29, '2016-02-15 12:43:17', NULL, 1, 1, 1, 1, 8, 21);
+(29, '2016-02-15 12:43:17', NULL, 1, 1, 1, 1, 8, 21),
+(30, '2016-02-16 12:23:27', '2016-02-16 12:23:29', 1, 1, 1, 1, 8, 21);
 
 -- --------------------------------------------------------
 
@@ -657,29 +645,30 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
   `security_password` varchar(50) NOT NULL,
   `first_login` int(11) NOT NULL COMMENT '0-firstlogin;1-alreadyloginMultipleTimes',
   `verification_code` varchar(10) NOT NULL,
-  `verify_expiry` varchar(25) NOT NULL
+  `verify_expiry` varchar(25) NOT NULL,
+  `confirmation_status` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_accounts`
 --
 
-INSERT INTO `user_accounts` (`UserID`, `UserName`, `Password`, `UserType`, `UserStatus`, `security_question_id`, `security_password`, `first_login`, `verification_code`, `verify_expiry`) VALUES
-(26, 'fire', '81dc9bdb52d04dc20036dbd8313ed055', 0, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(27, 'test', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 1, '', ''),
-(28, 'urgillo2', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(29, 'r', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(30, 'v', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(31, 'g', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(32, 'aljaymonggo', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(33, 'norf', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(34, 'norf123', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', ''),
-(38, 'mickey', 'c28b959962a1a3058c9f56f0691df470', 1, 0, 0, '', 0, '', ''),
-(60, 'sponge', 'aa19ba73252e50e36a6a009c8808aaa3', 1, 1, 1, 'aa19ba73252e50e36a6a009c8808aaa3', 1, '1203391043', '2016-02-09 09:39:32'),
-(61, 'patrick', '7cc2ae164fbe5a3b4fb70c2ecf667fe2', 2, 1, 0, '', 0, '576900437', '2016-02-09 11:32:17'),
-(62, 'goku', '885b91dd01e1d7bad1eb473dcfe75bb6', 1, 0, 0, '', 0, '248169158', '2016-02-10 08:15:37'),
-(63, 'inuyasha', 'ebeb757ff15e42e209af67037776f107', 2, 0, 0, '', 0, '1437996353', '2016-02-10 08:26:03'),
-(66, 'testma', '252c4a594c9a7f3579719eb1eefe8bc3', 1, 1, 0, '', 0, '624449391', '2016-02-15 08:26:25');
+INSERT INTO `user_accounts` (`UserID`, `UserName`, `Password`, `UserType`, `UserStatus`, `security_question_id`, `security_password`, `first_login`, `verification_code`, `verify_expiry`, `confirmation_status`) VALUES
+(26, 'fire', '81dc9bdb52d04dc20036dbd8313ed055', 0, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(27, 'test', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 1, '', '', 0),
+(28, 'urgillo2', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(29, 'r', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(30, 'v', '81dc9bdb52d04dc20036dbd8313ed055', 1, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(31, 'g', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(32, 'aljaymonggo', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(33, 'norf', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(34, 'norf123', '81dc9bdb52d04dc20036dbd8313ed055', 2, 1, 1, '81dc9bdb52d04dc20036dbd8313ed055', 0, '', '', 0),
+(38, 'mickey', 'c28b959962a1a3058c9f56f0691df470', 1, 0, 0, '', 0, '', '', 0),
+(60, 'sponge', 'aa19ba73252e50e36a6a009c8808aaa3', 1, 1, 1, 'aa19ba73252e50e36a6a009c8808aaa3', 1, '1203391043', '2016-02-09 09:39:32', 0),
+(61, 'patrick', '7cc2ae164fbe5a3b4fb70c2ecf667fe2', 2, 1, 0, '', 0, '576900437', '2016-02-09 11:32:17', 0),
+(62, 'goku', '885b91dd01e1d7bad1eb473dcfe75bb6', 1, 0, 0, '', 0, '248169158', '2016-02-10 08:15:37', 0),
+(63, 'inuyasha', 'ebeb757ff15e42e209af67037776f107', 2, 0, 0, '', 0, '1437996353', '2016-02-10 08:26:03', 0),
+(66, 'testma', '252c4a594c9a7f3579719eb1eefe8bc3', 1, 1, 0, '', 0, '624449391', '2016-02-15 08:26:25', 0);
 
 -- --------------------------------------------------------
 
@@ -729,12 +718,6 @@ INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `User
 --
 ALTER TABLE `bookmark`
   ADD PRIMARY KEY (`bm_id`);
-
---
--- Indexes for table `client_clinics`
---
-ALTER TABLE `client_clinics`
-  ADD PRIMARY KEY (`cc_id`);
 
 --
 -- Indexes for table `client_interest`
@@ -860,11 +843,6 @@ ALTER TABLE `user_details`
 ALTER TABLE `bookmark`
   MODIFY `bm_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `client_clinics`
---
-ALTER TABLE `client_clinics`
-  MODIFY `cc_id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `client_interest`
 --
 ALTER TABLE `client_interest`
@@ -883,7 +861,7 @@ ALTER TABLE `instructors`
 -- AUTO_INCREMENT for table `instructor_masterlist`
 --
 ALTER TABLE `instructor_masterlist`
-  MODIFY `MasterInsID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `MasterInsID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `interest`
 --
@@ -903,17 +881,17 @@ ALTER TABLE `payment_logs`
 -- AUTO_INCREMENT for table `paypal_logs`
 --
 ALTER TABLE `paypal_logs`
-  MODIFY `paypal_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `paypal_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `RoomID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `RoomID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `security_questions`
 --
@@ -923,7 +901,7 @@ ALTER TABLE `security_questions`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `subscriptions`
 --
@@ -938,7 +916,7 @@ ALTER TABLE `subscription_plans`
 -- AUTO_INCREMENT for table `time_logs`
 --
 ALTER TABLE `time_logs`
-  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
+  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `user_accounts`
 --
