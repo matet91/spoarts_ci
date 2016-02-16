@@ -51,7 +51,7 @@ function getstudents(){
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 			if ( aData[5] == "1" ){
-				$('td:eq(5)', nRow).html('<button class = "btn btn-primary btn-attendance" data-toggle="tooltip" data-placement="top" title="View Attendance History" id="view_history" onclick="view_history('+aData[0]+');"><span class = "glyphicon glyphicon-calendar"></span></button>' );
+				$('td:eq(5)', nRow).html('<button class = "btn btn-primary" data-toggle="tooltip" data-placement="top" title="View Profile" id="view_history" onclick="view_profile('+aData[0]+');"><i class = "fa fa-eye"></i></button>' );
 			}
 		},
 		"fnInitComplete": function(oSettings, json) {
@@ -86,7 +86,7 @@ function getSubscribers(){
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 			if ( aData[10] == 1 ){
-				$('td:eq(10)', nRow).html('<button class = "btn btn-primary btn-viewlist" data-toggle="tooltip" data-placement="top" title="View Students and Instructors" id="view_studinstruct" onclick="view_studinstruct('+aData[0]+');"><span class = "glyphicon glyphicon-list"></span></button>' );
+				$('td:eq(10)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="View Profile" onclick="viewprofile('+aData[0]+')"><i class = "fa fa-eye"></i></button>&nbsp;<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Deactivate Account" id="view_history" onclick="turn_off('+aData[0]+');"><i class = "fa fa-power-off"></i></button>' );
 			}
 		},
 		"fnInitComplete": function(oSettings, json) {
@@ -96,13 +96,6 @@ function getSubscribers(){
 }
 
 //get all service providers
-function serviceproviders(){
-	$.ajax({
-		url: 'subscribers/list',
-		dataType:'JSON',
-		type:'POST',
-		success:function(msg){
-			
-		}
-	});
+function viewprofile(id){
+	window.location = "sp_profile?susid="+id;
 }
