@@ -329,11 +329,15 @@ function listings(c,id){
 			url:'login/listings/'+c+"/"+id,
 			dataType:'JSON',
 			success: function(msg){
-				$.each(msg, function(i,e){
-					opt += "<option value='"+e.id+"'>"+e.name+"</option>";
-				});
+				if(msg != ''){
+					$.each(msg, function(i,e){
+						opt += "<option value='"+e.id+"'>"+e.name+"</option>";
+					});
 
-				$("#"+selectid).html(opt).removeAttr('disabled').trigger('chosen:updated');
+					$("#"+selectid).html(opt).removeAttr('disabled').trigger('chosen:updated');
+				}else{
+					$("#"+selectid).html(opt).attr('disabled','disabled').trigger('chosen:updated');
+				}
 			}
 	});	
 }

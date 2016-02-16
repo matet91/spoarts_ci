@@ -111,7 +111,7 @@
 
               			<div class = "form-group">
               				<label>Note</label>
-              				<textarea id = "payment_desc" name = "payment_desc" class = "form-control"></textarea>
+              				<textarea id = "payment_desc" name = "payment_desc" class = "form-control" placeholder="Payment Description"></textarea>
               			</div>
               		</div>
               		<div class = "form-group" style="float:right">

@@ -138,7 +138,7 @@ function loadServices(c,search){
 				          "</div>"+
 				          "<a href='#' onclick = bookmark('"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Bookmark'><i class='more fa fa-bookmark' style = 'left:30% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></button>"+
 				          "<a href='#' onclick = enroll('"+c+"','"+e.UserID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Enroll' ><i class='more fa fa-sign-in' style = 'left:55% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
-				          "<a href='#' onclick = info('"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
+				          "<a href='#' onclick = info('"+e.clinic_id+"','"+e.UserID+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
 				        "</li><input type='hidden' class = 'form-control' id = 'clinicname"+e.clinic_id+"' value='"+e.clinic_name+"' />";
 
 			});
@@ -391,7 +391,7 @@ function bookmark(clinicid){
 	});
 }
 
-function info(clinicid){
+function info(clinicid,spid){
 	var height = $(window).height();
 	var dialogHeight = $("#modal_info").find('.modal-dialog').outerHeight(true);
 	var top = parseInt(height)/6-parseInt(dialogHeight);
@@ -411,11 +411,11 @@ function info(clinicid){
 	});
 	
 	$("#SaveComment").click(function(){
-		SaveComment(clinicid,clinicname);
+		SaveComment(clinicid,clinicname,spid);
 	});
 }
 
-function SaveComment(clinicid,clinicname){
+function SaveComment(clinicid,clinicname,spid){
 	var dataForm = $("#formrate").serializeArray();
 	var data = {};
 	var message = $("#Message").val();
@@ -430,6 +430,7 @@ function SaveComment(clinicid,clinicname){
 		data['Message'] = message;
 		data['Rating'] = rating;
 		data['clinic_id'] = clinicid;
+		data['SPID'] = spid;
 		
 		$.ajax({
 		url:'clinics/SaveRating',

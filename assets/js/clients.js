@@ -159,14 +159,14 @@ function checkStatus(id){
 function paynow(){
     var frm = $("#frm-paynow").serializeArray(),
         errList = new Array(), data={};
-
+ if ($('#date_log').prop("disabled") == false) {
     $.each(frm, function(i,e){
         var name = $("#"+e.name),
             value = e.value;
         if(value == ''){
             if(e.name !='payment_balance' || e.name!='payment_desc'){
                 if(e.name == 'date_log'){
-                    if($("#payment_type").val() == 0){
+                    if($("#payment_type").val() == '0'){
                         name.parent().addClass('has-error');
                         errList.push(name.attr('placeholder'));
                     }else{
@@ -196,6 +196,13 @@ function paynow(){
         data['service_id'] = $("#serviceid").val(),
         data['client_id'] = $("#clientid").val();
         submitPay(data);
+    }
+    }else{
+         $("#message .alert").html("Please select different Payment type. The student needs to have a time log first before you can use the payment type session.").addClass('alert-danger').show();
+
+        setTimeout(function(){
+            $("#message .alert").html("").removeClass('alert-danger').hide();
+        },3500);
     }
 }
 
@@ -302,46 +309,48 @@ function updateBalance(paymentid){
     });
 
     $("#btn-paysave").click(function(e){
-        e.preventDefault();
-        var frm = $("#frm-updateBalance").serializeArray();
-        $.each(frm, function(i,e){
-            if(e.value == ''){
-                $("#"+e.name).parent().addClass('has-error');
-            }else{
-                $("#"+e.name).parent().removeClass('has-error');
-            }
-        });
-        var len = $("#frm-updateBalance .has-error").length;
-        if(len > 0){
-            $("#message .alert").html("All fields are required.").addClass('alert-danger').show();
-        }else{
-            $("#message .alert").html("").removeClass('alert-danger').hide();
-            $.ajax({
-                url:'clients/updateBalance/'+paymentid,
-                data:{'payment_amt':$("#pay_amt").val(),'payment_balance':$("#pay_bal").val()},
-                dataType:'JSON',
-                type:'POST',
-                success:function(msg){
-                    if(msg == true){
 
-                        var table = $("#tbl-paymentlogs").DataTable();
-                         table.ajax.reload();
-                        $("#message .alert").html("Payment Updated Successfully.").addClass('alert-success').show();
-
-                        setTimeout(function(){
-                             $("#message .alert").html("").removeClass('alert-success').hide();
-                        },2500);
-                        getPaymentDetails($("#studEnrolledID").val());
-                    }else{
-                        $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show();
-
-                        setTimeout(function(){
-                            $("#message .alert").html("").removeClass('alert-danger').hide();
-                        },2500);
-                    }
+            e.preventDefault();
+            var frm = $("#frm-updateBalance").serializeArray();
+            $.each(frm, function(i,e){
+                if(e.value == ''){
+                    $("#"+e.name).parent().addClass('has-error');
+                }else{
+                    $("#"+e.name).parent().removeClass('has-error');
                 }
             });
-        }
+            var len = $("#frm-updateBalance .has-error").length;
+            if(len > 0){
+                $("#message .alert").html("All fields are required.").addClass('alert-danger').show();
+            }else{
+                $("#message .alert").html("").removeClass('alert-danger').hide();
+                $.ajax({
+                    url:'clients/updateBalance/'+paymentid,
+                    data:{'payment_amt':$("#pay_amt").val(),'payment_balance':$("#pay_bal").val()},
+                    dataType:'JSON',
+                    type:'POST',
+                    success:function(msg){
+                        if(msg == true){
+
+                            var table = $("#tbl-paymentlogs").DataTable();
+                             table.ajax.reload();
+                            $("#message .alert").html("Payment Updated Successfully.").addClass('alert-success').show();
+
+                            setTimeout(function(){
+                                 $("#message .alert").html("").removeClass('alert-success').hide();
+                            },2500);
+                            getPaymentDetails($("#studEnrolledID").val());
+                        }else{
+                            $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show();
+
+                            setTimeout(function(){
+                                $("#message .alert").html("").removeClass('alert-danger').hide();
+                            },2500);
+                        }
+                    }
+                });
+            }
+        
     });
 }
 

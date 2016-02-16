@@ -54,11 +54,35 @@ function testimonials(){ //for home page guest
 			});
 
 			$("#testimonials").html(result).addClass('custom-carousel show-one-slide touch-carousel').attr('data-appeared-items',1);
-			
+			var $owl = $('#testimonials');
+			$owl.trigger('destroy.owl.carousel');
+			// After destory, the markup is still not the same with the initial.
+			// The differences are:
+			//   1. The initial content was wrapped by a 'div.owl-stage-outer';
+			//   2. The '.owl-carousel' itself has an '.owl-loaded' class attached;
+			//   We have to remove that before the new initialization.
+			$owl.html($owl.find('.owl-stage-outer').html()).removeClass('owl-loaded');
+			$owl.owlCarousel({
+			    // your initial option here, again.
+			    navigation : true,
+				pagination: false,
+				slideSpeed : 2500,
+				stopOnHover: true,
+		    	autoPlay: 3000,
+		    	singleItem:true,
+				autoHeight : true,
+				transitionStyle : "fade"
+			});
+			$('.touch-slider').find('.owl-prev').html('<i class="fa fa-angle-left"></i>');
+			$('.touch-slider').find('.owl-next').html('<i class="fa fa-angle-right"></i>');
+			$('.touch-carousel, .testimonials-carousel').find('.owl-prev').html('<i class="fa fa-angle-left"></i>');
+			$('.touch-carousel, .testimonials-carousel').find('.owl-next').html('<i class="fa fa-angle-right"></i>');
 		}
 	});
 }
 
 function getEventsPromos(){
-	
+	$.ajax({
+		url:''
+	});
 }
