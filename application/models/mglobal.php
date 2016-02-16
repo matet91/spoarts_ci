@@ -132,15 +132,11 @@ class mglobal extends CI_Model {
 	}
 
 	function saveInterest(){
-		$sq = $this->input->post('sq');
-		$sq_pwd = md5($this->input->post('sq_pwd'));
 		$interest =$this->input->post('interest');
 		$firstlogin = 1;
 		$userid = $this->session->userdata('userid');
 
 		$data = array(
-						'security_question_id'=>$sq,
-						'security_password'=>$sq_pwd,
 						'first_login'=>$firstlogin
 					);
 		$this->db->where('UserID',$userid);
@@ -151,7 +147,7 @@ class mglobal extends CI_Model {
 							'interest_ids'=>$interest
 						);
 		$this->db->insert('client_interest',$dataInterest);
-
+		$this->session->set_userdata('first_login',1);
 		return $q;
 	}
 

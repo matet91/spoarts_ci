@@ -1,11 +1,12 @@
 function getservices(){
+    var id = $("#spid").val();
   $('#tbl-services').DataTable( {
     "bProcessing":true, 
     "bServerSide":true,
     "bRetrieve": true,
     "bDestroy":true,
     "sLimit":10,  
-    "sAjaxSource": "sp_profile/dataTables/1",
+    "sAjaxSource": "sp_profile/dataTables/1/"+id,
     "aoColumns":[ {"sTitle":"ID","bVisible":false},
             {"sTitle":"Services"},
             {"sTitle":"Description","bSearchable": true},
@@ -29,4 +30,5 @@ function getservices(){
 
 $(document).ready(function(){
     getservices();
+    var table = $("#tbl-services").DataTable();
 });

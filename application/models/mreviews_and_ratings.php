@@ -43,9 +43,9 @@ class mreviews_and_ratings extends CI_Model {
 		$reviewsid = $this->input->post('reviewsid');
 		$userid = $this->session->userdata('userid');
 		
-		$data = array("ReviewStatus"=>$stat, "ReviewerID"=>$userid);
+		$data = array("ReviewStatus"=>$stat);
 		
-		$this->db->where('ReviewsID',$reviewsid);	
+		$this->db->where('EnrolledID',$reviewsid);	
 		$q = $this->db->update('reviews_and_ratings',$data);
 
 		if($q) return 1;

@@ -17,7 +17,7 @@ class Mspprofile extends CI_Model {
 		return $row;
 	}
 
-	function dataTables($case){
+	function dataTables($case,$id=null){
 		$sSort = $this->input->get('iSortCol_0');
 		$sSortype = $this->input->get('sSortDir_0');
 		$sSearch = $this->input->get('sSearch');
@@ -32,12 +32,13 @@ class Mspprofile extends CI_Model {
 				$select = array("serviceid","servicename", "servicedesc", "serviceschedule", "serviceregistrationfee", "serviceprice","serviceWalkin","serviceHour as servicehour","(CASE WHEN servicetype=1 THEN 'Arts' ELSE 'Sports' END) as servicetype","1 as action");
 				$sTable = "services";
 				$leftjoin = " ";
-				$sWhere = "WHERE servicestatus=1 AND spid = '".$this->input->get('susid')."'";
+				$sWhere = "WHERE servicestatus=1 AND SPID=$id";
 
-				if($sSearch){$sWhere .= " AND (servicename like '%".$sSearch."%' OR servicedesc like '%".$sSearch."%' OR serviceschedule like '%".$sSearch."%' OR serviceregistrationfee like '%".$sSearch."%' OR servicetype like '%".$sSearch."%' OR serviceprice like '%".$sSearch."%')";}
-				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
-				$groupby = "";
-				$aColumns_output = array("serviceid","servicename","servicedesc", "serviceschedule", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
+				if($sSearch){
+					$sWhere .= " AND (servicename like '%".$sSearch."%' OR servicedesc like '%".$sSearch."%' OR serviceschedule like '%".$sSearch."%' OR serviceregistrationfee like '%".$sSearch."%' OR servicetype like '%".$sSearch."%' OR serviceprice like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("serviceid","servicename","servicedesc", "serviceschedule", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
 			break;
 			case 2://list of instructors
 

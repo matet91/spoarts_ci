@@ -27,17 +27,7 @@
     <!-- End Page Banner -->
 
 <!-- hidden text boxes -->
-<input type = "hidden" id = "action_type"/>
-<!-- removing services, set this textbox below of the service id that will be deleted -->
-<input type = "hidden" id = "sid"/> 
-
-<!-- update/add indicator for Instructors -->
-<input type="hidden" id = "instHiddenVal"/>
-
-<!-- type to delete. 1-services,2-instructors, 3-students -->
-<input type="hidden" id = "deleteType"/>
-
-<input type = "hidden" id = "txtHiddenService" value = "">
+<input type = "hidden" id = "spid" value = "<?=$this->input->get('susid');?>"/>
     <!-- Start Content -->
     <div id="content">
       <div class="container">

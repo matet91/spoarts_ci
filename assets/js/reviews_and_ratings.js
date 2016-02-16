@@ -16,7 +16,7 @@ function getReviewList(typelist){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
-			var result = "";
+			var result = "",ctr=0;
 			$.each(msg, function(i,e){
 				var star = "";
 				for(var str = 0; str < e.Rating ; str++){
@@ -49,13 +49,13 @@ function getReviewList(typelist){
 					'</div>'+
 				'</div>';
 				
-				if((ctr % 2) == 0 && ctr < (cnt-1)){
+				if((ctr % 2) == 0 && ctr < (str-1)){
 					result = '<div class="row">' + result ;
 					//first
-				}else if((ctr % 2) == 1 && ctr < (cnt-1)){
+				}else if((ctr % 2) == 1 && ctr < (str-1)){
 					result = result + '</div>';
 					//second
-				}else if((ctr % 2) == 0 &&  ctr == (cnt-1)){
+				}else if((ctr % 2) == 0 &&  ctr == (str-1)){
 					result = '<div class="row">' + result + '</div>';
 				}
 			});

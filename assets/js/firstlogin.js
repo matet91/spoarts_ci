@@ -74,22 +74,12 @@ function saveInterest(){
 				interest.push($(this).val());
 	});
 	var count = $("input[type='checkbox']:checked").length;
-
+	console.log
 	if(count > 0){
 		var sq_pwd = $("#sec_pwd").val();
-
-		if(sq_pwd == ''){
-			$("#message .alert").html("Please enter your security password.").addClass("alert-danger").show();
-			$("#sec_pwd").parent().addClass('has-error');
-
-			setTimeout(function(){
-				$("#message .alert").html("").removeClass("alert-danger").hide();
-				$("#sec_pwd").parent().removeClass('has-error');
-			},3000);
-		}else{
 			$.ajax({
 				url:'index/saveInterest',
-				data:{sq:$("#security_question_id").val(),sq_pwd:sq_pwd,interest:interest.toString()},
+				data:{interest:interest.toString()},
 				dataType:'JSON',
 				type:'POST',
 				success:function(msg){
@@ -100,7 +90,7 @@ function saveInterest(){
 					}
 				}
 			});
-		}
+		
 	}else{ 
 		$("#message .alert").html("Please select your interest.").addClass("alert-danger").show();
 			setTimeout(function(){

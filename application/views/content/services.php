@@ -341,7 +341,7 @@
                         </div>
                         <div class = "col-md-6">
                           <div class = "form-group">
-                            <label for = "serv_reg_fee">Registration Fee</label>
+                            <label for = "serv_reg_fee">Membership Fee</label>
                             <input type="text" placeholder="Registration Fee" class = "form-control" id = "ServiceRegistrationFee" name = "ServiceRegistrationFee" onkeypress = "numbersOnly(this.value,this.name)"/>
                           </div>
                           <div class = "form-group">
@@ -350,7 +350,7 @@
                           </div>
                           <div class = "form-group">
                             <label for = "serv_walkin"># of Hour(s)/Session</label>
-                            <input type="text" placeholder="Walk-in/Per Session" class = "form-control" id = "serviceHour" name = "serviceHour" onkeypress = "numbersOnly(this.value,this.name)"/>
+                            <input type="text" placeholder="# of Hour(s)/Session" class = "form-control" id = "serviceHour" name = "serviceHour" onkeypress = "numbersOnly(this.value,this.name)"/>
                           </div>
                           <div class = "form-group">
                             <label for = "serv_monthly">Monthly Fee</label>

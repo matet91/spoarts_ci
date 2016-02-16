@@ -55,8 +55,9 @@ class Sp_profile extends CI_Controller {
 		$this->load->view('index',$data);
 	}
 
-	function dataTables($case){
-		$data = $this->Mspprofile->dataTables($case);
+	function dataTables($case,$id=null){
+
+		$data = $this->Mspprofile->dataTables($case,$id);
 		echo json_encode($data);
 	}
 

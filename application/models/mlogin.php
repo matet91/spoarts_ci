@@ -75,7 +75,7 @@ class Mlogin extends CI_Model {
                                 $session = array('userid' => $userid,
                                  'username' => $row->UserName,
                                  'usertype' => $row->UserType,
-                                 'name'=>ucfirst($rowx->spfirstname)." ".ucfirst($rowx->splastname),
+                                 'name'=>($rowx->spfirstname!=NULL)?ucfirst($rowx->spfirstname):'First Name not set'." ".($rowx->splastname!=NULL)?ucfirst($rowx->splastname):'Last Name not set',
                                 'splogoname'=>$rowx->splogoName,
                                 'securityquestion'=>$rowx->sec_questions,
                                 'first_login'=>$rowx->first_login

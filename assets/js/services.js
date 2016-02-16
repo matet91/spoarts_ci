@@ -147,7 +147,7 @@ function getservices(){
             {"sTitle":"Services"},
             {"sTitle":"Description","bSearchable": true},
             {"sTitle":"Schedule","bSearchable": true},
-            {"sTitle":"Registration Fee (Peso)","bSearchable": true},
+            {"sTitle":"Membership Fee (Peso)","bSearchable": true},
             {"sTitle":"Walk-in Fee/Session (Peso)","bSearchable": true},
             {"sTitle":"# of Hours Per Session","bSearchable": true},
             {"sTitle":"Monthly Fee (Peso)","bSearchable": true},
@@ -829,6 +829,12 @@ var error = $("#"+frmid+" .has-error").length;
         }else{
           $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
         }
+
+        $("#RoomID,#InstructorID").trigger("chosen:updated");
+        setTimeout(function(){
+          window.location = 'services';
+        },2000);
+        
       }
     });
   }

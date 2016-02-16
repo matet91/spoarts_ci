@@ -35,7 +35,7 @@ class mclinics extends CI_Model {
 			$search = "";
 		}
 		
-		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=0 $search GROUP BY SPID,ServiceType";
+		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=1 $search GROUP BY SPID,ServiceType";
 		
 		$q = $this->db->query($sql);
 		return $q->result();
@@ -117,7 +117,7 @@ class mclinics extends CI_Model {
 		$frmdata = $this->input->post('data');
 		if($frmdata['studType'] ==0){ //new student
 			
-			$ch = $this->checkData("students", "stud_id", "WHERE serviceHour='".$frmdata['serviceHour']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
+			$ch = $this->checkData("students", "stud_id", "WHERE stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
 	
 			if($ch){
 				$error = 3; //existing student in a clinic
@@ -125,21 +125,21 @@ class mclinics extends CI_Model {
 				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
 	
 				if($ch_sched['ch_sched'] == 0){
-					$data_stud['serviceHour'] = $frmdata['serviceHour'];
 					$data_stud['stud_age'] = $frmdata['stud_age'];
 					$data_stud['stud_address'] = $frmdata['stud_address'];
+					$data_stud['stud_name'] = $frmdata['stud_name'];
 					$data_stud['client_id'] = $userid;
 					$data_stud['stud_type'] = 1;
 					
 					$insert = $this->db->insert('students',$data_stud);
 					
-					$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE serviceHour='".$frmdata['serviceHour']."' AND stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
+					$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE  stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
 					$data_enroll['client_id'] = $userid;
 					$data_enroll['service_id'] = $frmdata['service_id'];
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 					$data_enroll['ins_id'] = $frmdata['ins_id'];
 					$data_enroll['SchedID'] = $frmdata['SchedID'];
-					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['StudEnrolledStatus'] = 0;
 					
 					$insert2 = $this->db->insert('students_enrolled',$data_enroll);
 					
@@ -318,13 +318,11 @@ class mclinics extends CI_Model {
 		$userid = $this->session->userdata('userid');
 		
 		$getstudid = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE clinic_id='".$data['clinic_id']."' AND client_id= '".$userid."'");
-		
-		if($getstudid['StudEnrolledID'] == 0){
+		if($getstudid == 0){
 			$error = 2; //not enrolled
 		}else{
 			$data['ReviewStatus'] = 0;
-			$data['ReviewerID'] = 0;
-			$data['SPID'] = $userid;
+			$data['EnrolledID'] = $userid;
 
 			$insert = $this->db->insert('reviews_and_ratings',$data);
 			

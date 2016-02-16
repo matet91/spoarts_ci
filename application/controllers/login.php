@@ -64,7 +64,7 @@ class Login extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function saveRegister(){
+	public function saveRegister(){
 		$data = $this->mlogin->saveRegister();
 		echo json_encode($data);
 	}

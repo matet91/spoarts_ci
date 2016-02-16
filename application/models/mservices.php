@@ -38,8 +38,18 @@ class mservices extends CI_Model {
 		$dir = "assets/images/".$name;
 
 		move_uploaded_file($tmp_name, $dir);
+		//check if user exist in clinics
+		$this->db->where('UserID',$userid);
+		$this->db->select("*");
+		$cget = $this->db->get('clinics');
+		if($cget->num_rows() > 0){
 			$this->db->where('UserID',$userid);
 			$this->db->update('clinics',array('clinic_logo'=>$name));
+		}else{
+			$d = array('UserID'=>$userid,'clinic_logo'=>$name);
+			$this->db->insert('clinics',$d);
+		}
+			
 			
 		return $name;
 	}
@@ -79,7 +89,7 @@ class mservices extends CI_Model {
 			$q = $this->db->update('clinics',$clinicData);
 		}else{
 			$clinicData['UserID'] = $userid;
-			$this->db->insert('clinics',$clinicData);
+			$q = $this->db->insert('clinics',$clinicData);
 		}
 
 		return $q;
