@@ -77,7 +77,7 @@ class Clinics extends CI_Controller {
 	function getexistStud($clinicid){
 		$table = "students";
 		$fields = "stud_id, stud_name, stud_age";
-		$where = "WHERE client_id = '".$this->session->userdata('userid')."' AND clinic_id = $clinicid";
+		$where = "WHERE client_id = '".$this->session->userdata('userid')."'";
 		$order = "";
 		$leftjoin = "";
 		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
@@ -119,6 +119,11 @@ class Clinics extends CI_Controller {
 	
 	function dataTables($switch,$id){
 		$data = $this->mclinics->dataTables($switch,$id);
+		echo json_encode($data);
+	}
+	
+	function SaveRating(){
+		$data = $this->mclinics->SaveRating();
 		echo json_encode($data);
 	}
 }

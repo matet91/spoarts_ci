@@ -10,7 +10,7 @@
         width: 70%; /* either % (e.g. 60%) or px (400px) */
     }
 }
-.col-md-6{
+.colmd{
 	width: 100% !important;
 }
 
@@ -22,7 +22,14 @@
 #ServiceInfo,.read-more{
 	margin-bottom:10px;
 }
+
+#SaveComment,#formrate{
+	margin-top:10px;
+	margin-bottom:10px;
+}
 </style>
+<!-- Bootstrap Rating CSS  -->
+ <link rel="stylesheet" href="assets/css/bootstrap-rating.css" type="text/css" media="screen">
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
       <div class="container">
@@ -41,6 +48,7 @@
     </div>
     <!-- End Page Banner -->
  <!-- Start Portfolio Section -->
+    <input type = "hidden" id = "ses_userid" value = "<?=$this->session->userdata('userid');?>">
     <input type = "hidden" id = "clinic_type" value = "<?=$this->input->get('type');?>">
     <!-- Start Content -->
     <div id="content">
@@ -163,17 +171,32 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
-						<div class="col-md-6">
+						<div class="col-md-6 colmd">
 							<a class="main-button" href="#" id="ServiceInfo">Services <i class="fa fa-angle-right"></i></a>
-							<div id="services-div">
+							<div id="services-div"> 
 								<table id="services_list" class="display" cellspacing="0" width="100%"></table>
 							</div>
 							<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
 							<a class="read-more" href="#" id="ReviewsRatings">View All Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
 							<a class="read-more" href="#" id="HideReviewsRatings">Hide Some Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
-							<div id="reviewsratings-div">
-								test
-							</div>
+							<div id="reviewsratings-div"></div>
+							<form  id="formrate"> 
+								 <div class = "form-group">
+									<label for = "forrate_message">Comment</label>
+									<div class="survey-builder container">
+										<span style="cursor: default;">
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+										</span>
+										<input class="rating-tooltip" type="hidden" id="Rating" name="Rating">
+									</div>
+									<textarea class = "form-control" id = "Message" name = "Message"></textarea>
+									<a class="main-button" href="#" id="SaveComment">Save</a>
+								  </div>
+							</form>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -188,31 +211,4 @@
 	
     <!-- javascripts -->
     <script type="text/javascript" src="assets/js/clinics.js"></script>
-    <script>
-var autocomplete;
-
-function initAutocomplete() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
-      {types: ['geocode']});
-
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
-}
-
-// [START region_fillform]
-function fillInAddress() {
-  // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
-      var lat=place.geometry.location.lat();
-      var lng = place.geometry.location.lng();
-      $("#latitude").val(lat), $("#longitude").val(lng);
-}
-
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
-         async defer>
-</script>
+	<script type="text/javascript" src="assets/js/bootstrap-rating.js"></script>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2016 at 09:28 PM
+-- Generation Time: Feb 16, 2016 at 04:17 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -28,10 +28,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `bookmark` (
   `bm_id` int(11) NOT NULL,
-  `clinic_id` int(11) NOT NULL,
+  `clinic_id` mediumtext NOT NULL,
   `client_id` int(11) NOT NULL,
   `service_id` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bookmark`
+--
+
+INSERT INTO `bookmark` (`bm_id`, `clinic_id`, `client_id`, `service_id`) VALUES
+(1, '27,21', 61, '');
 
 -- --------------------------------------------------------
 
@@ -804,7 +811,7 @@ ALTER TABLE `user_details`
 -- AUTO_INCREMENT for table `bookmark`
 --
 ALTER TABLE `bookmark`
-  MODIFY `bm_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bm_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `client_interest`
 --

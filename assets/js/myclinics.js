@@ -3,7 +3,6 @@ $(document).ready(function(){
 	var clinictype = $('#clinic_type').val();
 	loadServices(clinictype,0);
 	$('#searchClinic').keypress(function(){
-
 		var clinictype = $('#clinic_type').val();
 		if($(this).val()!=''){
 			$('#clinic classic-title').html("Searching... "+$(this).val());
@@ -11,6 +10,13 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#clinic_type').change(function(){
+		var clinictype = $('#clinic_type').val();
+		if($(this).val()!=''){
+			$('#clinic classic-title').html("Searching... "+$(this).val());
+			loadServices(clinictype,$(this).val());
+		}
+	});
 	$('#Service').change(function(){
 		if($( this ).val() !=0){
 			changeService($( this ).val());
@@ -118,7 +124,7 @@ $(function () {
 function loadServices(c,search){
 
 	$.ajax({
-		url:'clinics/loadClinics/'+c+"/"+search,
+		url:'myclinics/loadServices/'+c+"/"+search,
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
@@ -140,10 +146,11 @@ function loadServices(c,search){
 				$('#clinic .classic-title').html("<b class = 'alert alert-info'>Found : "+msg.length+" clinic(s)...</b>");
 			}
 			$('#portfolio-list').html(content);
+
 		}
 	});
 	
-	$("#ServiceInfo").click(function(){
+	 $("#ServiceInfo").click(function(){
         $("#mypayment_list").toggle();
     });
 }
@@ -195,35 +202,28 @@ function changeService(serviceid){
 }
 
 function enroll(c,userid,clinic_id){
-	if($("#ses_userid").val() == ""){
-		$("#message .alert").html("You cannot enroll from this clinic. Need to create an account first.").addClass('alert-danger').show();
-		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
-		},2000);
-	}else{
-		var height = $(window).height();
-		var dialogHeight = $("#modal_enroll").find('.modal-dialog').outerHeight(true);
-		var top = parseInt(height)/6-parseInt(dialogHeight);
-		$("#modal_enroll").modal('show').attr('style','top:'+top+'px !important;');
-		
-		//$("#service_id").val(serviceid);	
-		$("#clinic_id").val(clinic_id);
-		$("#ctype").val(c);
+	var height = $(window).height();
+	var dialogHeight = $("#modal_enroll").find('.modal-dialog').outerHeight(true);
+	var top = parseInt(height)/6-parseInt(dialogHeight);
+	$("#modal_enroll").modal('show').attr('style','top:'+top+'px !important;');
+	
+	//$("#service_id").val(serviceid);	
+	$("#clinic_id").val(clinic_id);
+	$("#ctype").val(c);
 
-		$.ajax({
-			url:'clinics/getService/'+c+'/'+userid,
-			dataType:'JSON',
-			type:'POST',
-			success:function(msg){ 
-				var result = "<option value=0>Select</option>";
-				$("#Service").html("");
-				$.each(msg, function(i,e){	
-					result += '<option value='+e.ServiceID+'>'+e.ServiceName+'</option>';		
-				});	
-				$('#Service').html(result).trigger("chosen:updated");
-			}
-		});
-	}
+	$.ajax({
+		url:'myclinics/getService/'+c+'/'+userid,
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){ 
+			var result = "<option value=0>Select</option>";
+			$("#Service").html("");
+			$.each(msg, function(i,e){	
+				result += '<option value='+e.ServiceID+'>'+e.ServiceName+'</option>';		
+			});	
+			$('#Service').html(result).trigger("chosen:updated");
+		}
+    });
 }
 
 function changeStudType(){
@@ -352,7 +352,7 @@ function saveEnroll(){
 				}else if(msg == 4){ //student already enrolled in schedule selected
 					$("#message .alert").html(nme+" already enrolled in this schedule").addClass('alert-danger').show();
 				}else if(msg == 5){
-					$("#message .alert").html("The service has reached its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();
+					$("#message .alert").html("The service hits its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();
 				}else{
 				  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
 				}
@@ -370,32 +370,25 @@ function saveEnroll(){
 }
 
 function bookmark(clinicid){
-	if($("#ses_userid").val() == ""){
-		$("#message .alert").html("You cannot bookmark a clinic. You need to create an account first.").addClass('alert-danger').show();
-		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
-		},2000);
-	}else{
-		$.ajax({
-			url:'clinics/bookmark',
-			data:{clinicid:clinicid},
-			dataType:'JSON',
-			type:'POST',
-			success:function(msg){
-				if(msg == 1){
-					$("#message .alert").html("Clinic was bookmarked already.").addClass('alert-success').show();
-				}else if(msg == 2 || msg == 3){
-					$("#message .alert").html("Clinic has been successfully bookmarked.").addClass('alert-success').show();
-				}else{
-					$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
-				}
-				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-success').hide();
-					$("#message .alert").html("").removeClass('alert-danger').hide();
-				},2000);
+	$.ajax({
+		url:'clinics/bookmark',
+		data:{clinicid:clinicid},
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){
+			if(msg == 1){
+				$("#message .alert").html("Clinic was bookmarked already.").addClass('alert-success').show();
+			}else if(msg == 2 || msg == 3){
+				$("#message .alert").html("Clinic has been successfully bookmarked.").addClass('alert-success').show();
+			}else{
+				$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
 			}
-		});
-	}
+			setTimeout(function(){
+				$("#message .alert").html("").removeClass('alert-success').hide();
+				$("#message .alert").html("").removeClass('alert-danger').hide();
+			},2000);
+		}
+	});
 }
 
 function info(clinicid){
@@ -417,14 +410,9 @@ function info(clinicid){
 		$("#HideReviewsRatings").hide();
 	});
 	
-	if($("#ses_userid").val() == ""){
-		$("#formrate").hide();
-	}else{
-		$("#SaveComment").click(function(){
-			SaveComment(clinicid,clinicname);
-		});
-	}
-	
+	$("#SaveComment").click(function(){
+		SaveComment(clinicid,clinicname);
+	});
 }
 
 function SaveComment(clinicid,clinicname){

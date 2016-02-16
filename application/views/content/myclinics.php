@@ -5,18 +5,42 @@
  #portfolio-list li:hover .more{
     top:68% !important;
   }
+  @media screen and (min-width: 768px) {
+    .modalinfo {
+        width: 70%; /* either % (e.g. 60%) or px (400px) */
+    }
+}
+.colmd{
+	width: 100% !important;
+}
+
+#services-div,#HideReviewsRatings{
+	margin-bottom:10px;
+	display:none;
+}
+
+#ServiceInfo,.read-more{
+	margin-bottom:10px;
+}
+
+#SaveComment,#formrate{
+	margin-top:10px;
+	margin-bottom:10px;
+}
 </style>
+<!-- Bootstrap Rating CSS  -->
+ <link rel="stylesheet" href="assets/css/bootstrap-rating.css" type="text/css" media="screen">
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <h2><?php echo ($this->input->get('type')==1)?'Arts Clinic':'Sports Clinic';?></h2>
+            <h2>My Clinics</h2>
           </div>
           <div class="col-md-6">
             <ul class="breadcrumbs">
               <li><a href="?content=home.php">Home</a></li>
-              <li><?php echo ($this->input->get('type')==1)?'Arts':'Sports';?></li>
+              <li>My Clinics</li>
             </ul>
           </div>
         </div>
@@ -24,23 +48,28 @@
     </div>
     <!-- End Page Banner -->
  <!-- Start Portfolio Section -->
-    <input type = "hidden" id = "clinic_type" value = "<?=$this->input->get('type');?>">
     <!-- Start Content -->
     <div id="content">
       <div class = "container" id = "clinic">
         <!-- Page Content -->
         <div class="page-content">
           <!-- Classic Heading -->
-          <h4 class="classic-title"><span><?php echo ($this->input->get('type')==1)?'Arts':'Sports';?> Clinic List</span></h4> 
-        <!-- Stat Search -->
+          <h4 class="classic-title"><span>Clinic List</span></h4> 
+			<!-- Start Search -->
+			<select class = "form-control chosen-select" id = "clinic_type">
+				<option value=0>Arts Clinic Bookmark</option>
+				<option value=1>Sports Clinic Bookmark</option>
+				<option value=2>Arts Clinic Enrolled</option>
+				<option value=3>Sports Clinic Enrolled</option>
+			</select>
             <div class="search-side">
               <a class="show-search"><i class="fa fa-search"></i></a>
               <div class="search-form">
                   <input type="text" value="" name="searchClinic" id="searchClinic" placeholder="Search clinic..."/>
               </div>
             
-            <!-- End Search -->
-          </div>
+			<!-- End Search -->
+			</div>
         
         <!-- Divider -->
         <div class="hr1 margin-top"></div>
@@ -68,11 +97,16 @@
 				</div>
 				<div class="modal-body">
 					<div class = "row">
+						<input type="hidden" class = "form-control" id = "ctype"/>
 						<form  id="formschedule">  
 							<div class="col-md-6">
 							  <div class = "form-group">
+								<label for = "forsched_name">Services</label>
+								<select class = "form-control chosen-select" id = "Service" name = "Service"></select>
+							  </div>
+							  <div class = "form-group" id="schedform" style="display: none">
 								<label for = "forsched_name">Schedules</label>
-								<select class = "form-control" id = "Schedule" name = "Schedule"></select>
+								<select class = "form-control chosen-select" id = "Schedule" name = "Schedule"></select>
 							  </div>
 							  <div id="sched-info" style="display:none">
 								  <div class = "form-group">
@@ -94,10 +128,11 @@
 							<div class="col-md-6">
 							  <div class = "form-group">
 								<label for = "forsched_name">Student Type</label>
-								<select class = "form-control" id = "StudType"><option value=0>New</option><option value=1>Existing</option></select>
+								<select class = "form-control chosen-select" id = "StudType"><option value=0>New</option><option value=1>Existing</option><option value=2>Client</option></select>
 							  </div>
 							  <div id="stud-exist" style="display:none"> 
-								  <select class = "form-control" id = "stud_id" name = "stud_id"></select>
+								  <label for = "forsched_name">Student</label>
+								  <select class = "form-control chosen-select" id = "stud_id" name = "stud_id"></select>
 							  </div>
 							  <div id="stud-new">
 								  <div class = "form-group">
@@ -130,5 +165,56 @@
 	</div>
     <!-- end modal -->
 	
+	<!-- modal info -->
+    <div class="modal fade" id = "modal_info" tabindex="-1" role="dialog">
+		<div class="modal-dialog modalinfo">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="title-promo">More Info</h4>
+				</div>
+				<div class="modal-body">
+					<div class = "row">
+						<div class="col-md-6 colmd">
+							<a class="main-button" href="#" id="ServiceInfo">Services <i class="fa fa-angle-right"></i></a>
+							<div id="services-div"> 
+								<table id="services_list" class="display" cellspacing="0" width="100%"></table>
+							</div>
+							<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
+							<a class="read-more" href="#" id="ReviewsRatings">View All Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
+							<a class="read-more" href="#" id="HideReviewsRatings">Hide Some Reviews and Ratings...<i class="fa fa-angle-right"></i></a>
+							<div id="reviewsratings-div">
+								test
+							</div>
+							<form  id="formrate"> 
+								 <div class = "form-group">
+									<label for = "forrate_message">Comment</label>
+									<div class="survey-builder container">
+										<span style="cursor: default;">
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+											<div title="" data-original-title="" style="display: inline-block; position: relative;" class="rating-symbol"><div style="display: inline-block; position: absolute; overflow: hidden; left: 0px; right: 0px; width: 0px;" class="rating-symbol-foreground"><span></span></div></div>
+										</span>
+										<input class="rating-tooltip" type="hidden" id="Rating" name="Rating">
+									</div>
+									<textarea class = "form-control" id = "Message" name = "Message"></textarea>
+									<a class="main-button" href="#" id="SaveComment">Save</a>
+								  </div>
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+						<!--button type="button" id= "btn-Enroll" class="btn btn-primary">Enroll</button-->
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	</div>
+    <!-- end modal -->
+	
     <!-- javascripts -->
-    <script type="text/javascript" src="assets/js/clinics.js"></script>
+    <script type="text/javascript" src="assets/js/myclinics.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap-rating.js"></script>

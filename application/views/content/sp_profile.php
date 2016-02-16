@@ -13,12 +13,12 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <h2><?=ucfirst($data->spfirstname)+" "+ucfirst($data->splastname);?></h2>
+            <h2><?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?></h2>
           </div>
           <div class="col-md-6">
             <ul class="breadcrumbs">
               <li><a href="?content=home.php">Home</a></li>
-              <li><?=ucfirst($data->spfirstname)+" "+ucfirst($data->splastname);?></li>
+              <li><?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?></li>
             </ul>
           </div>
         </div>
@@ -73,7 +73,9 @@
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Owner Name </label>
+                    
                     <div class="col-sm-10">
+                    <input type="text" class="form-control" value = "<?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?>" disabled>
                     </div>
                   </div>
                   <div class="form-group">
@@ -178,7 +180,8 @@
               		</div>
               	</div>
               </div>
-
+              </div>
+</div>
   <!-- modal add Payment method -->
       <div class="modal fade" id = "modal_payment" tabindex="-1" role="dialog">
         <div class="modal-dialog">

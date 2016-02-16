@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class mclinics extends CI_Model {
+class mmyclinics extends CI_Model {
 	public function __construct()
 	{
 			// Call the CI_Model constructor
@@ -14,28 +14,23 @@ class mclinics extends CI_Model {
 	}
 	
 	function loadServices($c,$search){
-
-		if(isset($search) && $search!='0'){
-			$search = " AND (s.ServiceName LIKE '$search%' OR c.clinic_name LIKE '$search%')";
-		}else{
-			$search = "";
-		}
-		$sql = "SELECT * FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID WHERE s.ServiceStatus='1' and s.ServiceType = '$c' $search";
-
-		$q = $this->db->query($sql);
-	//	echo $this->db->last_query();
-		return $q->result();
-	}
-	
-	function loadClinics($c,$search){
-
+		$userid = $this->session->userdata('userid');
 		if(isset($search) && $search!='0'){
 			$search = " AND (c.clinic_name LIKE '$search%')";
 		}else{
 			$search = "";
 		}
 		
-		$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=0 $search GROUP BY SPID,ServiceType";
+		//$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=0 $search GROUP BY SPID,ServiceType";
+		
+		if($c == 0 or $c == 1){
+			$clinicids = $this->getID("bookmark", "clinic_id", "WHERE client_id='".$userid."'");
+			$sql = "SELECT c.* FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID WHERE c.clinic_id IN(".$clinicids.") AND s.ServiceType=".$c." GROUP BY s.SPID";
+		}else{
+			if($c == 2){$d=0;}else{$d=1;}
+			$clinicids = $this->getID("students_enrolled", "clinic_id", "WHERE client_id='".$userid."' GROUP BY clinic_id,client_id");
+			$sql = "SELECT c.* FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID WHERE c.clinic_id IN(".$clinicids.") AND s.ServiceType=".$d." GROUP BY s.SPID";
+		}
 		
 		$q = $this->db->query($sql);
 		return $q->result();
@@ -71,42 +66,6 @@ class mclinics extends CI_Model {
 
 			if($d == true)
 				return 3; //new clinic bookmark added
-			else return 0; //error occurred
-			exit();
-		}
-	}
-	
-	function bookmark_matet(){
-		$serviceid = $this->input->post('serviceid');
-		$clinicid = $this->input->post('clinicid');
-		$userid = $this->session->userdata('userid');
-		//get list of bookmarked and verify if the serviceid already exist
-		$this->db->where('client_id',$userid);
-		$this->db->select('service_id');
-		
-		$q = $this->db->get('bookmark');
-		if($q->num_rows() > 0){
-			$row = $q->row();
-			$services = explode(',',$row->service_id);
-			if(in_array($serviceid,$services)){
-				return 1; //already bookmarked
-				exit();
-			}else{
-				array_push($services,$serviceid);
-				$this->db->where('client_id',$userid);
-				$d = $this->db->update('bookmark',array('service_id'=>implode(",",$services)));
-				if($d == true)
-					return 2;//bookmark updated
-				else return 0; //error occurred
-				exit();
-			}
-
-		}else{
-			$data = array('service_id'=>$serviceid,'clinic_id'=>$clinicid,'client_id'=>$userid);
-			$d = $this->db->insert('bookmark',$data);
-
-			if($d == true)
-				return 3; //new service bookmark added
 			else return 0; //error occurred
 			exit();
 		}
