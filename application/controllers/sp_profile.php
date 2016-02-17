@@ -43,7 +43,7 @@ class Sp_profile extends CI_Controller {
 		}
 		$content = 'sp_profile.php';
 		$profile = $this->Mspprofile->loadprofile();
-		$title = ucfirst($profile->spfirstname)." ".ucfirst($profile->splastname);
+		$title = ucfirst($profile->clinic_name);
 		$clubpic = $profile->clinic_logo;
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,

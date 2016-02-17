@@ -22,7 +22,7 @@ class mservices extends CI_Model {
 
 	function loadprofile(){
 		$userid = $this->session->userdata('userid');
-		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID WHERE a.UserID='$userid'";
+		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID LEFT JOIN subscription_plans e ON e.PlanID=d.SubscType WHERE a.UserID='$userid'";
 
 		$q = $this->db->query($sql);
 

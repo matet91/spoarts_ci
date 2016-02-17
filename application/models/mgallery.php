@@ -17,8 +17,9 @@ class mgallery extends CI_Model {
 
 		return $qalbum->result();
 	}
-	function albumDisplay(){
-		$userid = $this->session->userdata('userid');
+	function albumDisplay($userid=null){
+		if(!isset($userid)) $userid = $this->session->userdata('userid');
+
 		$sql = "SELECT count(b.galleryID) as count,a.UserID,a.albumName,a.albumID as albumID,a.dateCreated,a.albumDesc,b.fileName FROM albums a LEFT JOIN gallery b ON a.albumID=b.albumID WHERE a.UserID='$userid' GROUP BY b.albumID ";
 
 		$d = $this->db->query($sql);

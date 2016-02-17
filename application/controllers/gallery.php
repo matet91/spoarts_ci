@@ -53,8 +53,8 @@ class Gallery extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function albumDisplay(){
-		$data = $this->mgallery->albumDisplay();
+	function albumDisplay($spid=null){
+		$data = $this->mgallery->albumDisplay($spid);
 		echo json_encode($data);
 	}
 

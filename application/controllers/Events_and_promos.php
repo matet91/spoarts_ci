@@ -89,8 +89,10 @@ class Events_and_promos extends CI_Controller {
 	}
 	
 	//get all events
-	function getEvents(){
-		$spid = $this->session->userdata('userid');
+	function getEvents($spid=null){
+		if(!isset($spid))
+			$spid = $this->session->userdata('userid');
+		
 		//$spid = $this->mevents_and_promos->getspid();
 
 		$table = "events";

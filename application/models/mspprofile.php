@@ -9,7 +9,7 @@ class Mspprofile extends CI_Model {
 	}
 		
 	function loadprofile(){
-		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID WHERE a.UserID='".$this->input->get('susid')."'";
+		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID LEFT JOIN subscription_plans e ON e.PlanID=d.SubscType WHERE a.UserID='".$this->input->get('susid')."'";
 
 		$q = $this->db->query($sql);
 
@@ -311,7 +311,8 @@ class Mspprofile extends CI_Model {
 
 	function getPromo($spid){
 		$this->db->where('SPID',$spid);
-		$this->db->select('*');
+		$this->db->where('PromoStatus',1);
+		$this->db->select('*,DATE(TIMESTAMP) as timestamp');
 		$get = $this->db->get('promos');
 		return $get->result();
 	}

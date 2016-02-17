@@ -65,7 +65,7 @@ function albumDisplay(){
 				content += "<div class='portfolio-item item'>"+
 							"<div class='portfolio-border'>"+
 							"<div class='portfolio-thumb'>"+
-							"<a class='lightbox' title='This is an image title' href='#' onclick='viewAlbum("+e.albumID+",'"+e.albumName+"')'>"+
+							'<a class="lightbox viewalbum" href="#" id="'+e.albumID+'" title = "'+e.albumName+'">'+
 							"<div class='thumb-overlay'><i class='fa fa-arrows-alt'></i></div>"+
 							"<img alt='' src='assets/images/"+filename+"' />"+
 							"</a>"+
@@ -284,7 +284,7 @@ function loadImages(id,title){
 			
 			var content = "";
 			$.each(msg, function(i,e){
-				content += '<div class="portfolio-item item">'+
+				content += '<div class = "col-md-3"><div class="portfolio-item item">'+
                 '<div class="portfolio-border">'+                  
                 '<div class="portfolio-thumb">'+
                     '<a class="lightbox" title="'+e.filename+'" href="assets/images/'+e.albumName+"/"+e.fileName+'">'+
@@ -299,28 +299,11 @@ function loadImages(id,title){
                     '</a>'+
                   '</div>'+
                 '</div>'+
-              '</div>';
+              '</div></div>';
 			});
-			var $owl = $('#gallerydisplay');
-
-			$owl.trigger('replace.owl.carousel');
 
 			$("#gallerydisplay").focus().html(content).show('slide');
-			$("#gallerydisplay").owlCarousel({
-				navigation : true,
-				pagination: false,
-				slideSpeed : 400,
-				stopOnHover: true,
-		    	autoPlay: false,
-		    	items : 4,
-		    	itemsDesktopSmall : [900,3],
-				itemsTablet: [600,2],
-				itemsMobile : [479, 1]
-			});
-			$('.touch-slider').find('.owl-prev').html('<i class="fa fa-angle-left"></i>');
-			$('.touch-slider').find('.owl-next').html('<i class="fa fa-angle-right"></i>');
-			$('.touch-carousel, .testimonials-carousel').find('.owl-prev').html('<i class="fa fa-angle-left"></i>');
-			$('.touch-carousel, .testimonials-carousel').find('.owl-next').html('<i class="fa fa-angle-right"></i>');
+			
 			$('.lightbox').nivoLightbox({
 				effect: 'fadeScale',
 				keyboardNav: true,

@@ -47,7 +47,7 @@
             <!-- picture -->
             <div class = "col-md-1">
                 <div class = "row">
-                  <img src="assets/images/<?php echo $clubpic;?>" class="img-circle" style = "width80px; height80px; cursorpointer;" id = "clubimage" data-toggle = "popover" data-placement = "top" title = "Click here to change picture.">
+                  <img src="assets/images/<?php echo $clubpic;?>" class="img-circle" style = "width:80px; height:80px; cursorpointer;" id = "clubimage" data-toggle = "popover" data-placement = "top" title = "Click here to change picture.">
                    <input type="file" name="clubpic" id="clubpic" accept="image/*" style = "display:none"/>
                 </div>
                  <!-- end picture -->

@@ -159,7 +159,14 @@ function checkStatus(id){
 function paynow(){
     var frm = $("#frm-paynow").serializeArray(),
         errList = new Array(), data={};
- if ($('#date_log').prop("disabled") == false) {
+ if ($('#date_log').prop("disabled") == true && $("#payment_type").val() == '0') {
+
+         $("#message .alert").html("Please select different Payment type. The student needs to have a time log first before you can use the payment type session.").addClass('alert-danger').show();
+
+        setTimeout(function(){
+            $("#message .alert").html("").removeClass('alert-danger').hide();
+        },3500);
+}else{
     $.each(frm, function(i,e){
         var name = $("#"+e.name),
             value = e.value;
@@ -197,13 +204,7 @@ function paynow(){
         data['client_id'] = $("#clientid").val();
         submitPay(data);
     }
-    }else{
-         $("#message .alert").html("Please select different Payment type. The student needs to have a time log first before you can use the payment type session.").addClass('alert-danger').show();
-
-        setTimeout(function(){
-            $("#message .alert").html("").removeClass('alert-danger').hide();
-        },3500);
-    }
+}
 }
 
 function submitPay(data){
