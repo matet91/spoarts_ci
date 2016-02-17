@@ -8,6 +8,8 @@
       }
 
 </style>
+<?php $usertype = $this->session->userdata('usertype');?>
+<input type = "hidden" id = "usertype" value = "<?=$usertype;?>">
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
       <div class="container">
@@ -58,20 +60,20 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Clinic Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="clinic_name" name = "clinic_name" placeholder="Club Name" value = "<?=ucfirst($data->clinic_name);?>">
+                      <span><?=ucfirst($data->clinic_name);?></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Owner Name </label>
                     
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" value = "<?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?>" disabled>
+                    <span><?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?> </span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Location</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>">
+                      <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>" disabled>
                       <input type="hidden" class="form-control" id="latitude" name = "latitude" value="<?php echo $data->latitude;?>">
                       <input type="hidden" class="form-control" id="longitude" name = "longitude" value="<?php echo $data->longitude;?>">
                       <span class = "glyphicon glyphicon-map-marker" style = "cursor:pointer !important;" id = "showmap" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
@@ -81,9 +83,16 @@
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">About Us</label>
                     <div class="col-sm-10">
-                      <textarea id = "SPAboutMe" name = "SPAboutMe"><?=ucfirst($data->SPAboutMe);?></textarea>
+                      <span ><?=ucfirst($data->SPAboutMe);?></span>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Contact #</label>
+                    <div class="col-sm-10">
+                      <span ><?=$data->SPContactNo;?></span>
+                    </div>
+                  </div>
+                  <?php if($usertype == 0){?>
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Subscription Type</label>
                     <div class="col-sm-10">
@@ -129,6 +138,7 @@
                       
                     </div>
                   </div>
+                  <?php } ?>
                 </form>
               </div>
               <!-- Divider -->
@@ -147,8 +157,10 @@
               <!-- Nav Tabs -->
 	              <ul class="nav nav-tabs">
 	                <li class="active"><a href="#tab-4" data-toggle="tab"><i class="fa fa-desktop"></i>Services</a></li>
-	                <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-calendar"></i>Gallery</a></li>
-	                <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-map-pin"></i>Clients</a></li>
+                  <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-picture-o"></i>Gallery</a></li>
+                  <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-calendar"></i>Events</a></li>
+	                <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-gift"></i>Promos</a></li>
+	               <?php if($usertype == 0){?> <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-map-pin"></i>Clients</a></li><?php } ?>
 	              </ul>
 
 	              <!-- Tab panels -->

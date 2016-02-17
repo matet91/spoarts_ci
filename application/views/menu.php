@@ -19,7 +19,7 @@
             <!-- End Search -->
             <!-- Start Navigation List -->
             <ul class="nav navbar-nav navbar-right " id = "menus">
-            <?php if(!$this->session->userdata('userid') || $this->session->userdata('userid') == 2){?>
+            <?php if(!$this->session->userdata('userid') || $this->session->userdata('usertype') == 2){?>
               <li>
                 <a class = "<?php echo ($content == 'home.php'?'active':'');?>" href="<?= (!$this->session->userdata('userid'))?'login':'index';?>">Home</a>
               </li>
@@ -49,9 +49,9 @@
                 <?php } ?>
               </li>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
-                <li><a href="?content=sales.php" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
+                <li><a href="gallery" class = "<?php echo ($content == 'gallery.php'?'active':'');?>">Gallery</a></li>
               <?php } ?>
-              <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
+              <?php if($this->session->userdata('userid') && ($this->session->userdata('usertype') == 1 || $this->session->userdata('usertype') == 0)){?>
                 <li><a href="?content=sales.php" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
             </ul>

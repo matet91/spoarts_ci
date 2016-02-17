@@ -28,7 +28,18 @@ function getservices(){
 
 }
 
+function getPromo(){
+    var id = $("#spid").val();
+    $.ajax({
+        url:'sp_profile/getPromo/'+id,
+        dataType:'JSON',
+        success:function(msg){
+
+        }
+    });
+}
 $(document).ready(function(){
     getservices();
     var table = $("#tbl-services").DataTable();
+    $('[data-toggle="tooltip"]').tooltip();
 });

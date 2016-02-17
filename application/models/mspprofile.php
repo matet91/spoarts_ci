@@ -308,4 +308,11 @@ class Mspprofile extends CI_Model {
 			break;
 		}
 	}
+
+	function getPromo($spid){
+		$this->db->where('SPID',$spid);
+		$this->db->select('*');
+		$get = $this->db->get('promos');
+		return $get->result();
+	}
 }

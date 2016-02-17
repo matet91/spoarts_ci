@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2016 at 06:16 PM
+-- Generation Time: Feb 17, 2016 at 12:38 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -19,6 +19,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `spoarts`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `albums`
+--
+
+CREATE TABLE IF NOT EXISTS `albums` (
+  `albumID` int(11) NOT NULL,
+  `albumName` text NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `albumDesc` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `albums`
+--
+
+INSERT INTO `albums` (`albumID`, `albumName`, `UserID`, `dateCreated`, `albumDesc`) VALUES
+(1, 'Pink Album', 2, '2016-02-17 12:59:02', 'My mouse is pink                  '),
+(2, 'hello', 2, '2016-02-17 16:47:15', 'is it me you''re looking for?                  ');
 
 -- --------------------------------------------------------
 
@@ -111,6 +133,37 @@ CREATE TABLE IF NOT EXISTS `events` (
 
 INSERT INTO `events` (`EventID`, `EventName`, `EventDesc`, `EventFor`, `EventStartDate`, `EventEndDate`, `EventLocation`, `EventStatus`, `SPID`, `TIMESTAMP`) VALUES
 (1, 'My pink Life', 'story telling on how I started to like pink', '1', '2016-02-16', '2016-02-23', 'cebu', 1, 2, '2016-02-16 16:21:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery`
+--
+
+CREATE TABLE IF NOT EXISTS `gallery` (
+  `galleryID` int(11) NOT NULL,
+  `albumID` int(11) NOT NULL,
+  `fileName` text NOT NULL,
+  `dateCreated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`galleryID`, `albumID`, `fileName`, `dateCreated`) VALUES
+(1, 1, 'Chrysanthemum.jpg', '2016-02-17 16:12:46'),
+(2, 1, 'Desert.jpg', '2016-02-17 16:12:47'),
+(3, 1, 'Hydrangeas.jpg', '2016-02-17 16:12:48'),
+(4, 1, 'Jellyfish.jpg', '2016-02-17 16:12:49'),
+(5, 1, 'Koala.jpg', '2016-02-17 16:12:50'),
+(6, 1, 'Lighthouse.jpg', '2016-02-17 16:12:51'),
+(7, 1, 'Penguins.jpg', '2016-02-17 16:12:52'),
+(8, 1, 'Tulips.jpg', '2016-02-17 16:12:53'),
+(9, 2, 'arts.jpg', '2016-02-17 17:05:06'),
+(10, 2, 'artscover.jpg', '2016-02-17 17:05:07'),
+(11, 2, 'background1.jpg', '2016-02-17 17:05:08'),
+(12, 2, 'bg2.jpg', '2016-02-17 17:05:08');
 
 -- --------------------------------------------------------
 
@@ -356,27 +409,6 @@ INSERT INTO `schedules` (`SchedID`, `SchedDays`, `RoomID`, `InstructorID`, `Serv
 -- --------------------------------------------------------
 
 --
--- Table structure for table `security_questions`
---
-
-CREATE TABLE IF NOT EXISTS `security_questions` (
-  `sec_id` int(11) NOT NULL,
-  `sec_questions` mediumtext NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `security_questions`
---
-
-INSERT INTO `security_questions` (`sec_id`, `sec_questions`) VALUES
-(1, 'What''s your first pet''s name'),
-(2, 'What''s your mother''s maiden name'),
-(3, 'What is the name of your elementary school'),
-(4, 'hfjjjksdfksd');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `services`
 --
 
@@ -577,6 +609,12 @@ INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `User
 --
 
 --
+-- Indexes for table `albums`
+--
+ALTER TABLE `albums`
+  ADD PRIMARY KEY (`albumID`);
+
+--
 -- Indexes for table `bookmark`
 --
 ALTER TABLE `bookmark`
@@ -599,6 +637,12 @@ ALTER TABLE `clinics`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`EventID`);
+
+--
+-- Indexes for table `gallery`
+--
+ALTER TABLE `gallery`
+  ADD PRIMARY KEY (`galleryID`);
 
 --
 -- Indexes for table `instructor_masterlist`
@@ -655,12 +699,6 @@ ALTER TABLE `schedules`
   ADD PRIMARY KEY (`SchedID`), ADD KEY `ROOMID` (`RoomID`), ADD KEY `INSTRUCTORID` (`InstructorID`);
 
 --
--- Indexes for table `security_questions`
---
-ALTER TABLE `security_questions`
-  ADD PRIMARY KEY (`sec_id`);
-
---
 -- Indexes for table `services`
 --
 ALTER TABLE `services`
@@ -713,6 +751,11 @@ ALTER TABLE `user_details`
 --
 
 --
+-- AUTO_INCREMENT for table `albums`
+--
+ALTER TABLE `albums`
+  MODIFY `albumID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `bookmark`
 --
 ALTER TABLE `bookmark`
@@ -732,6 +775,11 @@ ALTER TABLE `clinics`
 --
 ALTER TABLE `events`
   MODIFY `EventID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `gallery`
+--
+ALTER TABLE `gallery`
+  MODIFY `galleryID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `instructor_masterlist`
 --
@@ -777,11 +825,6 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `schedules`
   MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `security_questions`
---
-ALTER TABLE `security_questions`
-  MODIFY `sec_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `services`
 --

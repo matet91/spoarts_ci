@@ -50,8 +50,8 @@ function getstudents(){
 						{"sTitle":"Actions"}
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-			if ( aData[5] == "1" ){
-				$('td:eq(5)', nRow).html('<button class = "btn btn-primary" data-toggle="tooltip" data-placement="top" title="View Profile" id="view_history" onclick="view_profile('+aData[0]+');"><i class = "fa fa-eye"></i></button>' );
+			if ( aData[6] == "1" ){
+				$('td:eq(4)', nRow).html('<button class = "btn btn-primary" data-toggle="tooltip" data-placement="top" title="View Profile" id="view_history" onclick="view_profile('+aData[0]+');"><i class = "fa fa-eye"></i></button>' );
 			}
 		},
 		"fnInitComplete": function(oSettings, json) {

@@ -33,15 +33,15 @@ class Mlogin extends CI_Model {
         		$userid = $row->UserID;
                 switch($usertype){
                     case 1: //service provide
-                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID LEFT JOIN security_questions c ON b.security_question_id = c.sec_id LEFT JOIN subscriptions d ON d.UserID=a.UserID WHERE a.UserID='$userid'";
+                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID WHERE a.UserID='$userid'";
                     break;
 
                     case 2: //client
-                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID LEFT JOIN security_questions c ON b.security_question_id = c.sec_id WHERE a.UserID='$userid'";
+                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID WHERE a.UserID='$userid'";
                     break;
 
                     case 0://admin
-                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID LEFT JOIN security_questions c ON b.security_question_id = c.sec_id WHERE a.UserID='$userid'";
+                            $sql = "SELECT * FROM user_details a LEFT JOIN user_accounts b ON a.UserID=b.UserID WHERE a.UserID='$userid'";
                     break;
                 }
         		
@@ -54,7 +54,6 @@ class Mlogin extends CI_Model {
                                  'usertype' => $row->UserType,
                                  'name'=>ucfirst($rowx->spfirstname)." ".ucfirst($rowx->splastname),
                                 'splogoname'=>$rowx->splogoName,
-                                'securityquestion'=>$rowx->sec_questions,
                                 'first_login'=>$rowx->first_login
                                  );
                     break;
@@ -65,7 +64,6 @@ class Mlogin extends CI_Model {
                                  'usertype' => $row->UserType,
                                  'name'=>ucfirst($rowx->spfirstname)." ".ucfirst($rowx->splastname),
                                 'splogoname'=>$rowx->splogoName,
-                                'securityquestion'=>$rowx->sec_questions,
                                 'first_login'=>$rowx->first_login,
                                 'SubsStatus'=>$rowx->SubsStatus
                                  );
@@ -77,7 +75,6 @@ class Mlogin extends CI_Model {
                                  'usertype' => $row->UserType,
                                  'name'=>($rowx->spfirstname!=NULL)?ucfirst($rowx->spfirstname):'First Name not set'." ".($rowx->splastname!=NULL)?ucfirst($rowx->splastname):'Last Name not set',
                                 'splogoname'=>$rowx->splogoName,
-                                'securityquestion'=>$rowx->sec_questions,
                                 'first_login'=>$rowx->first_login
                                  );
                     break;

@@ -18,9 +18,6 @@ $(document).ready(function(){
 		formatDate:'Y-m-d',
 		format:'Y-m-d'
 	});
-
-
-	loadSecurity();
 	$("#btn-update-profile").click(function(){
 		
 		var dialogHeight = $("#modal_profile").find('.modal-dialog').outerHeight(true);

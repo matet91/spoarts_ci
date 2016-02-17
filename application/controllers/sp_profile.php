@@ -65,4 +65,9 @@ class Sp_profile extends CI_Controller {
 		$data = $this->mservices->paypal($type);
 		echo json_encode($data);
 	}
+
+	function getPromo($spid){
+		$data = $this->Mspprofile->getPromo($spid);
+		echo json_encode($data);
+	}
 }
