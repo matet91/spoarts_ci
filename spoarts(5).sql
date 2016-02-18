@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2016 at 12:38 PM
+-- Generation Time: Feb 18, 2016 at 10:06 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -284,7 +284,14 @@ CREATE TABLE IF NOT EXISTS `payment_logs` (
   `service_id` int(11) NOT NULL,
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_updated` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payment_logs`
+--
+
+INSERT INTO `payment_logs` (`payment_id`, `payment_amt`, `payment_date`, `payment_type`, `payment_balance`, `stud_id`, `client_id`, `payment_desc`, `payment_end_date`, `SchedID`, `UserID`, `service_id`, `date_added`, `last_updated`) VALUES
+(1, '200', '2016-02-18 04:51:40', 0, '0', 1, 3, 'kjasdklas', '2016-02-18 04:51:40', 1, 2, 1, '2016-02-18 16:51:40', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -300,14 +307,15 @@ CREATE TABLE IF NOT EXISTS `paypal_logs` (
   `paypal_invoice` varchar(50) NOT NULL,
   `buyer_name` varchar(50) NOT NULL,
   `paypal_createTime` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `paypal_logs`
 --
 
 INSERT INTO `paypal_logs` (`paypal_id`, `transaction_id`, `UserID`, `paypal_amount`, `paypal_invoice`, `buyer_name`, `paypal_createTime`) VALUES
-(1, '3WF45874VA242582C', 2, 1500, '56c34a95b673e', 'rene macalisang', '2016-02-16 16:13:15');
+(1, '3WF45874VA242582C', 2, 1500, '56c34a95b673e', 'rene macalisang', '2016-02-16 16:13:15'),
+(2, '48L84264W8567091Y', 1, 1500, '56c55caeba3a0', 'admin admin', '2016-02-18 05:54:55');
 
 -- --------------------------------------------------------
 
@@ -397,14 +405,15 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   `SchedTime` varchar(50) NOT NULL,
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `SchedRemaining` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schedules`
 --
 
 INSERT INTO `schedules` (`SchedID`, `SchedDays`, `RoomID`, `InstructorID`, `ServiceID`, `SchedSlots`, `SchedTime`, `date_added`, `SchedRemaining`) VALUES
-(1, 'Tuesday,Thursday', 1, 1, 1, 10, '11:00 am - 01:00 pm', '2016-02-16 11:16:14', 1);
+(1, 'Tuesday,Thursday', 1, 1, 1, 10, '11:00 am - 01:00 pm', '2016-02-16 11:16:14', 1),
+(2, 'Thursday,Friday', 1, 1, 2, 22, '05:00 pm - 08:00 pm', '2016-02-18 16:50:44', 0);
 
 -- --------------------------------------------------------
 
@@ -426,14 +435,15 @@ CREATE TABLE IF NOT EXISTS `services` (
   `serviceHour` int(11) NOT NULL,
   `clubpic` varchar(50) NOT NULL,
   `interest_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `services`
 --
 
 INSERT INTO `services` (`ServiceID`, `ServiceName`, `ServiceDesc`, `ServiceSchedule`, `ServiceRegistrationFee`, `ServiceStatus`, `ServicePrice`, `ServiceType`, `SPID`, `serviceWalkin`, `serviceHour`, `clubpic`, `interest_id`) VALUES
-(1, 'Jiujitsu pink service', 'I have pink mouse and this is pink manther', 'Monday-Friday 09:00am-10:00pm', 1000, 1, '1500', 0, 2, 300, 3, '', 36);
+(1, 'Jiujitsu pink service', 'I have pink mouse and this is pink manther', 'Monday-Friday 09:00am-10:00pm', 1000, 1, '1500', 0, 2, 300, 3, '', 36),
+(2, 'Archery club', 'My archery', 'Monday-Sunday 10:00AM-04:00PM', 1000, 1, '2000', 0, 2, 500, 3, '', 29);
 
 -- --------------------------------------------------------
 
@@ -449,14 +459,16 @@ CREATE TABLE IF NOT EXISTS `students` (
   `client_id` int(11) NOT NULL,
   `stud_type` int(11) NOT NULL COMMENT '0:client; 1:non-client;',
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students`
 --
 
 INSERT INTO `students` (`stud_id`, `stud_name`, `stud_age`, `stud_address`, `client_id`, `stud_type`, `date_added`) VALUES
-(1, 'Cris love pink too', 39, 'pink subdivision', 3, 1, '2016-02-16 11:28:13');
+(1, 'Cris love pink too', 39, 'pink subdivision', 3, 1, '2016-02-16 11:28:13'),
+(2, 'Cris love pink too', 39, 'pink subdivision', 3, 1, '2016-02-16 11:28:13'),
+(3, 'Pink Manther', 50, 'anywhere', 3, 1, '2016-02-18 17:02:20');
 
 -- --------------------------------------------------------
 
@@ -474,14 +486,15 @@ CREATE TABLE IF NOT EXISTS `students_enrolled` (
   `SchedID` int(11) NOT NULL,
   `StudEnrolledStatus` int(11) NOT NULL,
   `date_enrolled` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students_enrolled`
 --
 
 INSERT INTO `students_enrolled` (`StudEnrolledID`, `stud_id`, `client_id`, `service_id`, `clinic_id`, `ins_id`, `SchedID`, `StudEnrolledStatus`, `date_enrolled`) VALUES
-(1, 1, 3, 1, 1, 1, 1, 1, '2016-02-16 11:28:13');
+(1, 1, 3, 1, 1, 1, 1, 1, '2016-02-16 11:28:13'),
+(2, 3, 3, 2, 1, 1, 2, 0, '2016-02-18 17:02:20');
 
 -- --------------------------------------------------------
 
@@ -517,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `subscription_plans` (
   `PlanDesc` varchar(60) NOT NULL,
   `PlanTerm` varchar(20) NOT NULL,
   `PlanPrice` decimal(10,0) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscription_plans`
@@ -525,7 +538,8 @@ CREATE TABLE IF NOT EXISTS `subscription_plans` (
 
 INSERT INTO `subscription_plans` (`PlanID`, `PlanName`, `PlanDesc`, `PlanTerm`, `PlanPrice`) VALUES
 (1, 'Trial', 'Free Trial', '1M', '0'),
-(2, 'Premium', 'Premium Subscription', '1Y', '5000');
+(2, 'Premium', 'Premium Subscription', '1Y', '5000'),
+(3, 'Royal', 'pink pink                  ', '2null', '3040');
 
 -- --------------------------------------------------------
 
@@ -543,7 +557,14 @@ CREATE TABLE IF NOT EXISTS `time_logs` (
   `tl_paid` int(11) NOT NULL COMMENT '0-unpaid;1-paid;2-partial',
   `service_id` int(11) NOT NULL,
   `clinic_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `time_logs`
+--
+
+INSERT INTO `time_logs` (`tl_id`, `tl_in`, `tl_out`, `stud_id`, `SchedID`, `StudEnrolledID`, `tl_paid`, `service_id`, `clinic_id`) VALUES
+(1, '2016-02-18 04:51:21', '2016-02-18 04:51:52', 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -600,9 +621,9 @@ CREATE TABLE IF NOT EXISTS `user_details` (
 --
 
 INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `UserID`, `splogoName`, `spfirstname`, `splastname`, `SPRegisteredDate`, `spbirthday`, `longitude`, `latitude`) VALUES
-(1, 'Mandaue City, Central Visayas, Philippines', '12346598', 'spoarts.cebu@gmail.com', 1, '', 'admin', 'admin', '2016-02-16 10:59:14', '1966-02-02', '123.94155180000007', '10.3402623'),
+(1, 'Mandaue City, Central Visayas, Philippines', '12346598', 'spoarts.cebu@gmail.com', 1, 'Jellyfish.jpg', 'admin1', 'admin', '2016-02-16 10:59:14', '1966-02-02', '123.94155180000007', '10.3402623'),
 (2, 'Mandaue City, Central Visayas, Philippines', '1234567', 'rene@gmail.com', 2, 'Devil.jpg', 'rene', 'macalisang', '2016-02-16 11:02:28', '1966-07-04', '123.94155180000007', '10.3402623'),
-(3, 'Mandaue City, Central Visayas, Philippines', '1234556', 'cris@gmail.com', 3, '', 'cris', 'cubcub', '2016-02-16 11:03:44', '1966-02-03', '123.94155180000007', '10.3402623');
+(3, 'Mandaue City, Central Visayas, Philippines', '1234556', 'cris@gmail.com', 3, 'Tulips.jpg', 'cris', 'cubcub', '2016-02-16 11:03:44', '1966-02-03', '123.94155180000007', '10.3402623');
 
 --
 -- Indexes for dumped tables
@@ -799,12 +820,12 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `payment_logs`
 --
 ALTER TABLE `payment_logs`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `paypal_logs`
 --
 ALTER TABLE `paypal_logs`
-  MODIFY `paypal_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `paypal_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `promos`
 --
@@ -824,22 +845,22 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `SchedID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `stud_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `stud_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `students_enrolled`
 --
 ALTER TABLE `students_enrolled`
-  MODIFY `StudEnrolledID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `StudEnrolledID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `subscriptions`
 --
@@ -849,12 +870,12 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `subscription_plans`
 --
 ALTER TABLE `subscription_plans`
-  MODIFY `PlanID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `PlanID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `time_logs`
 --
 ALTER TABLE `time_logs`
-  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `user_accounts`
 --

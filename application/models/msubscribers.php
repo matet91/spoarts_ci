@@ -207,7 +207,7 @@ class Msubscribers extends CI_Model {
 		return $q;
 	}
 
-	function removeItem($removeItem){
+	function removeItem($id){
 		$this->db->where('PlanID',$id);
 		$q = $this->db->delete('subscription_plans');
 		return $q;

@@ -268,6 +268,7 @@ function getSubscriptionPlan(){
 }
 
 function removeItem(id){
+	if(confirm("Are you sure you want to remove this item?")){
 	$.ajax({
 		url: 'subscribers/removeItem/'+id,
 		dataType:'JSON',
@@ -287,6 +288,7 @@ function removeItem(id){
 			table.ajax.reload();
 		}
 	});
+}
 }
 
 function savePlan(){
