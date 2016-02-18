@@ -193,6 +193,7 @@ function saveProfile(data){
 				$("#modal_profile .alert").html("Changes saved. Modal will automatically close.").removeClass('alert-danger').show().addClass('alert-success');
 				setTimeout(function(){
 					$("#modal_profile").modal('hide');
+					window.location = 'index';
 				},4000);
 				
 			}else{

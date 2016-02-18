@@ -38,7 +38,7 @@ class Index extends CI_Controller {
   				else if($userType == 1){//service provider
   					header('Location:services'); exit();
   				}else{
-  					header('Location:service_provider');
+  					header('Location:subscribers');
   					exit();
   				}
   				$menu = "";
