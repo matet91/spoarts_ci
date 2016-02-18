@@ -13,7 +13,7 @@ $(document).ready(function(){
 		register();
 
 	});
-	$("#register").click(function(){
+	$("#register,#register2").click(function(){
 		initAutocomplete('SPAddress');
 		var height = $(window).height();
 		var dialogHeight = $("#modal_registration").find('.modal-dialog').outerHeight(true);

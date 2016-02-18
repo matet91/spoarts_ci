@@ -17,6 +17,9 @@ function get_payments(){
 					{"sTitle":"Balance","bSearchable": true},
 					{"sTitle":"Description","bSearchable": true},
 					{"sTitle":"Student","bSearchable": true},
+					{"sTitle":"Clinic","bSearchable": true},
+					{"sTitle":"Service","bSearchable": true},
+					{"sTitle":"Schedule","bSearchable": true},
 					{"sTitle":"Type","bSearchable": true}
 	],
     "fnInitComplete": function(oSettings, json) {

@@ -58,11 +58,11 @@
                 <form class="form-horizontal" id = "form-clinic">
                   <p ><?=ucfirst($data->SPAboutMe);?></p>
                     <ul class="icons-list">
-                      <li><i class="fa fa-home">  </i> <strong>Clinic Name:</strong> <?=ucfirst($data->clinic_name);?></li>
+                      <li><i class="fa fa-home">  </i> <strong>Clinic Name :</strong> <?=ucfirst($data->clinic_name);?></li>
                       <li><i class="fa fa-user">  </i> <strong>Owner :</strong> <?=ucfirst($data->spfirstname)." ".ucfirst($data->splastname);?></li>
-                      <li><i class="fa fa-globe">  </i> <strong>Address:</strong> <?=ucfirst($data->SPLocation);?></li>
-                      <li><i class="fa fa-envelope-o"></i> <strong>Email:</strong> <?=$data->SPEmail;?></li>
-                      <li><i class="fa fa-mobile"></i> <strong>Phone:</strong> <?=$data->SPContactNo;?></li>
+                      <li><i class="fa fa-globe">  </i> <strong>Address :</strong> <?=ucfirst($data->SPLocation);?></li>
+                      <li><i class="fa fa-envelope-o"></i> <strong>Email :</strong> <?=$data->SPEmail;?></li>
+                      <li><i class="fa fa-mobile"></i> <strong>Phone :</strong> <?=$data->SPContactNo;?></li>
                      
                     
                       <input type="hidden" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>" disabled>
@@ -71,8 +71,8 @@
 
                   <?php if($usertype == 0){?>
                    <li></i> <strong>Subscription:</strong> <?=$data->PlanName;?></li>
-                   <li></i> <strong>Subscription Plan Expiry Date:</strong> <?php echo date('F d Y',strtotime($data->SubscEndDate));?></li>
-                  <li></i><strong>Subscription Plan Status</strong> 
+                   <li></i> <strong>Subscription Plan Expiry Date :</strong> <?php echo date('F d Y',strtotime($data->SubscEndDate));?></li>
+                  <li></i><strong>Subscription Plan Status :</strong> 
                       <?php 
                       if($data->SubscType==2){
                         if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))

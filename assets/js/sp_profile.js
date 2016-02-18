@@ -1,13 +1,12 @@
 function getservices(){
     var id = $("#spid").val();
     var usertype = $("#usertype").val();
-
         $('#tbl-services').DataTable( {
         "bProcessing":true, 
         "bServerSide":true,
         "bRetrieve": true,
         "bDestroy":true,
-        "sLimit":10,  
+        "sLimit":10,
         "sAjaxSource": "sp_profile/dataTables/1/"+id,
         "aoColumns":[ {"sTitle":"ID","bVisible":false},
                 {"sTitle":"Services"},
@@ -30,32 +29,20 @@ function getservices(){
 
 }
 
-function clientlist(){
-    var id = $("#spid").val();
-    var usertype = $("#usertype").val();
-
-        $('#tbl-subscribers').DataTable( {
+function clientlist(id){
+        $('#tbl-client').DataTable( {
         "bProcessing":true, 
         "bServerSide":true,
         "bRetrieve": true,
         "bDestroy":true,
         "sLimit":10,
-        "pagingType": "simple",
-        "info":false,
-        "searching":false,
-        "sDom": '<"top">rt<"bottom"flp><"clear">',
-        "sAjaxSource": "subscribers/dataTables/2/"+id,
+        "sAjaxSource": "sp_profile/dataTables/3/"+id,
         "aoColumns":[   {"sTitle":"User ID"},
                         {"sTitle":"Name"},
-                        {"sTitle":"Username"},
-                        {"sTitle":"Name of Clinic","bSearchable": true},
                         {"sTitle":"Birthday","bSearchable": true},
                         {"sTitle":"Contact Number","bSearchable": true},
                         {"sTitle":"Email","bSearchable": true},
-                        {"sTitle":"Registered Date","bSearchable": true},
-                        {"sTitle":"Subscription Type","bSearchable": true},
-                        {"sTitle":"Status","bSearchable": true},
-                        {"sTitle":"Actions","bVisible":false}
+                        {"sTitle":"Address","bSearchable": true}
         ],
         "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
           
@@ -144,15 +131,17 @@ function eventCalendar(){ //showing the calendar event
     }); 
 }
 $(document).ready(function(){
+     $('#loader').fadeOut();
+     var clinicname = $("#clinicname").val(),
+        clinicid = $("#clinicid").val(),
+        spid = $("#spid").val();
     getservices();
+    clientlist(clinicid);
     var table = $("#tbl-services").DataTable();
     $('[data-toggle="tooltip"]').tooltip();
     getPromo();
     eventCalendar();
     albumDisplay();
-    var clinicname = $("#clinicname").val(),
-        clinicid = $("#clinicid").val(),
-        spid = $("#spid").val();
     reviewsratings(clinicid,clinicname,0);
     $("#ReviewsRatings").click(function(){
         reviewsratings(clinicid,clinicname,1);

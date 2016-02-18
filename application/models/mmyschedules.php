@@ -8,6 +8,11 @@ class mmyschedules extends CI_Model {
 			parent::__construct();
 	}
 	
+	function getlist($table, $fields , $where, $order, $leftjoin){
+		$query = $this->db->query("SELECT $fields FROM $table $leftjoin $where $order");
+		return $query->result();
+	}
+	
 	function dataTables($switch){
 		$sSort = $this->input->get('iSortCol_0');
 		$sSortype = $this->input->get('sSortDir_0');

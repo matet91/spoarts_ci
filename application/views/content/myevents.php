@@ -10,7 +10,6 @@
 <link href='assets/css/jquery.datetimepicker.css' rel='stylesheet' />
 <link href='assets/fullcalendar/fullcalendar.css' rel='stylesheet' />
 <link href='assets/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
-<link rel="stylesheet" href="assets/css/bootstrap-multiselect.css" type="text/css"/>
 
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">

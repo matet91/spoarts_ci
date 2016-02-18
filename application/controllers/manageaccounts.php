@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Subscribers extends CI_Controller {
+class Manageaccounts extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,13 +22,13 @@ class Subscribers extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('msubscribers');
+		$this->load->model('mmanageaccounts');
 	}
 	public function index()
 	{
 		
-		$content = 'subscribers.php';
-		$title = "Subscribers";
+		$content = 'manageaccounts.php';
+		$title = "Client Management";
 
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,
@@ -39,26 +39,16 @@ class Subscribers extends CI_Controller {
 	}
 	
 	function dataTables($switch){
-		$data = $this->msubscribers->dataTables($switch);
+		$data = $this->mmanageaccounts->dataTables($switch);
 		echo json_encode($data);
 	}
-	
-	function addservice(){
-		$data = $this->msubscribers->addservice();
-		return $data;
-	}
-	function listall(){
-		$data = $this->msubscribers->listall();
-		echo json_encode($data);
-	}
-
 	function deactivateAccount($id,$t){
-		$data = $this->msubscribers->deactivateAccount($id,$t);
+		$data = $this->mmanageaccounts->deactivateAccount($id,$t);
 		echo  json_encode($data);
 	}
 
 	function deleteAccount($id){
-		$data = $this->msubscribers->deleteAccount($id);
+		$data = $this->mmanageaccounts->deleteAccount($id);
 		echo json_encode($data);
 	}
 }

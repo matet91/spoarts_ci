@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Subscribers extends CI_Controller {
+class Sales extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -22,14 +22,15 @@ class Subscribers extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		
-		$this->load->model('msubscribers');
+		$this->load->model('msales');
 	}
+
 	public function index()
 	{
+		$content = 'sales.php';
+		$type = $this->input->get('type');
+		$title = "Sales";
 		
-		$content = 'subscribers.php';
-		$title = "Subscribers";
-
 		$data = array('header' => 'header.php',
 					  'content' => 'content/'.$content,
 					  'menu' => 'menu.php',
@@ -38,27 +39,8 @@ class Subscribers extends CI_Controller {
 		$this->load->view('index',$data);
 	}
 	
-	function dataTables($switch){
-		$data = $this->msubscribers->dataTables($switch);
-		echo json_encode($data);
-	}
-	
-	function addservice(){
-		$data = $this->msubscribers->addservice();
-		return $data;
-	}
-	function listall(){
-		$data = $this->msubscribers->listall();
-		echo json_encode($data);
-	}
-
-	function deactivateAccount($id,$t){
-		$data = $this->msubscribers->deactivateAccount($id,$t);
-		echo  json_encode($data);
-	}
-
-	function deleteAccount($id){
-		$data = $this->msubscribers->deleteAccount($id);
+	function dataTables($switch,$reptype,$repdate){
+		$data = $this->msales->dataTables($switch,$reptype,$repdate);
 		echo json_encode($data);
 	}
 }

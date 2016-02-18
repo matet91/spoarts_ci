@@ -31,6 +31,10 @@ class Login extends CI_Controller {
 	public function index()
 	{
 		
+		if($this->session->userdata('userid')){ //check if logged in
+			header('Location: index');
+			exit();
+		}
 		$data = array('header'=>'header.php',
 						'content'=>'content/login.php',
 						'menu'=>'menu.php',

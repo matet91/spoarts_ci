@@ -31,6 +31,7 @@
 <input type = "hidden" id = "serviceid"/>
 <input type = "hidden" id = "clientid"/>
 <input type = "hidden" id = "paymentid"/>
+<input type = "hidden" id = "userid" value = "<?=$this->session->userdata('userid');?>"/>
     <!-- Page Content -->
     <div class="page-content">
       <div class="tabs-section" id = "tab-clients">
@@ -48,7 +49,7 @@
           <div class="tab-pane fade in active" id="tab-clients">
       		<!-- Divider -->
 				<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
-           		<table id="tbl-clients" class="display" cellspacing="0" width="100%"></table>
+           		<table id="tbl-client" class="display" cellspacing="0" width="100%"></table>
           </div>
           <div class="tab-pane fade in" id="tab-student_approved">
       		<select id = "service_id" class = "chosen-select">

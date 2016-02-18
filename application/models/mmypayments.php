@@ -19,15 +19,15 @@ class mmypayments extends CI_Model {
 
 		switch($switch){
 			case 1:
-				$aColumns = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
-				$select = array("payment_id","payment_date", "payment_amt", "payment_balance","payment_desc","stud_name","(CASE WHEN payment_type=0 THEN 'Session'  WHEN payment_type=1 THEN 'Monthly' ELSE 'Membership' END)  as payment_type");
+				$aColumns = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","clinic","service","schedule","payment_type");
+				$select = array("payment_id","payment_date", "payment_amt", "payment_balance","payment_desc","stud_name","(clinic_name)as clinic","(ser.ServiceName)as service","CONCAT(sc.SchedDays,'@',sc.SchedTime) as schedule","(CASE WHEN payment_type=0 THEN 'Session'  WHEN payment_type=1 THEN 'Monthly' ELSE 'Membership' END)  as payment_type");
 				$sTable = "payment_logs p";
-				$leftjoin = " LEFT JOIN students s ON s.stud_id = p.stud_id";
+				$leftjoin = " LEFT JOIN students s ON s.stud_id = p.stud_id LEFT JOIN schedules sc ON sc.SchedID = p.SchedID LEFT JOIN services ser ON ser.ServiceID = p.service_id LEFT JOIN clinics u ON u.UserID = p.UserID";
 				$sWhere = "WHERE p.client_id = ".$this->session->userdata("userid")."";
 				if($sSearch){$sWhere .= " AND (payment_date like '%".$sSearch."%' OR payment_amt like '%".$sSearch."%' OR payment_balance like '%".$sSearch."%'  OR payment_desc like '%".$sSearch."%' OR stud_name like '%".$sSearch."%' OR payment_type like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
+				$aColumns_output = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","clinic","service","schedule","payment_type");
 			break;
 		}
 		

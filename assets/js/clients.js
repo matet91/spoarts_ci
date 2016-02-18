@@ -433,6 +433,7 @@ function clients(){
 $(document).ready(function(){
     getApprovedStudents();
     countPendings();
+    clientlist();
     getDisapprovedStudents();
     listings(6,null); //see main.js
     $("#service_id").change(function(){
@@ -494,3 +495,27 @@ $(document).ready(function(){
 
 });
 
+function clientlist(){
+        $('#tbl-client').DataTable( {
+        "bProcessing":true, 
+        "bServerSide":true,
+        "bRetrieve": true,
+        "bDestroy":true,
+        "sLimit":10,
+        "sAjaxSource": "sp_profile/dataTables/3",
+        "aoColumns":[   {"sTitle":"User ID"},
+                        {"sTitle":"Name"},
+                        {"sTitle":"Birthday","bSearchable": true},
+                        {"sTitle":"Contact Number","bSearchable": true},
+                        {"sTitle":"Email","bSearchable": true},
+                        {"sTitle":"Address","bSearchable": true}
+        ],
+        "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+          
+        },
+        "fnInitComplete": function(oSettings, json) {
+        }
+    }).on('processing.dt',function(oEvent, settings, processing){
+    });
+
+}

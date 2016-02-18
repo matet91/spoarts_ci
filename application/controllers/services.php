@@ -125,8 +125,8 @@ class Services extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function paypal($type){
-		$data = $this->mservices->paypal($type);
+	function paypal($type,$userid=null){
+		$data = $this->mservices->paypal($type,$userid);
 		echo json_encode($data);
 	}
 }

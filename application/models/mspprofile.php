@@ -57,19 +57,32 @@ class Mspprofile extends CI_Model {
 			break;
 
 			case 3://schedules
-					$select = array("s.SchedID","s.SchedDays","s.SchedTime","r.RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots","s.date_added","1 as action");
-					
-					$sTable = "schedules s";
-					$leftjoin = "LEFT JOIN services srv ON srv.ServiceID=s.ServiceID
-						LEFT JOIN rooms r ON r.RoomID=s.RoomID
-						LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
-					//print_r($select);
-					$sWhere = "WHERE srv.SPID = '$userid'";
-					if($sSearch){
-						$sWhere .= " AND (r.RoomName like '%".$sSearch."%' OR m.MasterInsName like '%".$sSearch."%' OR s.SchedTime like '%".$sSearch."%' OR s.date_added like '%".$sSearch."%' OR s.SchedDays like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
+					$id = (isset($id)?$id:$this->session->userdata('clinic_id'));
+					$aColumns = array("a.client_id",
+									"c.spfirstname",
+									"c.splastname",
+								  "c.SPBirthday", 
+								  "c.SPContactNo", 
+								  "c.SPEmail",
+								  "c.SPAddress",
+								  "d.UserStatus");
+					$select = array("c.UserID as UserID",
+									 "CONCAT(c.spfirstname,' ',c.splastname) as name",
+									  "c.SPBirthday",
+									  "c.SPContactNo",
+									  "c.SPEmail","c.SPAddress","d.UserStatus");
+					$sTable = "students_enrolled a";
+					$leftjoin = " LEFT JOIN user_details c ON c.UserID=a.client_id LEFT JOIN user_accounts d ON d.UserID=a.client_id";
+					$sWhere = "WHERE a.clinic_id='$id' and d.UserStatus=1";
+					if($sSearch){$sWhere .= " AND ( c.SPBirthday like '%".$sSearch."%' OR c.SPContactNo like '%".$sSearch."%' OR c.spfirstname like '%".$sSearch."%' OR c.splastname like '%".$sSearch."%' OR c.SPAddress like '%".$sSearch."%')";}
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
-					$groupby = "";
-					$aColumns_output = array("SchedID","SchedDays","SchedTime","RoomName","MasterInsName","ServiceName","SchedSlots","date_added","action");
+					$groupby = "GROUP BY a.client_id";
+					$aColumns_output = array("UserID",
+											"name",
+											"SPBirthday",
+											"SPContactNo",
+											"SPEmail",
+											"SPAddress");
 			break;
 			case 4://masterlist od instructors
 					$select = $aColumns;

@@ -132,7 +132,7 @@ function loadServices(c,search){
 				          "</div>"+
 				          "<a href='#' onclick = bookmark('"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Bookmark'><i class='more fa fa-bookmark' style = 'left:30% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></button>"+
 				          "<a href='#' onclick = enroll('"+c+"','"+e.UserID+"','"+e.clinic_id+"') data-toggle='tooltip' data-placement='top' title='Enroll' ><i class='more fa fa-sign-in' style = 'left:55% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
-				          "<a href='#' onclick = viewprofile('"+e.clinic_id+"','"+e.UserID+"') data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
+				          "<a href='#'  onclick = viewprofile('"+e.clinic_id+"','"+e.UserID+"')  data-toggle='tooltip' data-placement='top' title='More Info' ><i class='more fa fa-info' style = 'left:80% !important;height:50px !important;width:50px !important;line-height:49px !important;font-size:30px !important;'></i></a>"+
 				        "</li><input type='hidden' class = 'form-control' id = 'clinicname"+e.clinic_id+"' value='"+e.clinic_name+"' />";
 
 			});
@@ -521,6 +521,16 @@ function infoservice(clinicid){
   }).on('processing.dt',function(oEvent, settings, processing){
   });
 }
+
 function viewprofile(clinicid,userid){
-	window.location = "sp_profile?susid="+userid;
+	var userid = $("#ses_userid").val();
+	if(userid == ''){
+		$("#message .alert").html("You need to login.").addClass('alert-danger').show();
+		setTimeout(function(){
+			$("#message .alert").html("").removeClass('alert-danger').hide();
+		},3000);
+	}else{
+	 $('#loader').show();
+	 window.location = "sp_profile?susid="+userid;
+	}
 }

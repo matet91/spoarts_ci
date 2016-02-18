@@ -51,8 +51,14 @@
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
                 <li><a href="gallery" class = "<?php echo ($content == 'gallery.php'?'active':'');?>">Gallery</a></li>
               <?php } ?>
-              <?php if($this->session->userdata('userid') && ($this->session->userdata('usertype') == 1 || $this->session->userdata('usertype') == 0)){?>
-                <li><a href="?content=sales.php" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
+              <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
+                <li><a href="manageaccounts" class = "<?php echo ($content == 'manageaccounts.php'?'active':'');?>">Client Management</a></li>
+              <?php } ?>
+              <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 1){?>
+                <li><a href="sales?type=1" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
+              <?php } ?>
+              <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
+                <li><a href="sales?type=0" class = "<?php echo ($content == 'sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
             </ul>
             <!-- End Navigation List -->

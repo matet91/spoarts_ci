@@ -1,3 +1,24 @@
+/*jQuery(function(){
+ jQuery('#date_timepicker_start').datetimepicker({
+  format:'Y/m/d',
+  onShow:function( ct ){
+   this.setOptions({
+    maxDate:jQuery('#date_timepicker_end').val()?jQuery('#date_timepicker_end').val():false
+   })
+  },
+  timepicker:false
+ });
+ jQuery('#date_timepicker_end').datetimepicker({
+  format:'Y/m/d',
+  onShow:function( ct ){
+   this.setOptions({
+    minDate:jQuery('#date_timepicker_start').val()?jQuery('#date_timepicker_start').val():false
+   })
+  },
+  timepicker:false
+ });
+});*/
+
 $(document).ready(function(){
 	var height = $(window).height();
 	
@@ -250,18 +271,6 @@ function getService(sel){
     });
 }
 
-function checkSecurityPwd(pwd,type,id){
-  if(type == "updatePromos"){
-		
-	}else if(type == "removePromos"){
-		deleteEventsPromos(type,id);
-	}else if(type=="updateEvents"){
-		
-	}else if(type == ""){
-		deleteEventsPromos("removeEvents",id);
-	}
-}
-
 function deleteEventsPromos(type,id){
 	$.ajax({
       url:'events_and_promos/'+type,
@@ -270,11 +279,6 @@ function deleteEventsPromos(type,id){
       type:'POST',
       success:function(msg){
         if(msg == 0){
-			var height = $(window).height();
-			var dialogHeight = $("#modal_alert").find('.modal-dialog').outerHeight(true);
-			var top = parseInt(height)/2-parseInt(dialogHeight);
-			$("#modal_alert").modal('show').attr('style','top:'+top+'px !important;');
-			
 			if(type == "removePromos"){
 				$("#message .alert").html("Promo has been removed successfully").addClass("alert-success").show();
 			}else{

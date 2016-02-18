@@ -340,7 +340,7 @@ class mservices extends CI_Model {
 		return $q;
 	}
 
-	function paypal($type){
+	function paypal($type,$userid=null){
 		$apiContext = new \PayPal\Rest\ApiContext(
 		    new \PayPal\Auth\OAuthTokenCredential(
 		        'AXk62QC51pffd4zUaXG9LQzu9oFIWNQx5eHzznUGBYYabG4Gi3AQKdH3uvugO5QZE3QXyoCy5p9fsimI',     // ClientID
@@ -419,7 +419,7 @@ class mservices extends CI_Model {
 					$transactions = $payment->getTransactions(); 
 					$relatedResources = $transactions[0]->getRelatedResources(); 
 					$sale = $relatedResources[0]->getSale(); 
-					$userid = $this->session->userdata('userid');
+					$userid = ((!isset($userid))?$userid:$this->session->userdata('userid'));
 					$transactionID = $sale->getId();
 					$createTime = $sale->getCreateTime();
 					$status = $sale->getState();

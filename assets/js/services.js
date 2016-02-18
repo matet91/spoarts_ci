@@ -142,7 +142,7 @@ function getservices(){
     "bRetrieve": true,
     "bDestroy":true,
     "sLimit":10,  
-    "sAjaxSource": "subscribers/dataTables/1",
+    "sAjaxSource": "services/dataTables/1",
     "aoColumns":[ {"sTitle":"ID","bVisible":false},
             {"sTitle":"Services"},
             {"sTitle":"Description","bSearchable": true},
@@ -614,7 +614,7 @@ function validateForm(t){
             case 4: //add room
                     name.parent().addClass("has-error");
             break;
-            case 5: //add room
+            case 5: //payment
                     name.parent().addClass("has-error");
             break;
           }

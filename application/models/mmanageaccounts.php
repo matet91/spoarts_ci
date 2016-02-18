@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Msubscribers extends CI_Model {
+class Mmanageaccounts extends CI_Model {
 	public function __construct()
 	{
 			// Call the CI_Model constructor
@@ -44,41 +44,35 @@ class Msubscribers extends CI_Model {
 			case 2:
 				$aColumns = array("a.UserID",
 								  "e.UserName", 
-								  "b.clinic_name", 
 								  "a.SPBirthday", 
 								  "a.SPContactNo", 
 								  "a.SPEmail",
 								  "a.SPRegisteredDate",
-								  "d.PlanName",
 								  "a.UserStatus");
 				$select = array("a.UserID as UserID",
 								 "CONCAT(a.spfirstname,' ',a.splastname) as name",
-								  "e.UserName", 
-								  "b.clinic_name", 
+								  "e.UserName",  
 								  "a.SPBirthday", 
 								  "a.SPContactNo", 
 								  "a.SPEmail",
 								  "a.SPRegisteredDate",
-								  "d.PlanName",
 								  "e.UserStatus as ustatus",
 								  "(CASE WHEN e.UserStatus=0 THEN 'UNVERIFIED' WHEN e.UserStatus=1 THEN 'ACTIVE' ELSE 'INACTIVE' END) as UserStatus",
 								  "1 as action");
 				$sTable = "user_details a";
-				$leftjoin = " LEFT JOIN clinics b ON b.UserID=a.UserID LEFT JOIN subscriptions c ON c.UserID=a.UserID LEFT JOIN subscription_plans d ON d.PlanID=c.SubscType LEFT JOIN user_accounts e ON e.UserID=a.UserID";
-				$sWhere = "WHERE e.UserType=1";
-				if($sSearch){$sWhere .= " AND (a.UserID like '%".$sSearch."%' OR e.UserName like '%".$sSearch."%' OR b.clinic_name like '%".$sSearch."%' OR a.SPBirthday like '%".$sSearch."%' OR a.SPContactNo like '%".$sSearch."%' OR a.SPRegisteredDate like '%".$sSearch."%' OR d.PlanName like '%".$sSearch."%' OR UserStatus like '%".$sSearch."%' OR a.spfirstname like '%".$sSearch."%' OR a.splastname like '%".$sSearch."%')";}
+				$leftjoin = " LEFT JOIN user_accounts e ON e.UserID=a.UserID";
+				$sWhere = "WHERE e.UserType=2";
+				if($sSearch){$sWhere .= " AND (a.UserID like '%".$sSearch."%' OR e.UserName like '%".$sSearch."%' OR a.SPBirthday like '%".$sSearch."%' OR a.SPContactNo like '%".$sSearch."%' OR a.SPRegisteredDate like '%".$sSearch."%' OR UserStatus like '%".$sSearch."%' OR a.spfirstname like '%".$sSearch."%' OR a.splastname like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("ustatus",
+				$aColumns_output = array(
 										"UserID",
 										"name",
 										"UserName", 
-										"clinic_name", 
 										"SPBirthday", 
 										"SPContactNo", 
 										"SPEmail",
 										"SPRegisteredDate",
-										"PlanName",
 										"UserStatus",
 										"action");
 			break;
@@ -172,18 +166,7 @@ class Msubscribers extends CI_Model {
 	}
 
 	function deactivateAccount($id,$t){
-		switch($t){
-			case 1: //activates
-					$cstatus = 1;
-			break;
-
-			case 2: //deactivate
-					$cstatus = 1;
-			break;
-		}
 		$where = array('UserID'=>$id);
-		$this->db->where($where);
-		$this->db->update('clinics',array('clinic_status'=>$cstatus));
 		$this->db->where($where);
 		$q = $this->db->update('user_accounts',array('UserStatus'=>$t));
 		return $q; 
@@ -191,11 +174,21 @@ class Msubscribers extends CI_Model {
 
 	function deleteAccount($id){
 		//remove user in user_accounts, user_details, students_enrolled, other tables
-		$tables = array('user_accounts','user_details','clinics');
+		$tables = array('user_accounts','user_details');
 		$where = array('UserID'=>$id);
-		$this->db->where('SPID',$id);
-		$this->db->delete('services'); //remove services
 
+		//get all students
+		$this->db->where('client_id',$id);
+		$this->db->select('*');
+		$get = $this->db->get('students');
+			foreach($get->result() as $row){
+				$data[] = $row->stud_id;
+			}
+			$students = implode(',',$data);
+
+
+		$sql = $this->db->query("DELETE FROM students_enrolled WHERE stud_id in (".$students.")");
+		
 		$this->db->where($where);
 		$q = $this->db->delete($tables);//delete from table arrayed tables
 		return $q;

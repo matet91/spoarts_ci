@@ -32,7 +32,7 @@
                 <h3 class="animated3">
            <span>Learn from the experts. Go to the right Club.</span>
        </h3>
-                <p class="animated4"><a href="#" class="slider btn btn-system btn-large">Click to Register</a></p>
+                <p class="animated4"><a href="#" id = "register2" class="slider btn btn-system btn-large">Click to Register</a></p>
               </div>
             </div>
           </div>
