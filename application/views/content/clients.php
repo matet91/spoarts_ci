@@ -37,7 +37,7 @@
       <div class="tabs-section" id = "tab-clients">
         <!-- Nav Tabs -->
         <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab-clients" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
+        <li class="active"><a href="#tab-clientsx" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
           <li><a href="#tab-student_approved" data-toggle="tab"><i class="fa fa-group"></i>Approved Students</a></li>
           <li><a href="#tab-students_pending" data-toggle="tab"><i class="fa fa-group"></i>Pending Students&nbsp;<span id='countPending' class='text-danger'></span></a></li>
           
@@ -46,22 +46,22 @@
       	<div class="tab-content">
 
           <!-- Tab Content 1 -->
-          <div class="tab-pane fade in active" id="tab-clients">
+          <div class="tab-pane fade in active" id="tab-clientsx">
       		<!-- Divider -->
-				<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+				      <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
            		<table id="tbl-client" class="display" cellspacing="0" width="100%"></table>
           </div>
           <div class="tab-pane fade in" id="tab-student_approved">
-      		<select id = "service_id" class = "chosen-select">
-      		</select>
-      		<!-- Divider -->
-			<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+          		<select id = "service_id" class = "chosen-select">
+          		</select>
+          		<!-- Divider -->
+    			   <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
            	<table id="tbl-approved_students" class="display" cellspacing="0" width="100%"></table>
           </div>
 
           <div class="tab-pane fade in" id="tab-students_pending">
-      		<!-- Divider -->
-				<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+              <!-- Divider -->
+				      <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
            		<table id="tbl-disapproved_students" class="display" cellspacing="0" width="100%"></table>
           </div>
         </div>
