@@ -121,7 +121,9 @@
                   <li><a href="#tab-6" data-toggle="tab"><i class="fa fa-calendar"></i>Events</a></li>
                   <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-gift"></i>Promos</a></li>
 	                <li><a href="#tab-8" data-toggle="tab"><i class="fa fa-star"></i>Reviews & Ratings</a></li>
-	               <?php if($usertype == 0){?> <li><a href="#tab-9" data-toggle="tab"><i class="fa fa-map-pin"></i>Clients</a></li><?php } ?>
+	               <?php if($usertype == 0){?> <li><a href="#tab-9" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
+                 <li><a href="#tab-10" data-toggle="tab"><i class="fa fa-group"></i>Enrolled Students</a></li>
+                 <?php } ?>
 	              </ul>
 
 	              <!-- Tab panels -->
@@ -183,6 +185,11 @@
                   </div>
                   <div class="tab-pane fade in" id="tab-9">
                     <table id="tbl-client" class="display" cellspacing="0" width="100%"></table>
+                    <!-- Divider -->
+                    <div class="hr1" style="margin-bottom:30px;"></div>
+                  </div>
+                  <div class="tab-pane fade in" id="tab-10">
+                    <table id="tbl-enrolled" class="display" cellspacing="0" width="100%"></table>
                     <!-- Divider -->
                     <div class="hr1" style="margin-bottom:30px;"></div>
                   </div>

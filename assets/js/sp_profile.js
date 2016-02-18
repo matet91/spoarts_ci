@@ -54,6 +54,37 @@ function clientlist(id){
 
 }
 
+function enrolledStudents(id){
+        $('#tbl-enrolled').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "sp_profile/dataTables/4/"+id,
+    "aoColumns":[ 
+            {"sTitle":"ID","sName":"ID","bVisible":false},
+            {"sTitle":"Student ID","sName":"studid","bVisible":true},
+            {"sTitle":"Name","sName":"name"},
+            {"sTitle":"Age","sName":"age","bSearchable": true},
+            {"sTitle":"Address","sName":"address","bSearchable": true},
+            {"sTitle":"Client","sName":"client","bSearchable": true},
+            {"sTitle":"Service","sName":"service","bSearchable": true},
+            {"sTitle":"Instructor","sName":"instructor","bSearchable": true},
+            {"sTitle":"Date Enrolled","sName":"date_enrolled","bSearchable": true},
+            {"sTitle":"Schedule","sName":"SchedDays","bSearchable": true}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+
+}
+
 function getPromo(){
     var id = $("#spid").val();
     $.ajax({
@@ -136,6 +167,7 @@ $(document).ready(function(){
         clinicid = $("#clinicid").val(),
         spid = $("#spid").val();
     getservices();
+    enrolledStudents(spid);
     clientlist(clinicid);
     var table = $("#tbl-services").DataTable();
     $('[data-toggle="tooltip"]').tooltip();

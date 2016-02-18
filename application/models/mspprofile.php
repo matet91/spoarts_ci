@@ -84,18 +84,39 @@ class Mspprofile extends CI_Model {
 											"SPEmail",
 											"SPAddress");
 			break;
-			case 4://masterlist od instructors
-					$select = $aColumns;
-					$select[6] = "(CASE WHEN MasterInsStatus = 1 THEN 'Active' ELSE 'Inactive' END) as MasterInsStatus";
-					$sTable = "instructor_masterlist";
-					$leftjoin = "";
+			case 4://enrolled students
+					$select = array("a.StudEnrolledID as ID",
+									"b.stud_id as studid",
+									"b.stud_name as name",
+									"b.stud_age as age",
+									"b.stud_address as address",
+									"CONCAT(c.spfirstname,' ',c.splastname) as client",
+									"d.ServiceName as service",
+									"a.date_enrolled",
+									"CONCAT(e.SchedDays,' ',e.SchedTime) as schedules",
+									"f.MasterInsName as instructor");
+					$sTable = "students_enrolled a";
+					$leftjoin = " LEFT JOIN students b ON b.stud_id=a.stud_id LEFT JOIN user_details c ON c.UserID=a.client_id LEFT JOIN services d ON d.ServiceID=a.service_id LEFT JOIN schedules e ON e.SchedID=a.SchedID LEFT JOIN instructor_masterlist f ON f.MasterInsID=a.ins_id";
 					//print_r($select);
-					$sWhere = "wHERE UserID='$userid'";
+					$sWhere = "wHERE d.SPID='$id' AND a.StudEnrolledStatus=1";
 					if($sSearch){
-						$sWhere .= " AND (MasterInsName like '%".$sSearch."%' OR MasterInsAddress like '%".$sSearch."%' OR MasterInsContactNo like '%".$sSearch."%' OR MasterInsEmail like '%".$sSearch."%' OR MasterInsExpertise like '%".$sSearch."%')";}
+							$sWhere .= " AND (b.stud_name like '%".$sSearch."%' OR b.stud_age like '%".$sSearch."%' OR b.stud_address like '%".$sSearch."%' OR c.spfirstname like '%".$sSearch."%' OR c.splastname like '%".$sSearch."%' OR d.ServiceName like '%".$sSearch."%' OR a.date_enrolled like '%".$sSearch."%' OR e.ScedDays like '%".$sSearch."%' OR e.SchedTime like '%".$sSearch."%' OR f.MasterInsName like '%".$sSearch."%' OR b.stud_id like '%".$sSearch."%')";
+						
+					}
+					$aColumns = array("a.StudEnrolledID",
+									  "b.studid",
+									  "b.stud_name",
+									  "b.stud_age",
+									  "b.stud_address",
+									  "c.spfirstname",
+									  'd.ServiceName',
+									  "f.MasterInsName",
+									  "a.date_enrolled",
+									  "e.SchedDays"
+									);
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 					$groupby = "";
-					$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise","MasterInsStatus","action");
+					$aColumns_output = array("ID","studid","name","age","address","client","service","instructor","date_enrolled","schedules");
 			break;
 
 			case 5://rooms
