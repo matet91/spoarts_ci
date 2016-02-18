@@ -61,4 +61,24 @@ class Subscribers extends CI_Controller {
 		$data = $this->msubscribers->deleteAccount($id);
 		echo json_encode($data);
 	}
+
+	function savePlan(){
+		$data = $this->msubscribers->savePlan();
+		echo json_encode($data);
+	}
+
+	function removeItem($id){
+		$data = $this->msubscribers->removeItem($id);
+		echo json_encode($data);
+	}
+
+	function getPlanRow($id){
+		$data = $this->msubscribers->getPlanRow($id);
+		echo json_encode($data);
+	}
+
+	function updatePlan($id){
+		$data = $this->msubscribers->updatePlan($id);
+		echo json_encode($data);
+	}
 }

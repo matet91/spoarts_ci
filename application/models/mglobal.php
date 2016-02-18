@@ -206,4 +206,8 @@ class mglobal extends CI_Model {
 		$get = $this->db->query($sql);
 		return $get->result();
 	}
+
+	function getServiceProviders(){
+		$sql = "";
+	}
 }

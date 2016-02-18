@@ -1,10 +1,17 @@
 $(document).ready(function() {
 	getSubscribers();
-
+	getSubscriptionPlan();
     $('#btn-checkout').click(function(){
 
       validateForm(5);
   });
+    $("#btn-addPlan").click(function(){
+    	$("#modal_plan").modal('show');
+    });
+
+    $('#saveplan').click(function(){
+    	savePlan();
+    });
 } );
 
 function view_studinstruct(serviceid){
@@ -30,21 +37,6 @@ function getstudents(){
 		"bRetrieve": true,
 		"bDestroy":true,
 		"sLimit":10,
-		"dom": 'T<"clear">lfrtip',
-		 "tableTools": {
-					"sRowSelect": "multi",
-					"aButtons": [ "print","select_all", "select_none",{"sExtends":'text',"sButtonText":'Delete Selected Record',"fnClick": function ( nButton, oConfig, oFlash ) {
-						var oTT = TableTools.fnGetInstance( 'position_list' ),
-						aData = oTT.fnGetSelectedData(),
-						values = [];
-
-					for(i = 0; i < aData.length; i++){
-						values.push(aData[i][0]);
-					}
-						deldata(values.join(','),2);
-					}}]
-			},
-		"sPaginationType":"simple",
 		"sAjaxSource": "subscribers/dataTables/2",
 		"aoColumns":[	{"sTitle":"ID","bVisible":false},
 						{"sTitle":"Name","bSearchable": true},
@@ -244,4 +236,148 @@ var error = $("#"+frmid+" .has-error").length;
       }
     });
   }
+}
+
+
+function getSubscriptionPlan(){
+	var height = $(window).height();
+	$('#tbl-sub_plan').DataTable( {	
+		"bProcessing":true,	
+		"bServerSide":true,
+		"bInfo": true,
+		"bRetrieve": true,
+		"bDestroy":true,
+		"sLimit":10,
+		"sAjaxSource": "subscribers/dataTables/3",
+		"aoColumns":[	{"sTitle":"ID","bVisible":false},
+						{"sTitle":"Plan Name","bSearchable": true},
+						{"sTitle":"Description","bSearchable": true},
+						{"sTitle":"Price","bSearchable": true},
+						{"sTitle":"Plan Term","bSearchable": true},
+						{"sTitle":"Actions"}
+		],
+		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+			if ( aData[5] == "1" ){
+				$('td:eq(4)', nRow).html('<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete" onclick="removeItem('+aData[0]+');"><i class = "fa fa-remove"></i></button>&nbsp;<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Edit Record" onclick="editItem('+aData[0]+');"><i class = "fa fa-pencil"></i></button>' );
+			}
+		},
+		"fnInitComplete": function(oSettings, json) {
+		}
+	}).on('processing.dt',function(oEvent, settings, processing){
+	});
+}
+
+function removeItem(id){
+	$.ajax({
+		url: 'subscribers/removeItem/'+id,
+		dataType:'JSON',
+		success: function(msg){
+			var table = $("#tbl-sub_plan").DataTable();
+			if(msg == true){
+				$("#message .alert").html("Deleted record successfully").addClass("alert-success").show();
+			    setTimeout(function(){
+			      $("#message .alert").html("").removeClass('alert-success').hide();
+			    },2000);
+			}else{
+				$("#message .alert").html("Can't delete this record. Please try again.").addClass("alert-danger").show();
+			    setTimeout(function(){
+			      $("#message .alert").html("").removeClass('alert-danger').hide();
+			    },2000);
+			}
+			table.ajax.reload();
+		}
+	});
+}
+
+function savePlan(){
+
+	var frm = $("#frm-sp").serializeArray(),data={},
+		url = '',edit = $("#planEdit").val(),err='';
+	if(edit!=''){
+		url = 'subscribers/updatePlan/'+edit;
+		err = 'Record updated successfully.';
+	}else{
+		url = 'subscribers/savePlan';
+		err = 'New Plan has successfully added.';
+	}
+	$.each(frm, function(i,e){
+		var name = $("#"+e.name);
+		if(e.value == ''){
+			name.parent().addClass('has-error');
+		}else{
+			if(e.name != 'ymd'){
+				if(e.name == 'PlanTerm'){
+					data[e.name] = e.value+""+$("#ymd").val();
+				}else{
+					data[e.name] = e.value;
+					name.parent().removeClass('has-error');
+				}
+			}
+		}
+	});
+
+	var len = $("#frm-sp .has-error").length;
+	if(len > 0){
+		$("#message .alert").html("All fields are required.").addClass("alert-danger").show();
+	    setTimeout(function(){
+	      $("#message .alert").html("").removeClass('alert-danger').hide();
+	    },2000);
+	}else{
+		$("#message .alert").html("").removeClass('alert-danger').hide();
+		$.ajax({
+			url :url,
+			data:{data:data},
+			dataType:'JSON',
+			type:'POST',
+			success:function(msg){
+				var table = $("#tbl-sub_plan").DataTable();
+				if(msg == true){
+					$("#message .alert").html(err).addClass("alert-success").show();
+					    setTimeout(function(){
+					      $("#message .alert").html("").removeClass('alert-success').hide();
+					      $.each(frm,function(i,e){
+					      	if(e.name != 'ymd')
+					      		$("#"+e.name).val('');
+					      		
+					      });
+					      $("#modal_plan").modal('close');
+					    },2000);
+				}else{
+					$("#message .alert").html("Error occurred.").addClass("alert-danger").show();
+				    setTimeout(function(){
+				      $("#message .alert").html("").removeClass('alert-danger').hide();
+				    },2000);
+				}
+				table.ajax.reload();
+			}
+		});
+	}
+}
+
+function editItem(id){
+	$("#planEdit").val(id);
+	getData(id);
+	$("#modal_plan").modal('show');
+	$("#modal_plan .title").html('Edit Plan');
+
+}
+
+function getData(id){
+	$.ajax({
+		url:'subscribers/getPlanRow/'+id,
+		dataType:'JSON',
+		success:function(msg){
+			var frm = $("#frm-sp").serializeArray();
+			$.each(frm,function(i,e){
+				var name = e.name;
+				if(name == 'PlanTerm')
+					$("#"+name).val(parseInt(msg[0][name]));
+				else{
+					if(name !='ymd')
+						$("#"+name).val(msg[0][name]);
+				}
+
+			});
+		}
+	});
 }

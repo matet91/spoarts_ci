@@ -83,16 +83,16 @@ class Msubscribers extends CI_Model {
 										"action");
 			break;
 			case 3:
-				$interestids = $this->getID("client_interest", "interest_ids" , "WHERE client_id = '".$this->session->userdata("userid")."'");
-				$aColumns = array("interest_id","interest_name", "interest_type");
-				$select = array("interest_id","interest_name", "(CASE WHEN interest_type=1 THEN 'Arts' ELSE 'Sports' END) as interest_type", "1 as action");
-				$sTable = "interest";
+				
+				$aColumns = array("PlanID","PlanName", "PlanDesc", "PlanPrice", "PlanTerm");
+				$select = array("PlanID","PlanName", "PlanDesc", "PlanPrice", "PlanTerm","1 as action");
+				$sTable = "subscription_plans";
 				$leftjoin = " ";
-				$sWhere = "WHERE interest_id IN (".$interestids.") ";
-				if($sSearch){$sWhere .= " AND (interest_name like '%".$sSearch."%' OR interest_type like '%".$sSearch."%')";}
+				$sWhere = "";
+				if($sSearch){$sWhere .= " (PlanName like '%".$sSearch."%' OR PlanDesc like '%".$sSearch."%' OR PlanPrice like '%".$sSearch."%' OR PlanTerm like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("interest_id","interest_name", "interest_type","action");
+				$aColumns_output = array("PlanID","PlanName", "PlanDesc", "PlanPrice", "PlanTerm","action");
 			break;
 			case 4:
 				$aColumns = array("payment_id","payment_date", "payment_amt","payment_balance","payment_desc","stud_name","payment_type");
@@ -198,6 +198,32 @@ class Msubscribers extends CI_Model {
 
 		$this->db->where($where);
 		$q = $this->db->delete($tables);//delete from table arrayed tables
+		return $q;
+	}
+
+	function savePlan(){
+		$data = $this->input->post('data');
+		$q = $this->db->insert('subscription_plans',$data);
+		return $q;
+	}
+
+	function removeItem($removeItem){
+		$this->db->where('PlanID',$id);
+		$q = $this->db->delete('subscription_plans');
+		return $q;
+	}
+
+	function getPlanRow($id){
+		$this->db->where('PlanID',$id);
+		$this->db->select("*");
+		$get = $this->db->get('subscription_plans');
+		return $get->result();
+	}
+
+	function updatePlan($id){
+		$data = $this->input->post('data');
+		$this->db->where('PlanID',$id);
+		$q = $this->db->update('subscription_plans',$data);
 		return $q;
 	}
 }

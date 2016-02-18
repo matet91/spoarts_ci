@@ -104,4 +104,9 @@ class Index extends CI_Controller {
 		$data = $this->mglobal->saveInterest();
 		echo json_encode($data);
 	}
+
+	function getServiceProviders(){
+		$data = $this->mglobal->getServiceProviders();
+		echo json_encode($data);
+	}
 }

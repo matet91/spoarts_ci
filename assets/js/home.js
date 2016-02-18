@@ -82,7 +82,17 @@ function testimonials(){ //for home page guest
 }
 
 function getEventsPromos(){
+
+}
+
+function getServiceProviders(){
 	$.ajax({
-		url:''
+		url:'index/getServiceProviders',
+		dataType:'JSON',
+		success:function(msg){
+			$.each(msg,function(i,e){
+
+			});
+		}
 	});
 }
