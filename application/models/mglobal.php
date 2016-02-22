@@ -330,7 +330,7 @@ class mglobal extends CI_Model {
 	        $to = $email;
 	        $subject = "[Do not reply] Spoarts: Reset Password";
 	        $message = "<span style='color:#3BACAD'>Hi ".$fname."!</span><br/>
-	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=2&code=".$UAData['verification_code']."&id=".$UserID."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
+	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=3&id=".$UserID."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
 	                    <h3 style='color:#0298D3'>Spoarts Team</h3></p>";
 	        $mail = new Mailer();
 	       // $mail->SMTPDebug = 3;

@@ -11,7 +11,9 @@
 		 			<h3 class="classic-title"><span>Registration Completed!</span></h3>
 		 			<p><h6>Congratulations! Your registration has been completed. We sent you your verification Link. Please check your email to activate your account. You have 24 hours before your verification link expired.</h6></p>
 		 		<?php }else if($this->input->get('type') == 3){
+		 					if(!$this->input->get('id')){
 		 			?>	
+
 		 				<div class = "row">
 	 						<form class = "frm-resetpassword">
 	 							<div class = "row">
@@ -24,6 +26,29 @@
 	 						<button type="button" class="btn btn-lg btn-primary" id="reset">RESET PASSWORD</button>
 	 					</div>
 		 			<?php
+		 				}
+		 				else{
+		 				?>
+		 					<div class = "row">
+		 						<div class = "row" style = "margin: 5px">
+			                        <form id = "form-resetpassword-req">  
+			                          <div class = "form-group">
+			                            <label for = "oldpwd">Old Password :</label>
+			                            <input type = "password" class = "form-control" id = "oldpwd1" name = "oldpwd1" placeholder="Enter Old Password" data-placement="top" data-toggle="tooltip" data-placement="top" title="Click outside this textbox to verify inputted password.">
+			                          </div>
+			                          <div class = "form-group">
+			                            <label for = "newpwd1" id="label_newpwd" data-placement="top" data-toggle="popover">New Password : <span class ="text-info">Minimum of 8 and maximum of 10 characters.<span></label>
+			                            <input type = "password" class = "form-control" id = "newpwd1" name = "newpwd1" placeholder="New Password" disabled>
+			                          </div>
+			                          <div class = "form-group">
+			                            <label for = "con_newpwd1" id="label_con_newpwd1" data-placement="top" data-toggle="popover">Confirm New Password :</label>
+			                            <input type = "password" class = "form-control" id = "con_newpwd1" name = "con_newpwd1" placeholder="Confirm New Password" disabled>
+			                          </div>
+			                        </form>
+			                        <button class="btn btn-primary" id = "btn-newPwd" data-placement="top" data-toggle="tooltip" data-placement="top" title="Save Changes" disabled><span class="glyphicon glyphicon-floppy-save"></span>SAVE CHANGES</button>
+		 					</div>
+		 				<?php
+		 				}
 		 			}else { switch($data){ case 1:?>
 		 					<h3 class="classic-title"><span>Account Verification Error!</span></h3>
 		 					<p><h6>Your account has already been verified and activated.</h6></p>
