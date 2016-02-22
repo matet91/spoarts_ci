@@ -62,10 +62,25 @@ class Myclinics extends CI_Controller {
 	
 	function getService($c,$userid){
 		$d = $c;
-		if($c==2){$d=0;}else if($c==3){$d=1;}
+		//0 - sporst 1-arts
+		/*
+			0-sports bookmark
+			1- arts bookmark
+			2-arts enrolled
+			3-sports enrolled
+		*/
+		switch($c){
+			case 2://arts set $c to type 1
+					$c = 1;
+			break;
+
+			case 3: //sports set $c to type 0
+					$c = 0;
+			break;
+		}
 		$table = "services";
 		$fields = "ServiceID, ServiceName";
-		$where = "WHERE SPID = '".$userid."' AND ServiceType='".$d."' AND ServiceStatus = 1";
+		$where = "WHERE SPID = '".$userid."' AND ServiceType='".$c."' AND ServiceStatus = 1";
 		$order = "";
 		$leftjoin = "";
 		$data = $this->mmyclinics->getlist($table, $fields , $where, $order,$leftjoin);

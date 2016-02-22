@@ -123,6 +123,7 @@
 	                <li><a href="#tab-8" data-toggle="tab"><i class="fa fa-star"></i>Reviews & Ratings</a></li>
 	               <?php if($usertype == 0){?> <li><a href="#tab-9" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
                  <li><a href="#tab-10" data-toggle="tab"><i class="fa fa-group"></i>Enrolled Students</a></li>
+                 <li><a href="#tab-11" data-toggle="tab"><i class="fa fa-group"></i>Instructor MasterList</a></li>
                  <?php } ?>
 	              </ul>
 
@@ -190,6 +191,11 @@
                   </div>
                   <div class="tab-pane fade in" id="tab-10">
                     <table id="tbl-enrolled" class="display" cellspacing="0" width="100%"></table>
+                    <!-- Divider -->
+                    <div class="hr1" style="margin-bottom:30px;"></div>
+                  </div>
+                  <div class="tab-pane fade in" id="tab-11">
+                    <table id="tbl-ins_masterlist" class="display" cellspacing="0" width="100%"></table>
                     <!-- Divider -->
                     <div class="hr1" style="margin-bottom:30px;"></div>
                   </div>

@@ -7,6 +7,7 @@ class mclients extends CI_Model {
 			// Call the CI_Model constructor
 			parent::__construct();
 			date_default_timezone_set('Asia/Manila');
+			$this->load->model('mglobal');
 	}
 
 	function dataTables($case,$id=null){
@@ -262,6 +263,19 @@ class mclients extends CI_Model {
 			if(!isset($tlout)){
 				$this->db->where('tl_id',$tlid);
 				$this->db->update('time_logs',array('tl_out'=>$datetime));
+				//get info for students
+				$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='$id'";
+
+				$qx = $this->db->query($sql);
+				$rowx = $qx->row();
+				$studname = $rowx->stud_name;
+				$clientid = $rowx->client_id;
+				$clinicname = $rowx->clinic_name;
+				$servicename = $rowx->ServiceName;
+				$subj = "Time In/Out";
+				$msg = "$studname just logged out today ".date('Y-m-d h:i:s')." [".$clinicname."-".$servicename."]";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
 				return 1; //timeout updated return and change it to completed today's session
 				exit();
 			}
@@ -305,6 +319,22 @@ class mclients extends CI_Model {
 							'tl_paid'=>$paid
 						);
 			$this->db->insert('time_logs',$data);
+
+			//get info for students
+				$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='$id'";
+
+				$qx = $this->db->query($sql);
+				$rowx = $qx->row();
+				$studname = $rowx->stud_name;
+				$clientid = $rowx->client_id;
+				$clinicname = $rowx->clinic_name;
+				$servicename = $rowx->ServiceName;
+				$subj = "Time In/Out";
+				$msg = "$studname just logged in today ".date('Y-m-d h:i:s')." [".$clinicname."-".$servicename."]";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
+
+			$this->mglobal->addNotif($subj,$msg,$clientid);
 			return 0; exit();
 		}
 	}
@@ -319,6 +349,7 @@ class mclients extends CI_Model {
 		$paymenttype = $data['payment_type'];
 		if($paymenttype == 0){ //paid per session
 			//valid for 1 day
+			$pt = "Session";
 			$paymentLog['payment_end_date'] = $now;
 			$timelogid = $data['date_log'];
 			
@@ -331,6 +362,7 @@ class mclients extends CI_Model {
 				$this->db->update('time_logs',array("tl_paid"=>$paid));
 			}
 		}else if($paymenttype == 1){//monthly
+			$pt = "Monthly";
 			$end_date = new DateTime($now);
 			$end_date->add(new DateInterval('P1M'));
 			$edate = $end_date->format('Y-m-d h:i:s');
@@ -349,6 +381,7 @@ class mclients extends CI_Model {
 			$this->db->query($sql);
 
 		}else{ //membership
+			$pt = "Membership";
 			$paymentLog['payment_end_date'] = '';
 		}
 		$payArr = array('payment_amt',
@@ -364,6 +397,20 @@ class mclients extends CI_Model {
 		}
 		$paymentLog['UserID'] = $userid;
 		$d = $this->db->insert('payment_logs',$paymentLog);
+		//get info for students
+		$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='".$data['stud_id']."'";
+
+		$qx = $this->db->query($sql);
+		$rowx = $qx->row();
+		$studname = $rowx->stud_name;
+		$clientid = $rowx->client_id;
+		$clinicname = $rowx->clinic_name;
+		$servicename = $rowx->ServiceName;
+
+		$subj = "$pt Payment ".date('Y-m-d h:i:s');
+		$msg = "Paid Today with amount of ".$data['payment_amt']." and outstanding balance of ".$data['payment_balance']." [ ".$clinicname."-".$servicename." ] ";
+
+		$this->mglobal->addNotif($subj,$msg,$clientid);
 		return $d;
 	}
 
@@ -392,14 +439,80 @@ class mclients extends CI_Model {
 		$this->db->where('SchedID',$schedid);
 		$this->db->select('*');
 		$get = $this->db->get('schedules');
+
+		//check if the student has conflict schedule
+		//get the sched time and day and the students id of $id (its the studenrolledid of students_enrolled)
+		$sqlx = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON a.SchedID=b.SchedID WHERE a.StudEnrolledID='$id'";
+		$qx = $this->db->query($sqlx);
+		$rowx = $qx->row();
+		$sDays = explode(',',$rowx->SchedDays);
+		$sTime = explode('-',$rowx->SchedTime);
+		$sStart = date('h:i a',strtotime(str_replace(' ','',$sTime[0])));
+		$sEnd = date('h:i a',strtotime(str_replace(' ','',$sTime[1])));
+		$studid = $rowx->stud_id;
+		$startTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',1),'%h:%i %p')";
+		$endTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',-1),'%h:%i %p')";
+		$start = "STR_TO_DATE('$sStart','%h:%i %p')";
+		$end = "STR_TO_DATE('$sEnd','%h:%i %p')";
+
+		$sqlb = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON b.SchedID = a.SchedID WHERE b.SchedDays REGEXP '".implode('|',$sDays)."' AND (($startTime BETWEEN $start AND $end AND $startTime !=$end) OR ($endTime BETWEEN $start AND $end AND $endTime != $start) OR ($startTime <= $start && $endTime >= $end)) AND a.stud_id='$studid' and a.StudEnrolledStatus=1";
+
+		$qb = $this->db->query($sqlb);
+		if($qb->num_rows() > 0){
+			//get info for students
+			$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='$id'";
+
+			$qx = $this->db->query($sql);
+			$rowx = $qx->row();
+			$studname = $rowx->stud_name;
+			$clientid = $rowx->client_id;
+			$clinicname = $rowx->clinic_name;
+			$servicename = $rowx->ServiceName;
+			$subj = "Enrollment Request Approval";
+			$msg = "$studname enrollment to ".$servicename." of ".$servicename." has been decline because the schedule is conflict to some of your student's schedule. [".$clinicname."-".$servicename."]";
+
+			$this->mglobal->addNotif($subj,$msg,$clientid);
+
+			return 2; exit(); //student's schedule is conflict
+		}
+		//end conflict checking
 		if($get->num_rows() > 0){
 			$update = "UPDATE schedules set SchedRemaining='$count' WHERE SchedID = '$schedid' AND SchedSlots > '$count'";
 			$qup = $this->db->query($update);
 			if($qup == true){
 				$this->db->where('StudEnrolledID',$id);
 				$qx = $this->db->update('students_enrolled',array('StudEnrolledStatus'=>1));
-				return $qx; exit();
+
+				//get info for students
+				$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='$id'";
+
+				$qx = $this->db->query($sql);
+				$rowx = $qx->row();
+				$studname = $rowx->stud_name;
+				$clientid = $rowx->client_id;
+				$clinicname = $rowx->clinic_name;
+				$servicename = $rowx->ServiceName;
+				$subj = "Enrollment Request Approval";
+				$msg = "$studname enrollment to ".$servicename." of ".$clinicname." has been approved last ".date('Y-m-d h:i:s')." [".$clinicname."-".$servicename."]";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
+
+
+				return 3; exit();
 			}else{
+				//get info for students
+				$sql = "SELECT b.ServiceName,a.client_id,d.stud_name,c.clinic_name from students_enrolled a LEFT JOIN services b ON a.service_id=b.ServiceID LEFT JOIN clinics c ON c.clinic_id=a.clinic_id LEFT JOIN students d ON d.stud_id=a.stud_id WHERE a.StudEnrolledID='$id'";
+
+				$qx = $this->db->query($sql);
+				$rowx = $qx->row();
+				$studname = $rowx->stud_name;
+				$clientid = $rowx->client_id;
+				$clinicname = $rowx->clinic_name;
+				$servicename = $rowx->ServiceName;
+				$subj = "Enrollment Request Approval";
+				$msg = "$studname was not able to enroll to ".$servicename." of ".$clinicname." because there is no available slot. [".$clinicname."-".$servicename."]";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
 				return 1; exit(); //full
 			}
 		}else{
@@ -413,5 +526,10 @@ class mclients extends CI_Model {
 		$q  = $this->db->query($sql);
 
 		return $q->num_rows();
+	}
+
+	function removePending($id){
+		$this->db->where('StudEnrolledID',$id);
+		return $this->db->delete('students_enrolled');
 	}
 }

@@ -280,18 +280,18 @@ function deleteEventsPromos(type,id){
       success:function(msg){
         if(msg == 0){
 			if(type == "removePromos"){
-				$("#message .alert").html("Promo has been removed successfully").addClass("alert-success").show();
+				$("#message .alert").html("Promo has been removed successfully").addClass("alert-success").show();$("#message").addClass('zindex');
 			}else{
-				$("#message .alert").html("Event has been removed successfully").addClass("alert-success").show();
+				$("#message .alert").html("Event has been removed successfully").addClass("alert-success").show();$("#message").addClass('zindex');
 			}
             setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-success').hide();
+				$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				window.location = 'events_and_promos';
 			},2000);
         }else{
-		  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+		  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();$("#message").addClass('zindex');
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-danger').hide();
+				$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 			},2000);
         }
       }
@@ -315,10 +315,10 @@ function saveEvents(type){
 				name.parent().removeClass('has-error');
 				data[e.name] = e.value;
             }else{
-				$("#message .alert").html(name.prev().html()+" should be numeric.").addClass("alert-danger").show();
+				$("#message .alert").html(name.prev().html()+" should be numeric.").addClass("alert-danger").show();$("#message").addClass('zindex');
 				name.parent().addClass("has-error");
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-danger').hide();
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
             }
         }else if(e.name == 'EventFor'){
@@ -345,9 +345,9 @@ function saveEvents(type){
 //get how many div is using 'has-error' class
 var error = $("#formaddevents .has-error").length;
   if(error > 0){
-    $("#modal_addevents .alert").append("All fields are required.").addClass('alert-danger').show();
+    $("#modal_addevents .alert").append("All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
   }else{
-    $("#modal_addevents .alert").html("").removeClass('alert-danger').hide();
+    $("#modal_addevents .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     $.ajax({
       url:'events_and_promos/'+type,
       data:{data},
@@ -356,21 +356,21 @@ var error = $("#formaddevents .has-error").length;
       success:function(msg){ 
         if(msg == 0){
 			if(type == "addEvents"){
-				$("#message .alert").html($("#EventName").val()+" Event has been added successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#EventName").val()+" Event has been added successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
 				$.each(dataForm, function(i,e){
 				  $("#"+e.name).val("");
 				});
 			}else if(type == "updateEvents"){
-				$("#message .alert").html($("#EventName").val()+" Event has been updated successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#EventName").val()+" Event has been updated successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
 			}
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-success').hide();
+				$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				window.location = 'events_and_promos';
 			},2000);
         }else{
-			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();$("#message").addClass('zindex');
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-danger').hide();
+				$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 			},2000);
         }
       }
@@ -397,9 +397,9 @@ function savePromos(type){
 //get how many div is using 'has-error' class
 var error = $("#formaddpromos .has-error").length;
   if(error > 0){
-    $("#modal_addpromos .alert").append("All fields are required.").addClass('alert-danger').show();
+    $("#modal_addpromos .alert").append("All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
   }else{
-    $("#modal_addpromos .alert").html("").removeClass('alert-danger').hide();
+    $("#modal_addpromos .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     $.ajax({
       url:'events_and_promos/'+type,
       data:{data},
@@ -408,24 +408,24 @@ var error = $("#formaddpromos .has-error").length;
       success:function(msg){
         if(msg == 0){
 			if(type == "addPromos"){
-				$("#message .alert").html($("#PromoName").val()+" Promo has been added successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#PromoName").val()+" Promo has been added successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
 				$.each(dataForm, function(i,e){
 				  $("#"+e.name).val("");
 				});
 			}else if(type == "updatePromos"){
-				$("#message .alert").html($("#PromoName").val()+" Promo has been updated successfully.").addClass("alert-success").show();
+				$("#message .alert").html($("#PromoName").val()+" Promo has been updated successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
 			}
 			
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-success').hide();
+				$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				window.location = 'events_and_promos';
 			},2000);
 			//getPromos();
         }else{
-			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();
+			$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass("alert-danger").show();$("#message").addClass('zindex');
 			
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-danger').hide();
+				$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 			},2000);
         }
       }

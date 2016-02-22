@@ -11,9 +11,9 @@ $(document).ready(function(){
 			$("#modal_album").modal('show');
 		}else{
 			if(sel == ''){
-				$('#message .alert').html("Please select an album first").addClass("alert-danger").show();
+				$('#message .alert').html("Please select an album first").addClass("alert-danger").show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$('#message .alert').html("").removeClass("alert-danger").hide();
+					$('#message .alert').html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
 				},2000);
 			}else {
 				renderFileUpload();
@@ -126,9 +126,9 @@ function createAlbum(){
 
 	var len = $("#frm-album .has-error").length;
 	if(len > 0){
-		$("#message .alert").html("All fields are required.").addClass("alert-danger").show();
+		$("#message .alert").html("All fields are required.").addClass("alert-danger").show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass("alert-danger").hide();
+			$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
 		},2000);
 	}else{
 		saveAlbum(data);
@@ -143,26 +143,26 @@ function saveAlbum(data){
 		type:'POST',
 		success:function(msg){
 			if(msg == true){
-				$('#message .alert').html("New album has been created. You can now add pictures.").addClass('alert-success').show();
+				$('#message .alert').html("New album has been created. You can now add pictures.").addClass('alert-success').show();$("#message").addClass('zindex');
 
 				setTimeout(function(){
-					$('#message .alert').html("").removeClass('alert-success').hide();
+					$('#message .alert').html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 					$("#modal_album").modal('hide');
 					$("#albumName").val('');
 					$("#albumDesc").val('');
 					albumDisplay();
 				},2000);
 			}else if(msg == 1){
-				$('#message .alert').html("Album already exist.").addClass('alert-danger').show();
+				$('#message .alert').html("Album already exist.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$('#message .alert').html("").removeClass('alert-danger').hide();
+					$('#message .alert').html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 					$("#albumName").val('');
 					$("#albumDesc").val('');
 				},2000);
 			}else{
-				$('#message .alert').html("Unable to create album.").addClass('alert-danger').show();
+				$('#message .alert').html("Unable to create album.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$('#message .alert').html("").removeClass('alert-danger').hide();
+					$('#message .alert').html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 					$("#modal_album").modal('hide');
 					$("#albumName").val('');
 					$("#albumDesc").val('');
@@ -251,11 +251,11 @@ function renderFileUpload(){
         });
         ctr++;
         if(ctr == count){
-	       	 $("#message .alert").html("All pictures were successfully added to Album "+$("#albumlist option[value='"+$('#albumlist').val()+"']").text()+". Page will reload after 3 seconds.").addClass('alert-success').show();
+	       	 $("#message .alert").html("All pictures were successfully added to Album "+$("#albumlist option[value='"+$('#albumlist').val()+"']").text()+". Page will reload after 3 seconds.").addClass('alert-success').show();$("#message").addClass('zindex');
 	       	 $("#browserpic").html("Add Pictures").removeAttr('disabled');
 
 	       	 setTimeout(function(){
-	       	 	$("#message .alert").html("").removeClass('alert-success').hide();
+	       	 	$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 	       	 	window.location = 'gallery';
 	       	 },3000);
        	}

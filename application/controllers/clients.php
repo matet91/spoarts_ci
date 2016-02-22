@@ -81,4 +81,8 @@ class Clients extends CI_Controller {
 		$data = $this->mclients->countPendings();
 		echo json_encode($data);
 	}
+	function removePending($id){
+		$data = $this->mclients->removePending($id);
+		echo json_encode($data);
+	}
 }

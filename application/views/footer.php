@@ -7,9 +7,9 @@
           <div class="col-md-3">
             <div class="footer-widget contact-widget">
               <ul>
-                <li><span>Phone Number:</span> +01 234 567 890</li>
-                <li><span>Email:</span> company@company.com</li>
-                <li><span>Website:</span> www.yourdomain.com</li>
+                <li><span>Phone Number:</span> +63 943 533 7455</li>
+                <li><span>Email:</span> spoarts@gmail.com</li>
+                <li><span>Website:</span> www.spoarts.com</li>
               </ul>
             </div>
           </div>

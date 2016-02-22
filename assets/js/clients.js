@@ -66,7 +66,7 @@ function getDisapprovedStudents(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[14] == 1 ){
-        $('td:eq(9)', nRow).html('<button class = "btn btn-primary" data-toggle="tooltip" data-placement="top" title="Approve" onclick="approve('+aData[0]+','+aData[1]+');"><i class = "icon-thumbs-up-alt"></i>Approve</button>' );
+        $('td:eq(9)', nRow).html('<button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Approve" onclick="approve('+aData[0]+','+aData[1]+');"><i class = "fa fa-check"></i></button>&nbsp<button class = "btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Remove" onclick="removePending('+aData[0]+')"><i class = "fa fa-ban"></i></button>' );
       }
 
     },
@@ -161,10 +161,10 @@ function paynow(){
         errList = new Array(), data={};
  if ($('#date_log').prop("disabled") == true && $("#payment_type").val() == '0') {
 
-         $("#message .alert").html("Please select different Payment type. The student needs to have a time log first before you can use the payment type session.").addClass('alert-danger').show();
+         $("#message .alert").html("Please select different Payment type. The student needs to have a time log first before you can use the payment type session.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 
         setTimeout(function(){
-            $("#message .alert").html("").removeClass('alert-danger').hide();
+            $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
         },3500);
 }else{
     $.each(frm, function(i,e){
@@ -195,9 +195,9 @@ function paynow(){
 
     var len = $("#frm-paynow .has-error").length;
     if(len > 0){
-        $("#message .alert").html(errList.toString()+" field (s) are required.").addClass("alert-danger").show();
+        $("#message .alert").html(errList.toString()+" field (s) are required.").addClass("alert-danger").show(); $("#message").addClass('zindex');
     }else{
-        $("#message .alert").html("").removeClass("alert-danger").hide();
+        $("#message .alert").html("").removeClass("alert-danger").hide(); $("#message").removeClass('zindex');
         data['SchedID'] = $("#SchedID").val(),
         data['stud_id'] = $("#studid").val(),
         data['service_id'] = $("#serviceid").val(),
@@ -214,26 +214,27 @@ function submitPay(data){
             data:{data:data},
             type:'POST',
             success:function(msg){
-                var table = $("#tbl-timelogs").DataTable(),frm = $("#frm-paynow").serializeArray();
+                var table = $("#tbl-timelogs").DataTable(),table2=$("#tbl-clients").DataTable(),frm = $("#frm-paynow").serializeArray();
 
                 if(msg == true){
-                    $("#message .alert").html("Payment Successfully Logged.").addClass('alert-success').show();
+                    $("#message .alert").html("Payment Successfully Logged.").addClass('alert-success').show(); $("#message").addClass('zindex');
 
                     setTimeout(function(){
-                        $("#message .alert").html("").removeClass('alert-success').hide();
+                        $("#message .alert").html("").removeClass('alert-success').hide(); $("#message").removeClass('zindex');
                     },2500);
                     $.each(frm, function(i,e){
                         $("#"+e.name).val("");
                     });
                 }else{
-                    $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show();
+                    $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 
                     setTimeout(function(){
-                        $("#message .alert").html("").removeClass('alert-danger').hide();
+                        $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
                     },2500);
                 }
 
                 table.ajax.reload();
+                table2.ajax.reload();
             }
         });
         
@@ -322,9 +323,9 @@ function updateBalance(paymentid){
             });
             var len = $("#frm-updateBalance .has-error").length;
             if(len > 0){
-                $("#message .alert").html("All fields are required.").addClass('alert-danger').show();
+                $("#message .alert").html("All fields are required.").addClass('alert-danger').show(); $("#message").addClass('zindex');
             }else{
-                $("#message .alert").html("").removeClass('alert-danger').hide();
+                $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
                 $.ajax({
                     url:'clients/updateBalance/'+paymentid,
                     data:{'payment_amt':$("#pay_amt").val(),'payment_balance':$("#pay_bal").val()},
@@ -334,18 +335,20 @@ function updateBalance(paymentid){
                         if(msg == true){
 
                             var table = $("#tbl-paymentlogs").DataTable();
+                            var table2 = $("#tbl-clients").DataTable();
                              table.ajax.reload();
-                            $("#message .alert").html("Payment Updated Successfully.").addClass('alert-success').show();
+                             table2.ajax.reload();
+                            $("#message .alert").html("Payment Updated Successfully.").addClass('alert-success').show(); $("#message").addClass('zindex');
 
                             setTimeout(function(){
-                                 $("#message .alert").html("").removeClass('alert-success').hide();
+                                 $("#message .alert").html("").removeClass('alert-success').hide(); $("#message").removeClass('zindex');
                             },2500);
                             getPaymentDetails($("#studEnrolledID").val());
                         }else{
-                            $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show();
+                            $("#message .alert").html("Error. Send Email report to spoarts.cebu@gmail.com if error persist.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 
                             setTimeout(function(){
-                                $("#message .alert").html("").removeClass('alert-danger').hide();
+                                $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
                             },2500);
                         }
                     }
@@ -356,31 +359,39 @@ function updateBalance(paymentid){
 }
 
 function approve(id,schedid){
+    $('#loader').show();
     $.ajax({
         url:'clients/approve/'+id+'/'+schedid,
         dataType:'JSON',
         success: function(msg){
+            $('#loader').fadeOut();
             var table = $("#tbl-disapproved_students").DataTable(),
                 table2 = $("#tbl-approved_students").DataTable();
-            if(msg == true){
+            if(msg == 3){
                 countPendings();
                 table.ajax.reload();
                 table2.ajax.reload();
-                $("#message .alert").html("Student Approved Successfully.").addClass("alert-success").show();
+                $("#message .alert").html("Student Approved Successfully.").addClass("alert-success").show(); $("#message").addClass('zindex');
                 setTimeout(function(){
-                    $("#message .alert").html("").removeClass('alert-success').hide();
+                    $("#message .alert").html("").removeClass('alert-success').hide(); $("#message").removeClass('zindex');
                 },3000);
             }else if(msg == 1){
-                $("#message .alert").html("This schedule is now FULL.").addClass('alert-danger').show();
+                $("#message .alert").html("This schedule is now FULL.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 
                 setTimeout(function(){
-                    $("#message .alert").html("").removeClass('alert-danger').hide();
+                    $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
+                },3000);
+            }else if(msg == 2){
+                $("#message .alert").html("Student's Schedule is conflict.").addClass('alert-danger').show(); $("#message").addClass('zindex');
+
+                setTimeout(function(){
+                    $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
                 },3000);
             }else{
-                 $("#message .alert").html("Schedule does not exist.").addClass('alert-danger').show();
+                 $("#message .alert").html("Schedule does not exist.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 
                 setTimeout(function(){
-                    $("#message .alert").html("").removeClass('alert-danger').hide();
+                    $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
                 },3000);
             }
         }
@@ -518,4 +529,27 @@ function clientlist(){
     }).on('processing.dt',function(oEvent, settings, processing){
     });
 
+}
+
+function removePending(id){
+    if(confirm("Are you sure you want to remove this student in your waiting list?")){
+        $('#loader').show();
+        $.ajax({
+            url: 'clients/removePending/'+id,
+            dataType:'JSON',
+            success:function(msg){
+                $('#loader').fadeOut();
+                if(msg == true){
+                    var table = $("#tbl-disapproved_students").DataTable();
+                    table.ajax.reload();
+                    $("#message .alert").html("Student has been removed successfully.").addClass("alert-success").show(); $("#message").addClass('zindex');
+                    setTimeout(function(){
+                        $("#message .alert").html("").removeClass('alert-success').hide(); $("#message").removeClass('zindex');
+                    },3000);
+                }else{
+
+                }
+            }
+        });
+    }
 }

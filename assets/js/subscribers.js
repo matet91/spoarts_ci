@@ -124,14 +124,14 @@ function turn_off(id,t){
 		success: function(msg){
 			var table = $("#tbl-subscribers").DataTable();
 			if(msg == true){
-				$("#message .alert").html(err).addClass("alert-success").show();
+				$("#message .alert").html(err).addClass("alert-success").show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-success').hide();
+					$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				},2000);
 			}else{
-				$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();
+				$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-danger').hide();
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 
 			}
@@ -148,14 +148,14 @@ function deleteAccount(id){
 			success:function(msg){
 				var table = $("#tbl-subscribers").DataTable();
 				if(msg == true){
-					$("#message .alert").html("Account and other information related to that user has been deleted permanently.").addClass("alert-success").show();
+					$("#message .alert").html("Account and other information related to that user has been deleted permanently.").addClass("alert-success").show();$("#message").addClass('zindex');
 					setTimeout(function(){
-						$("#message .alert").html("").removeClass('alert-success').hide();
+						$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 					},2000);
 				}else{
-					$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();
+					$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();$("#message").addClass('zindex');
 						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						},2000);
 				}
 				table.ajax.reload();
@@ -185,9 +185,9 @@ function validateForm(){
   }); 
   var count = $("#"+modal+" .has-error").lentgh;
   if(count > 0){
-    $("#message .alert").html("All fields are required").addClass("alert-danger").show();
+    $("#message .alert").html("All fields are required").addClass("alert-danger").show();$("#message").addClass('zindex');
     setTimeout(function(){
-      $("#message .alert").html("").removeClass('alert-danger').hide();
+      $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     },1500);
   }else{
 
@@ -203,9 +203,9 @@ function saveData(data,userid){
 //get how many div is using 'has-error' class
 var error = $("#"+frmid+" .has-error").length;
   if(error > 0){
-    $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();
+    $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
   }else{
-    $("#message .alert").html("").removeClass('alert-danger').hide();
+    $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     $('#loader').show();
     $.ajax({
       url:url,
@@ -216,18 +216,18 @@ var error = $("#"+frmid+" .has-error").length;
         $('#loader').fadeOut();
         if(msg == true){
 
-            $("#message .alert").html(errorMsg).addClass("alert-success").show();
+            $("#message .alert").html(errorMsg).addClass("alert-success").show();$("#message").addClass('zindex');
 
             $.each(frmid, function(i,e){
               $("#"+e.name).val("");
             });
             setTimeout(function(){
-              $("#message .alert").html("").removeClass("alert-success").hide();
+              $("#message .alert").html("").removeClass("alert-success").hide();$("#message").removeClass('zindex');
               $("#"+modal).modal('hide');
             },1500);
              $('#spid').val('');
         }else{
-          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
+          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();$("#message").addClass('zindex');
         }
         setTimeout(function(){
           window.location = 'subscribers';
@@ -275,14 +275,14 @@ function removeItem(id){
 		success: function(msg){
 			var table = $("#tbl-sub_plan").DataTable();
 			if(msg == true){
-				$("#message .alert").html("Deleted record successfully").addClass("alert-success").show();
+				$("#message .alert").html("Deleted record successfully").addClass("alert-success").show();$("#message").addClass('zindex');
 			    setTimeout(function(){
-			      $("#message .alert").html("").removeClass('alert-success').hide();
+			      $("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 			    },2000);
 			}else{
-				$("#message .alert").html("Can't delete this record. Please try again.").addClass("alert-danger").show();
+				$("#message .alert").html("Can't delete this record. Please try again.").addClass("alert-danger").show();$("#message").addClass('zindex');
 			    setTimeout(function(){
-			      $("#message .alert").html("").removeClass('alert-danger').hide();
+			      $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 			    },2000);
 			}
 			table.ajax.reload();
@@ -320,12 +320,12 @@ function savePlan(){
 
 	var len = $("#frm-sp .has-error").length;
 	if(len > 0){
-		$("#message .alert").html("All fields are required.").addClass("alert-danger").show();
+		$("#message .alert").html("All fields are required.").addClass("alert-danger").show();$("#message").addClass('zindex');
 	    setTimeout(function(){
-	      $("#message .alert").html("").removeClass('alert-danger').hide();
+	      $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 	    },2000);
 	}else{
-		$("#message .alert").html("").removeClass('alert-danger').hide();
+		$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		$.ajax({
 			url :url,
 			data:{data:data},
@@ -334,9 +334,9 @@ function savePlan(){
 			success:function(msg){
 				var table = $("#tbl-sub_plan").DataTable();
 				if(msg == true){
-					$("#message .alert").html(err).addClass("alert-success").show();
+					$("#message .alert").html(err).addClass("alert-success").show();$("#message").addClass('zindex');
 					    setTimeout(function(){
-					      $("#message .alert").html("").removeClass('alert-success').hide();
+					      $("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 					      $.each(frm,function(i,e){
 					      	if(e.name != 'ymd')
 					      		$("#"+e.name).val('');
@@ -345,9 +345,9 @@ function savePlan(){
 					      $("#modal_plan").modal('close');
 					    },2000);
 				}else{
-					$("#message .alert").html("Error occurred.").addClass("alert-danger").show();
+					$("#message .alert").html("Error occurred.").addClass("alert-danger").show();$("#message").addClass('zindex');
 				    setTimeout(function(){
-				      $("#message .alert").html("").removeClass('alert-danger').hide();
+				      $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				    },2000);
 				}
 				table.ajax.reload();

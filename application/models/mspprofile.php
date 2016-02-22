@@ -43,17 +43,16 @@ class Mspprofile extends CI_Model {
 			case 2://list of instructors
 
 				$select = $aColumns;
-				$select[5] = "(CASE WHEN ins_status = 0 THEN 'Inactive' ELSE 'Active' END) as ins_status";
-				$select[6] = "1 as action";
-				$sTable = "instructors";
+				$select[6] = "(CASE WHEN MasterInsStatus = 1 THEN 'Active' ELSE 'Inactive' END) as MasterInsStatus";
+				$sTable = "instructor_masterlist";
 				$leftjoin = "";
 				//print_r($select);
-				$sWhere = "";
+				$sWhere = "wHERE UserID='$id' and MasterInsStatus=1";
 				if($sSearch){
-					$sWhere .= "QHERE (ins_name like '%".$sSearch."%' OR ins_room like '%".$sSearch."%' OR ins_schedule like '%".$sSearch."%' OR ins_status like '%".$sSearch."%')";}
+					$sWhere .= " AND (MasterInsName like '%".$sSearch."%' OR MasterInsAddress like '%".$sSearch."%' OR MasterInsContactNo like '%".$sSearch."%' OR MasterInsEmail like '%".$sSearch."%' OR MasterInsExpertise like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = $aColumns;
+				$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise");
 			break;
 
 			case 3://schedules

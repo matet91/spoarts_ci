@@ -87,4 +87,9 @@ class Login extends CI_Controller {
 		$data = $this->mglobal->testimonials();
 		echo json_encode($data);
 	}
+
+	function showallclubs(){
+		$data  =$this->mglobal->showallclubs();
+		echo json_encode($data);
+	}
 }

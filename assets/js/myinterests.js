@@ -23,15 +23,15 @@ $(document).ready(function() {
 			type:'POST',
 			success:function(msg){ 
 				if(msg == 2){
-					$("#message .alert").html($("#interest_id option:selected").text()+" has been added successfully.").addClass("alert-success").show();
+					$("#message .alert").html($("#interest_id option:selected").text()+" has been added successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
 				}else{
-					$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+					$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}
 				
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-success').hide();
-					$("#message .alert").html("").removeClass('alert-danger').hide();
-					$("#modal_security .alert").html("").removeClass('alert-success').hide();
+					$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
+					$("#modal_security .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 					$("#modal_security").hide();
 					window.location = 'myinterests';
 				},2000);
@@ -74,14 +74,14 @@ function removeIntererst(interestid){
 		data:{interestid:interestid},
 		success:function(msg){
 			if(msg == 1){
-				$("#message .alert").html("Interest has been successfully deleted.").addClass("alert-success").show();
+				$("#message .alert").html("Interest has been successfully deleted.").addClass("alert-success").show();$("#message").addClass('zindex');
 			}else{
-				$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+				$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
 			}
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass('alert-success').hide();
-				$("#message .alert").html("").removeClass('alert-danger').hide();
-				$("#modal_security .alert").html("").removeClass('alert-success').hide();
+				$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
+				$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
+				$("#modal_security .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				$("#modal_security").hide();
 				window.location = 'myinterests';
 			},2000);

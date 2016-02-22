@@ -56,7 +56,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        z-index:999999;
+        z-index:-1;
     }
     #inner-message {
       text-align: center;
@@ -64,6 +64,9 @@
     }
     .modal-dialog{
       margin-top:8%!important;
+    }
+    .zindex{
+      z-index:9999999 !important;
     }
   </style>
 

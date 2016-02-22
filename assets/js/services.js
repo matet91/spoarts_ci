@@ -5,6 +5,9 @@ var height = $(window).height();
    $('.modal').on('hidden.bs.modal', function (e) {
         $(".chosen-select").removeAttr('disabled').trigger('chosen:updated');
         $("#startTime,#endTime").removeAttr('disabled');
+         $('#txtHiddenService').val('');
+         $(".modal input").val('');
+         $(".modal select").val('');
   });
    $('#btn-addService').click(function(e){
 	    e.preventDefault();
@@ -71,15 +74,15 @@ var height = $(window).height();
 
       if(pwd.val() == ''){
         pwd.parent().addClass('has-error');
-        $("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();
+        $("#modal_security .alert").html("Please enter the password of your security question.").addClass('alert-danger').show();$("#message").addClass('zindex');
 
         setTimeout(function(){
           pwd.parent().removeClass('has-error');
-          $("#modal_security .alert").html("").removeClass('alert-danger').hide();
+          $("#modal_security .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
         },1500);
       }else{
         pwd.parent().removeClass('has-error');
-        $("#modal_security .alert").html("").removeClass("alert-danger").hide();
+        $("#modal_security .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
         var t = $('#action_type').val();
         checkSecurityPwd(pwd.val(),t);
       }
@@ -108,6 +111,9 @@ var height = $(window).height();
 
 //open modal schedule
   $("#btn-modalSched").click(function(){
+      listings(4,null);
+      listings(5,null);
+      $('.chosen-select').trigger("chosen:updated");
       var dialogHeight = $("#modal_addschedule").find('.modal-dialog').outerHeight(true);
       var top = parseInt(height)/5-parseInt(dialogHeight);
       $("#modal_addschedule").modal('show');
@@ -184,13 +190,15 @@ function getSchedules(){
             {"sTitle":"Instructors","sName":"m.MasterInsName","bSearchable": true},
             {"sTitle":"Services","sName":"srv.ServiceName","bSearchable": true},
             {"sTitle":"Slots","sName":"s.SchedSlots","bSearchable": true},
+            {"sTitle":"Enrolled Headcounts","sName":"s.SchedRemaining","bSearchable": true},
+            {"sTitle":"Waiting List Headcounts","sName":"waitingList","bSearchable": false,"bsortable":false},
             {"sTitle":"Date Added","sName":"s.date_added","bSearchable": true},
             {"sTitle":"Actions"}
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-      if ( aData[8] == 1 ){
-        $('td:eq(7)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editSchedules('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick= removeData('+aData[0]+',4,"tbl-schedules")><i class = "fa fa-remove fa-fw"></i></button>' );
+      if ( aData[10] == 1 ){
+        $('td:eq(9)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editSchedules('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick= removeData('+aData[0]+',4,"tbl-schedules")><i class = "fa fa-remove fa-fw"></i></button>' );
       }
 
     },
@@ -242,7 +250,7 @@ function checkClinicFields(){
   var count = $("#content-services .has-error").length;
 
   if(count > 0){
-    $("#content-services  .alert").html("All fields are required.").addClass('alert-danger').show();
+    $("#content-services  .alert").html("All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
   }else{
       // var height = $(window).height();
       // var dialogHeight = $("#modal_security").find('.modal-dialog').outerHeight(true);
@@ -250,7 +258,7 @@ function checkClinicFields(){
       // $("#modal_security").modal('show');
       // $("#modal_security .modal-dialog").attr('style','margin-top:'+top+'px !important;');
 
-     $("#content-services  .alert").html("").removeClass('alert-danger').hide();
+     $("#content-services  .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
      saveClinicInfo();
      // $("#modal_security").modal('show').attr('style','top:'+top+'px !important;');
   }
@@ -272,7 +280,7 @@ function saveClinicInfo(){
       if(msg == true){
         $("#modal_security .alert").html("").hide();
         $("#modal_security").modal('hide');
-        $("#message .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();
+        $("#message .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();$("#message").addClass('zindex');
         setTimeout(function(){
           window.location = 'services';
         },2000);
@@ -415,14 +423,14 @@ function addInstructor(data){
       $('#loader').fadeOut();
       var table = $("#tbl-instructor").DataTable();
       if(msg == true){
-        $("#instructor-tab .alert").html(errorMsg).addClass('alert-success').show();
+        $("#instructor-tab .alert").html(errorMsg).addClass('alert-success').show();$("#message").addClass('zindex');
 
         $.each(data, function(i,e){
             $('#'+e.name).val('');
         });
         table.ajax.reload();
       }else{
-        $("#instructor-tab .alert").html("An error occurred. Please try again later or contact your Administrator.").addClass('alert-danger').show();
+        $("#instructor-tab .alert").html("An error occurred. Please try again later or contact your Administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
       }
     }
   });
@@ -456,6 +464,9 @@ function updateInstructor(id){
 }
 
 function getData(id, type){
+  listings(4,null); //see main.js
+  listings(5,null); //see main.js
+  $(".chosen-select").trigger('chosen:updated');
   switch(type){
     case 1: //update services
           $("#txtHiddenService").val(id); //2 for update
@@ -526,7 +537,7 @@ function removeData(id,t,dt){
   if (confirm('Are you sure you want to remove this record in the database?')) {
     // Save it!
     $('#loader').show();
-    $("#content-services  .alert").html("").removeClass('alert-danger').hide();
+    $("#content-services  .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     $.ajax({
         url: 'services/removeData/'+id+"/"+t,
         dataType: 'JSON',
@@ -537,9 +548,9 @@ function removeData(id,t,dt){
                $('#deleteType').val('');
               $("#modal_security .alert").html("").hide();
               $("#modal_security").modal('hide');
-              $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();
+              $("#message .alert").html("Service deleted successfully").removeClass("alert-danger").addClass("alert-success").show();$("#message").addClass('zindex');
               setTimeout(function(){
-                $("#message .alert").html("").removeClass("alert-success").show();
+                $("#message .alert").html("").removeClass("alert-success").show();$("#message").addClass('zindex');
                 var table = $("#"+dt).DataTable();
                 table.ajax.reload();
               },1500);
@@ -628,10 +639,10 @@ function validateForm(t){
                             data[e.name] = e.value;
                            
                           }else{
-                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();$("#message").addClass('zindex');
                             name.parent().addClass("has-error");
                             setTimeout(function(){
-                              $("#message .alert").html("").removeClass("alert-danger").hide();
+                              $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
                             },1500);  
                           }
                       }else{
@@ -647,10 +658,10 @@ function validateForm(t){
                             data[e.name] = e.value;
                            
                           }else{
-                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();$("#message").addClass('zindex');
                             name.parent().addClass("has-error");
                             setTimeout(function(){
-                              $("#message .alert").html("").removeClass("alert-danger").hide();
+                              $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
                             },1500);  
                         }
                       }else if(e.name == "endTime" || e.name == 'startTime'){
@@ -674,10 +685,10 @@ function validateForm(t){
                             data[e.name] = e.value;
                            
                           }else{
-                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                            $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();$("#message").addClass('zindex');
                             name.parent().addClass("has-error");
                             setTimeout(function(){
-                              $("#message .alert").html("").removeClass("alert-danger").hide();
+                              $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
                             },1500);  
                           }
                       }else{
@@ -693,10 +704,10 @@ function validateForm(t){
                               data[e.name] = e.value;
                              
                             }else{
-                              $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();
+                              $("#message .alert").html(name.prev().html()+" should be numeric.").addClass('alert-danger').show();$("#message").addClass('zindex');
                               name.parent().addClass("has-error");
                               setTimeout(function(){
-                                $("#message .alert").html("").removeClass("alert-danger").hide();
+                                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
                               },1500);  
                           }
                       }else{                        
@@ -716,9 +727,9 @@ function validateForm(t){
   if(t == 2 && schedDays.toString() != '') {data['schedDays'] = schedDays.toString();}
   var count = $("#"+modal+" .has-error").lentgh;
   if(count > 0){
-    $("#message .alert").html("All fields are required").addClass("alert-danger").show();
+    $("#message .alert").html("All fields are required").addClass("alert-danger").show();$("#message").addClass('zindex');
     setTimeout(function(){
-      $("#message .alert").html("").removeClass('alert-danger').hide();
+      $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     },1500);
   }else{
 
@@ -798,9 +809,9 @@ switch(t){
 //get how many div is using 'has-error' class
 var error = $("#"+frmid+" .has-error").length;
   if(error > 0){
-    $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();
+    $("#message .alert").append(" All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
   }else{
-    $("#message .alert").html("").removeClass('alert-danger').hide();
+    $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
     $('#loader').show();
     $.ajax({
       url:url,
@@ -810,30 +821,57 @@ var error = $("#"+frmid+" .has-error").length;
       success:function(msg){
         $('#loader').fadeOut();
         var dtable = $("#"+table).DataTable(), dataForm = $("#"+frmid).serializeArray(); 
-        if(msg == true){
+        if(msg == 1){
+              $("#message .alert").html("Room is is conflict with the schedule and time.").addClass("alert-danger").show();$("#message").addClass('zindex');
 
-            $("#message .alert").html(errorMsg).addClass("alert-success").show();
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+              },2000);
+        }else if(msg == 5){
+            $("#message .alert").html(errorMsg).addClass("alert-success").show();$("#message").addClass('zindex');
 
             $.each(dataForm, function(i,e){
               $("#"+e.name).val("");
             });
+            $('#txtHiddenService').val('');
             setTimeout(function(){
-              $("#message .alert").html("").removeClass("alert-success").hide();
+              $("#message .alert").html("").removeClass("alert-success").hide();$("#message").removeClass('zindex');
               $("#"+modal).modal('hide');
+               $("#RoomID").trigger("chosen:updated");
             },1500);
             if(t == 5){
               window.location = "services";
             }
              dtable.ajax.reload();
              $('#txtHiddenService').val('');
-        }else{
-          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
-        }
 
-        $("#RoomID,#InstructorID").trigger("chosen:updated");
-        setTimeout(function(){
-          window.location = 'services';
-        },2000);
+        }else if(msg == 2){
+              $("#message .alert").html("Instructor's schedule is conflict.").addClass("alert-danger").show();$("#message").addClass('zindex');
+
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+              },2000);
+        }else if(msg == 3){
+              $("#message .alert").html("Room Number already exist.").addClass("alert-danger").show();$("#message").addClass('zindex');
+
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+              },2000);
+        }else if(msg == 4){
+              $("#message .alert").html("Room Number and Room Name already exist.").addClass("alert-danger").show();$("#message").addClass('zindex');
+
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+              },2000);
+        }else if(msg == 7){
+            $("#message .alert").html("Service already exist.").addClass("alert-danger").show();$("#message").addClass('zindex');
+
+              setTimeout(function(){
+                $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+              },2000);
+        }else{
+          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();$("#message").addClass('zindex');
+        }
         
       }
     });

@@ -45,16 +45,16 @@ $(document).ready(function(){
 	
 	$('#modal_enroll .close').click(function(){
 		$("#formstudent").hide();$("#sched-info").hide();$("#schedform").hide();
-		//$("#modal_enroll .alert").html("").addClass("alert-success").hide();
-		$("#message .alert").html("").addClass('alert-success').hide();
-		$("#message .alert").html("").addClass('alert-danger').hide();
+		//$("#modal_enroll .alert").html("").addClass("alert-success").hide();$("#message").removeClass('zindex');
+		$("#message .alert").html("").addClass('alert-success').hide();$("#message").removeClass('zindex');
+		$("#message .alert").html("").addClass('alert-danger').hide();$("#message").removeClass('zindex');
 	});
 	
 	$('#modal_enroll .btn-default').click(function(){
 		$("#formstudent").hide();$("#sched-info").hide();$("#schedform").hide();
-		//$("#modal_enroll .alert").html("").addClass("alert-success").hide();
-		$("#message .alert").html("").addClass('alert-success').hide();
-		$("#message .alert").html("").addClass('alert-danger').hide();
+		//$("#modal_enroll .alert").html("").addClass("alert-success").hide();$("#message").removeClass('zindex');
+		$("#message .alert").html("").addClass('alert-success').hide();$("#message").removeClass('zindex');
+		$("#message .alert").html("").addClass('alert-danger').hide();$("#message").removeClass('zindex');
 	});
 	
 	$('#btn-Enroll').click(function(){
@@ -196,9 +196,9 @@ function changeService(serviceid){
 
 function enroll(c,userid,clinic_id){
 	if($("#ses_userid").val() == ""){
-		$("#message .alert").html("You cannot enroll from this clinic. Need to create an account first.").addClass('alert-danger').show();
+		$("#message .alert").html("You cannot enroll from this clinic. Need to create an account first.").addClass('alert-danger').show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
+			$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		},2000);
 	}else{
 		var height = $(window).height();
@@ -223,13 +223,29 @@ function enroll(c,userid,clinic_id){
 				$('#Service').html(result).trigger("chosen:updated");
 			}
 		});
+		getRelationship();
 	}
 }
 
-function changeStudType(){
-	var clinic_id = $("#clinic_id").val();
+function getRelationship(){
 	$.ajax({
-		url:'clinics/getexistStud/'+clinic_id,
+		url:'clinics/getRelationship/',
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){ 
+			var result = "";
+			$("#stud_relationship").html("");
+			$.each(msg, function(i,e){	
+				result += '<option value='+e.relationship_name+'>'+e.relationship_name+'</option>';		
+			});	
+			$('#stud_relationship').html(result).trigger("chosen:updated");
+		}
+	});
+}
+
+function changeStudType(){
+	$.ajax({
+		url:'clinics/getexistStud/',
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
@@ -254,9 +270,9 @@ function saveEnroll(){
 	var cherror = 0; //if not error
 	
 	if(service==0 || schedule==0){
-		$("#message .alert").html("Service or schedule is missing.").addClass('alert-danger').show();
+		$("#message .alert").html("Service or schedule is missing.").addClass('alert-danger').show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
+			$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		},2000);
 	}else{
 		if(studType==0){ //new student
@@ -264,7 +280,7 @@ function saveEnroll(){
 			  var name = $("#"+e.name);  
 			  data[e.name] = e.value;
 			  
-			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address"){
+			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address" || e.name == "stud_relationship"){
 				  if(e.value == ""){
 					name.parent().addClass("has-error");
 				  }else{
@@ -275,9 +291,9 @@ function saveEnroll(){
 					  if($.isNumeric(e.value)){
 						  name.parent().removeClass('has-error');   
 					  }else{
-						  $("#message .alert").html("Age should be numeric.").addClass('alert-danger').show();
+						  $("#message .alert").html("Age should be numeric.").addClass('alert-danger').show();$("#message").addClass('zindex');
 						  setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						  },2000);
 						  name.parent().addClass("has-error");
 					 }
@@ -288,9 +304,9 @@ function saveEnroll(){
 			var error = $("#formstudent .has-error").length;
 			if(error > 0){
 				cherror = 1; //if error
-				$("#message .alert").html("All fields are required.").addClass('alert-danger').show();
+				$("#message .alert").html("All fields are required.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-danger').hide();
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 			}else{
 				cherror = 0;
@@ -305,9 +321,9 @@ function saveEnroll(){
 				  if (e.name == "stud_id"){
 					  if(e.value == 0){
 						cherror = 1; //if error
-						$("#message .alert").html("Select a Student.").addClass('alert-danger').show();
+						$("#message .alert").html("Select a Student.").addClass('alert-danger').show();$("#message").addClass('zindex');
 						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						},2000);
 					  }else{
 						cherror = 0;
@@ -332,35 +348,40 @@ function saveEnroll(){
 			  dataType:'JSON',
 			  type:'POST',
 			  success:function(msg){
-				var nme = $("#stud_name").val();
+			  	$("#message .alert").removeClass('alert-danger').removeClass('alert-success');
+				var nme = $("#stud_name").val()+" is";
 				if(studType==1){
 					nme = $("#stud_id option:selected").text();
 				}else if(studType ==2){
-					nme = "Client";
+					nme = "You are";
 				}
 				if(msg == 0){
-					$("#message .alert").html(nme+" has been enrolled successfully.").addClass('alert-success').show();
+					$("#message .alert").html(nme+" now on the waiting list of this clinic's service's service.").addClass('alert-success').show();$("#message").addClass('zindex');
 					$("#stud_name").val("");$("#stud_age").val("");$("#stud_address").val("");
 					setTimeout(function(){
-						$("#message .alert").html("").removeClass('alert-success').hide();
+						$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 						window.location = 'clinics?type='+$("#ctype").val();
-					},2000);
+					},3000);
 				}else if(msg == 3){ //existing student in a clinic
 				
-					$("#message .alert").html($("#stud_name").val()+" student is already exist. Please select Student Type: Existing.").addClass('alert-danger').show();
+					$("#message .alert").html(nme+" already exist. Please select Student Type: Existing.").addClass('alert-danger').show();$("#message").addClass('zindex');
 					$("#stud_name").val("");$("#stud_age").val("");$("#stud_address").val("");
 				}else if(msg == 4){ //student already enrolled in schedule selected
-					$("#message .alert").html(nme+" already enrolled in this schedule").addClass('alert-danger').show();
+					$("#message .alert").html(nme+" already enrolled in this schedule").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else if(msg == 5){
-					$("#message .alert").html("The service has reached its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();
+					$("#message .alert").html("The service has reached its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();$("#message").addClass('zindex');
+				}else if(msg == 6){
+					$("#message .alert").html(nme+" already in this clinic's waiting list for approval.").addClass('alert-danger').show();$("#message").addClass('zindex');
+				}else if(msg == 7){
+					$("#message .alert").html("Schedule is conflict. Please select a different schedule.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else{
-				  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+				  $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}
 				
 				if(msg !=0){
 					setTimeout(function(){
-						$("#message .alert").html("").removeClass('alert-danger').hide();
-					},2000);
+						$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
+					},3000);
 				}
 			  }
 			});
@@ -371,9 +392,9 @@ function saveEnroll(){
 
 function bookmark(clinicid){
 	if($("#ses_userid").val() == ""){
-		$("#message .alert").html("You cannot bookmark a clinic. You need to create an account first.").addClass('alert-danger').show();
+		$("#message .alert").html("You cannot bookmark a clinic. You need to create an account first.").addClass('alert-danger').show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
+			$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		},2000);
 	}else{
 		$.ajax({
@@ -383,15 +404,15 @@ function bookmark(clinicid){
 			type:'POST',
 			success:function(msg){
 				if(msg == 1){
-					$("#message .alert").html("Clinic was bookmarked already.").addClass('alert-success').show();
+					$("#message .alert").html("Clinic was bookmarked already.").addClass('alert-success').show();$("#message").addClass('zindex');
 				}else if(msg == 2 || msg == 3){
-					$("#message .alert").html("Clinic has been successfully bookmarked.").addClass('alert-success').show();
+					$("#message .alert").html("Clinic has been successfully bookmarked.").addClass('alert-success').show();$("#message").addClass('zindex');
 				}else{
-					$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+					$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-success').hide();
-					$("#message .alert").html("").removeClass('alert-danger').hide();
+					$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 			}
 		});
@@ -434,9 +455,9 @@ function SaveComment(clinicid,clinicname,spid){
 	var rating = $("#Rating").val();
 	
 	if(rating == "" || rating == 0 || message == ""){
-		$("#message .alert").html("Either message or rating is empty.").addClass('alert-danger').show();
+		$("#message .alert").html("Either message or rating is empty.").addClass('alert-danger').show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
+			$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		},2000);
 	}else{
 		data['Message'] = message;
@@ -451,20 +472,20 @@ function SaveComment(clinicid,clinicname,spid){
 		type:'POST',
 		success:function(msg){
 			if(msg == 0){ //if success
-				$("#message .alert").html("Reviews has been saved. Waiting for approval.").addClass('alert-success').show();
+				$("#message .alert").html("Reviews has been saved. Waiting for approval.").addClass('alert-success').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html('').removeClass('alert-success').hide();
+					$("#message .alert").html('').removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				},2000);
 			}else if(msg ==2){
-				$("#message .alert").html("You are not allowed to make any reviews for "+clinicname+" because you are not enrolled with this clinic.").addClass('alert-danger').show();
+				$("#message .alert").html("You are not allowed to make any reviews for "+clinicname+" because you are not enrolled with this clinic.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html('').removeClass('alert-danger').hide();
+					$("#message .alert").html('').removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 				
 			}else{
-				$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+				$("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html('').removeClass('alert-danger').hide();
+					$("#message .alert").html('').removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 			}
 			setTimeout(function(){
@@ -523,11 +544,11 @@ function infoservice(clinicid){
 }
 
 function viewprofile(clinicid,userid){
-	var userid = $("#ses_userid").val();
-	if(userid == ''){
-		$("#message .alert").html("You need to login.").addClass('alert-danger').show();
+	var sess = $("#ses_userid").val();
+	if(sess == ''){
+		$("#message .alert").html("You need to login.").addClass('alert-danger').show();$("#message").addClass('zindex');
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass('alert-danger').hide();
+			$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 		},3000);
 	}else{
 	 $('#loader').show();

@@ -191,6 +191,7 @@ function saveProfile(data){
 		success:function(msg){
 			if(msg == 1){
 				$("#modal_profile .alert").html("Changes saved. Modal will automatically close.").removeClass('alert-danger').show().addClass('alert-success');
+
 				setTimeout(function(){
 					$("#modal_profile").modal('hide');
 					window.location = 'index';
@@ -359,9 +360,11 @@ function numbersOnly(val,id){
   if(!$.isNumeric(val)){
     $('#'+id).parent().addClass('has-error');
     $("#message .alert").html($("#"+id).prev().html()+" should be numeric.").addClass("alert-danger").show();
+    $("#message").addClass('zindex');
   }else{
     $("#"+id).parent().removeClass('has-error');
     $("#message .alert").html("").removeClass('has-error').hide();
+    $("#message").removeClass('zindex');
   }
 }
 
@@ -377,12 +380,16 @@ function saveNewPassword(){
 			$("#loader").fadeOut();
 			if(msg == true){
 				$("#message .alert").html("Password changed successfully.").addClass("alert-success").show();
+				$("#message").addClass('zindex');
 				setTimeout(function(){
 					$("#message .alert").html("").removeClass("alert-success").hide();
+					$("#message").removeClass('zindex');
 				},2000);
 			}else{
 				$("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
+				$("#message").addClass('zindex');
 				setTimeout(function(){
+					$("#message").removeClass('zindex');
 					$("#message .alert").html("").removeClass("alert-danger").hide();
 				},2000);
 			}

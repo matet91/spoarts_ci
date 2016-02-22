@@ -48,14 +48,14 @@ function deleteAccount(id){
 			success:function(msg){
 				var table = $("#tbl-client").DataTable();
 				if(msg == true){
-					$("#message .alert").html("Account and other information related to that user has been deleted permanently.").addClass("alert-success").show();
+					$("#message .alert").html("Account and other information related to that user has been deleted permanently.").addClass("alert-success").show();$("#message").addClass('zindex');
 					setTimeout(function(){
-						$("#message .alert").html("").removeClass('alert-success').hide();
+						$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 					},2000);
 				}else{
-					$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();
+					$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();$("#message").addClass('zindex');
 						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						},2000);
 				}
 				table.ajax.reload();
@@ -79,14 +79,14 @@ function turn_off(id,t){
 		success: function(msg){
 			var table = $("#tbl-client").DataTable();
 			if(msg == true){
-				$("#message .alert").html(err).addClass("alert-success").show();
+				$("#message .alert").html(err).addClass("alert-success").show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-success').hide();
+					$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
 				},2000);
 			}else{
-				$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();
+				$("#message .alert").html("Unable to process your request.").addClass("alert-danger").show();$("#message").addClass('zindex');
 				setTimeout(function(){
-					$("#message .alert").html("").removeClass('alert-danger').hide();
+					$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 				},2000);
 
 			}

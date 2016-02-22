@@ -16,11 +16,11 @@ function saveSQSettings(){
 	var sq_pwd = $("#sec_pwd").val();
 
 	if(sq_pwd == ''){
-		$("#message .alert").html("Please enter your security password.").addClass("alert-danger").show();
+		$("#message .alert").html("Please enter your security password.").addClass("alert-danger").show();$("#message").addClass('zindex');
 		$("#sec_pwd").parent().addClass('has-error');
 
 		setTimeout(function(){
-			$("#message .alert").html("").removeClass("alert-danger").hide();
+			$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
 			$("#sec_pwd").parent().removeClass('has-error');
 		},3000);
 	}else{
@@ -33,7 +33,7 @@ function saveSQSettings(){
 				if(msg == true){
 					window.location = "index";
 				}else{
-					$("#message .alert").html("System Error. Please send an email report to spoarts.cebu@gmail.com regarding this error. Thank you!").addClass("alert-danger").show();
+					$("#message .alert").html("System Error. Please send an email report to spoarts.cebu@gmail.com regarding this error. Thank you!").addClass("alert-danger").show();$("#message").addClass('zindex');
 				}
 			}
 		});
@@ -86,15 +86,15 @@ function saveInterest(){
 					if(msg == true){
 						window.location = "index";
 					}else{
-						$("#message .alert").html("System Error. Please send an email report to spoarts.cebu@gmail.com regarding this error. Thank you!").addClass("alert-danger").show();
+						$("#message .alert").html("System Error. Please send an email report to spoarts.cebu@gmail.com regarding this error. Thank you!").addClass("alert-danger").show();$("#message").addClass('zindex');
 					}
 				}
 			});
 		
 	}else{ 
-		$("#message .alert").html("Please select your interest.").addClass("alert-danger").show();
+		$("#message .alert").html("Please select your interest.").addClass("alert-danger").show();$("#message").addClass('zindex');
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass("alert-danger").hide();
+				$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
 			},3000);
 	}
 

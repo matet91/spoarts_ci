@@ -23,16 +23,44 @@ class mmyclinics extends CI_Model {
 		
 		//$sql = "SELECT c.* FROM services s LEFT JOIN clinics c ON s.spid = c.UserID WHERE s.ServiceStatus=1 AND s.ServiceType=$c AND c.clinic_status=0 $search GROUP BY SPID,ServiceType";
 		
-		if($c == 0 or $c == 1){
-			$clinicids = $this->getID("bookmark", "clinic_id", "WHERE client_id='".$userid."'");
-			$sql = "SELECT c.* FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID WHERE c.clinic_id IN(".$clinicids.") AND s.ServiceType=".$c." GROUP BY s.SPID";
-		}else{
-			if($c == 2){$d=0;}else{$d=1;}
-			$clinicids = $this->getID("students_enrolled", "clinic_id", "WHERE client_id='".$userid."' GROUP BY clinic_id,client_id");
-			$sql = "SELECT c.* FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID WHERE c.clinic_id IN(".$clinicids.") AND s.ServiceType=".$d." GROUP BY s.SPID";
+		/*
+				0-sports bookmakr
+				1 - arts bookmark
+				2 -  arts enrolled
+				3-sports enrolled
+		*/	
+		switch($c){
+			case 0:	 //sports bookmark
+					$table = "bookmark";
+					$where = "WHERE client_id='".$userid."'";
+
+			break;
+
+			case 1://arts bookmark
+					$table = "bookmark";
+					$where = "WHERE client_id='".$userid."'";
+			break;
+
+			case 2: //arts enrolled
+					$table = "students_enrolled";
+					$where = "WHERE client_id='".$userid."' GROUP BY clinic_id,client_id";
+					$c = 1;
+			break;
+
+			case 3://sports enrolled
+					$table = "students_enrolled";
+					$where = "WHERE client_id='".$userid."' GROUP BY clinic_id,client_id";
+					$c = 0;
+			break;
+
 		}
-		
+
+			$clinicids = $this->getID($table, "clinic_id", $where);
+			//echo $this->db->last_query();
+			$sql = "SELECT c.* FROM clinics c LEFT JOIN services s ON s.SPID=c.UserID AND s.ServiceStatus=1 WHERE c.clinic_id IN(".$clinicids.") AND s.ServiceType=".$c." GROUP BY s.SPID";
+
 		$q = $this->db->query($sql);
+		//echo $this->db->last_query();
 		return $q->result();
 	}
 	
@@ -82,7 +110,7 @@ class mmyclinics extends CI_Model {
 				$error = 3; //existing student in a clinic
 			}else{
 				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
-	
+				
 				if($ch_sched['ch_sched'] == 0){
 					$data_stud['serviceHour'] = $frmdata['serviceHour'];
 					$data_stud['stud_age'] = $frmdata['stud_age'];
@@ -111,11 +139,38 @@ class mmyclinics extends CI_Model {
 			}
 		}else if($frmdata['studType'] ==1){ //existing
 			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
-			
+
 			if($ch){
 				$error = 4; //student already enrolled in this schedule
 			}else{
 				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
+				//check if student enroll but status is pending for confirmation
+					$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=0");
+					if($ch){
+						return 6; exit(); //student already enrolled but status still pending.
+					}
+
+				//check if schedule is conflict on the student's current schedule
+					//get the details of schedule
+					$sqla = "SELECT SchedDays, SchedTime FROM schedules WHERE SchedID='".$frmdata['SchedID']."'";
+					$qsqla = $this->db->query($sqla);	
+					$ct = 0;
+					$rowa = $qsqla->row();
+					$sDays = explode(',',$rowa->SchedDays);
+					$sTime = explode('-',$rowa->SchedTime);
+					$sStart = date('h:i a',strtotime(str_replace(' ','',$sTime[0])));
+					$sEnd = date('h:i a',strtotime(str_replace(' ','',$sTime[1])));
+					$startTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',1),'%h:%i %p')";
+					$endTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',-1),'%h:%i %p')";
+					$start = "STR_TO_DATE('$sStart','%h:%i %p')";
+					$end = "STR_TO_DATE('$sEnd','%h:%i %p')";
+
+					$sqlb = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON b.SchedID = a.SchedID WHERE b.SchedDays REGEXP '".implode('|',$sDays)."' AND (($startTime BETWEEN $start AND $end AND $startTime !=$end) OR ($endTime BETWEEN $start AND $end AND $endTime != $start) OR ($startTime <= $start && $endTime >= $end)) AND a.stud_id='".$frmdata['stud_id']."' and a.StudEnrolledStatus=1";
+
+					$qb = $this->db->query($sqlb);
+					if($qb->num_rows() > 0){
+						return 7; exit(); //student's schedule is conflict
+					}
 				if($ch_sched['ch_sched'] == 0){
 					$data_enroll['stud_id'] = $frmdata['stud_id'];
 					$data_enroll['client_id'] = $userid;
@@ -123,7 +178,7 @@ class mmyclinics extends CI_Model {
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 					$data_enroll['ins_id'] = $frmdata['ins_id'];
 					$data_enroll['SchedID'] = $frmdata['SchedID'];
-					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['StudEnrolledStatus'] = 0;
 					$insert = $this->db->insert('students_enrolled',$data_enroll);
 					
 					if($insert){$error = 0;
@@ -151,7 +206,7 @@ class mmyclinics extends CI_Model {
 				$age = $diff->format("%y");
 				
 				//insert client data at first 
-				$data_stud['serviceHour'] = $rows['spfirstname'].' '.$rows['splastname'];
+				$data_stud['stud_name'] = $rows['spfirstname'].' '.$rows['splastname'];
 				$data_stud['stud_age'] = $age;
 				$data_stud['stud_address'] = $rows['spaddress'];
 				$data_stud['client_id'] = $userid;
@@ -166,18 +221,44 @@ class mmyclinics extends CI_Model {
 			$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
 			if($ch_sched['ch_sched'] == 0){
 				$stud_id = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
-			
+				//check if already on the waiting list
+				$chw = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=0");
+				//echo $this->db->last_query();
+				if($chw){
+					return 6; exit(); //on waiting list
+				}
 				$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
 				if($ch){
 					$error = 4; //student already enrolled in this schedule
 				}else{	
+					//check if schedule is conflict on the student's current schedule
+					//get the details of schedule
+					$sqla = "SELECT SchedDays, SchedTime FROM schedules WHERE SchedID='".$frmdata['SchedID']."'";
+					$qsqla = $this->db->query($sqla);	
+					$ct = 0;
+					$rowa = $qsqla->row();
+					$sDays = explode(',',$rowa->SchedDays);
+					$sTime = explode('-',$rowa->SchedTime);
+					$sStart = date('h:i a',strtotime(str_replace(' ','',$sTime[0])));
+					$sEnd = date('h:i a',strtotime(str_replace(' ','',$sTime[1])));
+					$startTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',1),'%h:%i %p')";
+					$endTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',-1),'%h:%i %p')";
+					$start = "STR_TO_DATE('$sStart','%h:%i %p')";
+					$end = "STR_TO_DATE('$sEnd','%h:%i %p')";
+
+					$sqlb = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON b.SchedID = a.SchedID WHERE b.SchedDays REGEXP '".implode('|',$sDays)."' AND (($startTime BETWEEN $start AND $end AND $startTime !=$end) OR ($endTime BETWEEN $start AND $end AND $endTime != $start) OR ($startTime <= $start && $endTime >= $end)) AND a.stud_id='".$stud_id."' and a.StudEnrolledStatus=1";
+
+					$qb = $this->db->query($sqlb);
+					if($qb->num_rows() > 0){
+						return 7; exit(); //student's schedule is conflict
+					}
 					$data_enroll['stud_id'] = $stud_id;
 					$data_enroll['client_id'] = $userid;
 					$data_enroll['service_id'] = $frmdata['service_id'];
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 					$data_enroll['ins_id'] = $frmdata['ins_id'];
 					$data_enroll['SchedID'] = $frmdata['SchedID'];
-					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['StudEnrolledStatus'] = 0;
 					$insert = $this->db->insert('students_enrolled',$data_enroll);
 					
 					if($insert){$error = 0;
@@ -203,13 +284,13 @@ class mmyclinics extends CI_Model {
 	function getID($table,$field,$where){
 		$sql = "SELECT $field FROM $table $where";
 		$q = $this->db->query($sql);
-		$id = 0;
+		$id = array(0);
 		if($q->num_rows() > 0){
 			foreach($q->result() as $row){
-				$id = $row->$field;
+				$id[] = $row->$field;
 			}
 		}	
-		return $id;
+		return implode(',',$id);
 	}
 	
 	function dataTables($switch,$id){

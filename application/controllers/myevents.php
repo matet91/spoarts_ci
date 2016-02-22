@@ -49,7 +49,7 @@ class Myevents extends CI_Controller {
 
 		if($service_ids){
 			$table = "events";
-			$fields = "EventID, EventName, EventDesc, EventFor, EventStartDate, EventEndDate,EventLocation";
+			$fields = "EventID, EventName, EventDesc, EventFor, EventStartDate, EventEndDate,EventLocation,SPID";
 			$where = "WHERE EventFor in(".implode(",",$service_ids).") AND EventStatus = 1";
 			$order = "";
 
@@ -58,6 +58,11 @@ class Myevents extends CI_Controller {
 			$data = "";
 		}
 		
+		echo json_encode($data);
+	}
+	
+	function saveEnrollEvent(){
+		$data = $this->mmyevents->saveEnrollEvent();
 		echo json_encode($data);
 	}
 }

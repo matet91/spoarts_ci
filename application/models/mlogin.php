@@ -269,7 +269,7 @@ class Mlogin extends CI_Model {
         $pwd = md5($this->input->post('pwd'));
         $userid = $this->input->get('id');
         $this->db->where('UserID',$userid);
-        $q = $this->db->update('user_accounts',array('Passsword'=>$pwd));
+        $q = $this->db->update('user_accounts',array('Password'=>$pwd));
 
         return $q;
     }   

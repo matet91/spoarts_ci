@@ -3,6 +3,8 @@ $(document).ready(function(){
 		login();
 	});
 
+	
+
 	$('#password').on('keydown', function(e){
 		if(e.which == 13){
 			login();
@@ -43,9 +45,9 @@ $(document).ready(function(){
 			$("#SubscType").removeAttr('disabled');
 		}else{
 			$("#SubscType").attr('disabled','disabled');
-			$("#message .alert").html("Please Skip Step 2: Subscription Plan.").addClass("alert-info").show();
+			$("#message .alert").html("Please Skip Step 2: Subscription Plan.").addClass("alert-info").show();$("#message").addClass('zindex');
 			setTimeout(function(){
-				$("#message .alert").html("").removeClass("alert-info").hide();
+				$("#message .alert").html("").removeClass("alert-info").hide();$("#message").removeClass('zindex');
 			},3000);
 		}
 	});
@@ -128,7 +130,7 @@ function login(){
 					$('#loader').fadeOut();
 					if(msg[0] == 1){
 
-						$("#message .alert").html("").removeClass('alert-danger').hide();
+						$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						if(msg[1] == "0"){
 							window.location = "subscribers";
 						}else if(msg[1] == "1"){
@@ -138,26 +140,26 @@ function login(){
 						}
 						
 					}else if(msg == 2){//inactive
-						$("#message .alert").html("Your account has not been verified. Please check your email. We sent you a new verification code.").addClass('alert-danger').show();
+						$("#message .alert").html("Your account has not been verified. Please check your email. We sent you a new verification code.").addClass('alert-danger').show();$("#message").addClass('zindex');
 							setTimeout(function(){
-								$("#message .alert").html("").removeClass('alert-danger').hide();
+								$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 							},3500);
 					}else if(msg == 3){
-						$("#message .alert").html("Your account is inactive. You may send an email request to spoarts.cebu@gmail.com to activate your account.").addClass('alert-danger').show();
+						$("#message .alert").html("Your account is inactive. You may send an email request to spoarts.cebu@gmail.com to activate your account.").addClass('alert-danger').show();$("#message").addClass('zindex');
 							setTimeout(function(){
-								$("#message .alert").html("").removeClass('alert-danger').hide();
+								$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 							},3500);
 					}else if(msg == 0){
-						$("#message .alert").html("Account not exist.").addClass('alert-danger').show();
+						$("#message .alert").html("Account not exist.").addClass('alert-danger').show();$("#message").addClass('zindex');
 
 						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						},3500);
 					}else{
 
-						$("#message .alert").html("Incorrect Username/Password.").addClass("alert-danger").show();
+						$("#message .alert").html("Incorrect Username/Password.").addClass("alert-danger").show();$("#message").addClass('zindex');
 						setTimeout(function(){
-							$("#message .alert").html("").removeClass('alert-danger').hide();
+							$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 						},3500);
 					}
 
@@ -181,9 +183,9 @@ function register(){
 
 	var count = $("#form-reg .has-error").length;
 	if(count > 0){
-		$("#message .alert").html(err.toString()+" should not be empty. All fields are required!").addClass('alert-danger').show();
+		$("#message .alert").html(err.toString()+" should not be empty. All fields are required!").addClass('alert-danger').show();$("#message").addClass('zindex');
 	}else{
-		$("#message .alert").html("").removeClass('alert-danger').hide();
+		$("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
 
 		saveRegister();
 	}
@@ -287,8 +289,9 @@ function saveRegister(){
 			if(msg == true){
 				window.location = "landingpage?type=1";
 			}else{
-				$("#message .alert").html("An error occurred. Please try again later.").addClass('alert-danger').show();
+				$("#message .alert").html("An error occurred. Please try again later.").addClass('alert-danger').show();$("#message").addClass('zindex');
 			}
 		}
 	})
 }
+

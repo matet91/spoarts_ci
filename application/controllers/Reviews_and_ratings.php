@@ -58,7 +58,7 @@ class Reviews_and_ratings extends CI_Controller {
 			$where = "WHERE SPID = '".$spid."' AND ReviewStatus= '".$switch."'";
 		}
 		$table = "reviews_and_ratings";
-		$fields = "ReviewsID, DatePosted, Message, Rating, (SELECT UserName FROM user_accounts WHERE UserID=SPID) as SPname,(SELECT UserName FROM user_accounts WHERE UserID=EnrolledID) as EnrolleName , ReviewStatus";
+		$fields = "ReviewsID, DatePosted, Message, Rating, (SELECT UserName FROM user_accounts WHERE UserID=SPID) as SPname,(SELECT CONCAT(spfirstname,' ',splastname) FROM user_details WHERE UserID=EnrolledID) as EnrolledName , ReviewStatus";
 		$order = "";
 		$data = $this->mreviews_and_ratings->getlist($table,$fields,$where,$order);
 		echo json_encode($data);

@@ -74,7 +74,7 @@ class Clinics extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	function getexistStud($clinicid){
+	function getexistStud(){
 		$table = "students";
 		$fields = "stud_id, stud_name, stud_age";
 		$where = "WHERE client_id = '".$this->session->userdata('userid')."'";
@@ -98,6 +98,16 @@ class Clinics extends CI_Controller {
 	
 	function saveEnroll(){
 		$data = $this->mclinics->saveEnroll();
+		echo json_encode($data);
+	}
+	
+	function getRelationship(){
+		$table = "relationship_status";
+		$fields = "relationship_id,relationship_name";
+		$leftjoin = "";
+		$where = "";
+		$order = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
 		echo json_encode($data);
 	}
 	function getReviewsRatings($id,$limit){

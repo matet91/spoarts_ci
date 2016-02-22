@@ -174,12 +174,14 @@ class mglobal extends CI_Model {
 			case 4: //instructors
 					$table = "instructor_masterlist";
 					$select = "MasterInsID as id,MasterInsName as name";
+					$this->db->where('MasterInsStatus',1);
 					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;
 
 			case 5: //room
 					$table = "rooms";
-					$select = "RoomID as id,RoomName as name";
+					$select = "RoomID as id,CONCAT(RoomNo,'-',RoomName)as name";
+					$this->db->where('RoomStatus',1);
 					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;
 
@@ -202,12 +204,116 @@ class mglobal extends CI_Model {
 	}
 
 	function testimonials(){
-		$sql = "SELECT a.ReviewsID,a.DatePosted,a.Message,a.Rating,b.clinic_name as clinic,CONCAT(c.spfirstname,'',c.splastname) as client FROM reviews_and_ratings a LEFT JOIN clinics b ON a.SPID=b.UserID LEFT JOIN user_details c ON a.EnrolledID = c.UserID WHERE a.ReviewStatus = 2";
+		$sql = "SELECT a.ReviewsID,a.DatePosted,a.Message,a.Rating,b.clinic_name as clinic,CONCAT(c.spfirstname,'',c.splastname) as client FROM reviews_and_ratings a LEFT JOIN clinics b ON a.SPID=b.UserID LEFT JOIN user_details c ON a.EnrolledID = c.UserID WHERE a.ReviewStatus = 2 ORDER BY a.ReviewsID desc";
 		$get = $this->db->query($sql);
 		return $get->result();
 	}
 
-	function getServiceProviders(){
-		$sql = "";
+	function showallclubs(){
+		$userid = $this->session->userdata('userid');
+		if($userid){
+			$this->db->where('client_id',$userid);
+			$this->db->select('clinic_id');
+			$getB = $this->db->get('bookmark');
+			$clinic = array();
+			if($getB->num_rows() > 0){
+				$row = $getB->row();
+				$clinic = explode(',',$row->clinic_id);
+			}
+
+			//get interest
+			$this->db->where('client_id',$userid);
+			$this->db->select('interest_ids');
+			$getI = $this->db->get('client_interest');
+			if($getI->num_rows() > 0){
+				$rowx = $getI->row();
+				$inid = $rowx->interest_ids;
+				$sqlx = "SELECT b.clinic_id FROM services a LEFT JOIN clinics b ON a.SPID=b.UserID WHERE a.interest_id in (".$inid.") GROUP BY a.SPID";
+				$qx = $this->db->query($sqlx);
+				if($qx->num_rows() > 0){
+					foreach($qx->result() as $qrow){
+						array_push($clinic,$qrow->clinic_id);
+					}
+				}
+			}
+			$cliniclist = $clinic;
+
+			if(isset($cliniclist)){
+				$this->db->where_in('clinic_id',$cliniclist);
+			}
+		}
+		$this->db->where('clinic_status',1);
+		$this->db->select("*");
+		$get = $this->db->get("clinics");
+
+		return $get->result();	
+	}
+
+	function loadEventPromo(){
+		$sql = "SELECT EventName as name, EventDesc as 'desc',EventStartDate as start, EventEndDate as 'end',EventLocation as location,timestamp FROM events WHERE EventStatus=1 ORDER BY timestamp desc";
+		$q = $this->db->query($sql);
+		$data = array();
+		if($q->num_rows > 0){
+			foreach($q->result() as $row){
+				$data[] = array('name' => $row->name,
+							'desc' =>$row->desc,
+							'start' => $row->start,
+							'end' => $row->end,
+							'location' => $row->location,
+							'timestamp' => date('Y-m-d',strtotime($row->timestamp)),
+							'type' => 0);
+			}
+		}
+
+		$sql = "SELECT PromoName as name,PromoDesc as 'desc',PromoStartDate as start,PromoEndDate as 'end',timestamp FROM promos WHERE PromoStatus=1 ORDER BY timestamp desc";
+		$qx = $this->db->query($sql);
+		if($qx->num_rows() > 0){
+			foreach($qx->result() as $row){
+				$data[] = array('name' =>$row->name,
+								'desc' =>$row->desc,
+								'start' => $row->start,
+								'end' => $row->end,
+								'location' => '',
+								'timestamp' => date('Y-m-d',strtotime($row->timestamp)),
+								'type' => 1);
+			}
+		}
+
+		return $data;
+	}
+
+	function countNotification(){
+		$userid = $this->session->userdata('userid');
+		$sql = "SELECT NotifID FROM notifications WHERE ClientID =".$userid." AND NotifStatus=0";
+		$q = $this->db->query($sql);
+		
+		return $q->num_rows();
+	}
+
+	function addNotif($subj,$msg,$clientid){
+		$userid = $this->session->userdata('userid');
+		$data = array('Subject'=>$subj,'Message'=>$msg,'ClientID'=>$clientid,'SPID'=>$userid);
+		$this->db->insert('notifications',$data);
+	}
+	function saveNotification(){
+		$values = $this->input->post('data');
+		$userid = $this->session->userdata('userid');
+		
+		foreach($values as $key =>$val){
+			$data[$key] = $val;
+		}
+		
+		$insert = $this->db->insert('notifications',$data);
+					
+		if($insert){$error = 0;
+		}else{$error = 1;}
+		
+		return $error;
+	}
+	function readNotification(){
+		$userid = $this->session->userdata('userid');
+		$sql = "Update notifications SET NotifStatus=1 WHERE ClientID=$userid";
+		$q = $this->db->query($sql);
+		return 0;
 	}
 }

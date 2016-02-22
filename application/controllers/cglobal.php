@@ -23,6 +23,8 @@ class cglobal extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->model('mglobal');
+		$this->load->model('mmyevents');
+		$this->load->model('mclinics');
 	}
 
 	public function index()
@@ -63,6 +65,47 @@ class cglobal extends CI_Controller {
 
 	function loadInterest($t){
 		$data = $this->mglobal->loadInterest($t);
+		echo json_encode($data);
+	}
+	
+	function loadClinics(){
+		$userid = $this->session->userdata('userid');
+		$interest_ids = $this->mmyevents->getlistid("client_interest","interest_ids","WHERE client_id= $userid","","");
+		
+		$data = $this->mglobal->loadClinics($interest_ids);
+		echo json_encode($data);
+	}
+	
+	function getService($userid){
+		$table = "services";
+		$fields = "ServiceID, ServiceName";
+		$where = "WHERE SPID = '".$userid."' AND ServiceStatus = 1";
+		$order = "";
+		$leftjoin = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
+		echo json_encode($data);
+	}
+	
+	function saveNotification(){
+		$data = $this->mglobal->saveNotification();
+		echo json_encode($data);
+	}
+	
+	function countNotification(){
+		$data = $this->mglobal->countNotification();
+		echo json_encode($data);
+	}
+	
+	function loadEventPromo(){
+		$data = $this->mglobal->loadEventPromo();
+		echo json_encode($data);
+	}
+	function loadAllClinic(){
+		$data = $this->mglobal->loadAllClinic();
+		echo json_encode($data);
+	}
+	function readNotification(){
+		$data = $this->mglobal->readNotification();
 		echo json_encode($data);
 	}
 }

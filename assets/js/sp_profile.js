@@ -85,6 +85,29 @@ function enrolledStudents(id){
 
 }
 
+function masterlistInstructors(id){
+  var table = $('#tbl-ins_masterlist').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,
+    "sAjaxSource": "sp_profile/dataTables/2/"+id,
+    "aoColumns":[ {"sTitle":"ID","sName":"MasterInsID","bVisible":false},
+            {"sTitle":"Name","sName":"MasterInsName"},
+            {"sTitle":"Address","sName":"MasterInsAddress","bSearchable": true},
+            {"sTitle":"Contact #","sName":"MasterInsContactNo","bSearchable": true},
+            {"sTitle":"E-mail","sName":"MasterInsEmail","bSearchable": true},
+            {"sTitle":"Expertise","sName":"MasterInsExpertise","bSearchable": true}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+}
+
 function getPromo(){
     var id = $("#spid").val();
     $.ajax({
@@ -95,9 +118,10 @@ function getPromo(){
 
             $.each(msg, function(i,e){
                 timestamp = new Date(e.timestamp);
+                var t = e.timestamp.split('-'),m = t[1], d = t[2];
                 content += '<div class="col-md-6 post-row">'+
                         '<div class="left-meta-post">'+
-                          '<div class="post-date"><span class="day">'+timestamp.getDay()+'</span><span class="month">'+month[parseInt(timestamp.getMonth())-1]+'</span></div>'+
+                          '<div class="post-date"><span class="day">'+d+'</span><span class="month">'+month[parseInt(m-1)]+'</span></div>'+
                           '<div class="post-type"><i class="fa fa-picture-o"></i></div>'+
                         '</div>'+
                         '<h3 class="post-title"><a href="#">'+e.PromoName+'</a></h3>'+
@@ -163,11 +187,13 @@ function eventCalendar(){ //showing the calendar event
 }
 $(document).ready(function(){
      $('#loader').fadeOut();
+     
      var clinicname = $("#clinicname").val(),
         clinicid = $("#clinicid").val(),
         spid = $("#spid").val();
     getservices();
     enrolledStudents(spid);
+    masterlistInstructors(spid);
     clientlist(clinicid);
     var table = $("#tbl-services").DataTable();
     $('[data-toggle="tooltip"]').tooltip();
@@ -378,9 +404,9 @@ function SaveComment(clinicid,clinicname,spid){
     var rating = $("#Rating").val();
     
     if(rating == "" || rating == 0 || message == ""){
-        $("#message .alert").html("Either message or rating is empty.").addClass('alert-danger').show();
+        $("#message .alert").html("Either message or rating is empty.").addClass('alert-danger').show();$("#message").addClass('zindex');
         setTimeout(function(){
-            $("#message .alert").html("").removeClass('alert-danger').hide();
+            $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
         },2000);
     }else{
         data['Message'] = message;
@@ -395,15 +421,15 @@ function SaveComment(clinicid,clinicname,spid){
         type:'POST',
         success:function(msg){
             if(msg == 0){ //if success
-                $("#message .alert").html("Reviews has been saved. Waiting for approval.").addClass('alert-success').show();
+                $("#message .alert").html("Reviews has been saved. Waiting for approval.").addClass('alert-success').show();$("#message").addClass('zindex');
             }else if(msg ==2){
-                $("#message .alert").html("You are not allowed to make any reviews for "+clinicname+" because you are not enrolled with this clinic.").addClass('alert-danger').show();
+                $("#message .alert").html("You are not allowed to make any reviews for "+clinicname+" because you are not enrolled with this clinic.").addClass('alert-danger').show();$("#message").addClass('zindex');
             }else{
-                $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();
+                $("#message .alert").html("An error occurred during the process. Please try again later or contact the administrator.").addClass('alert-danger').show();$("#message").addClass('zindex');
             }
             setTimeout(function(){
-                $("#message .alert").html("").removeClass('alert-success').hide();
-                $("#message .alert").html("").removeClass('alert-danger').hide();
+                $("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
+                $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
                 window.location = 'sp_profile?susid='+spid;
             },2000);
         }

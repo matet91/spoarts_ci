@@ -57,8 +57,8 @@
           <h4 class="classic-title"><span>Clinic List</span></h4> 
 			<!-- Start Search -->
 			<select class = "form-control chosen-select" id = "clinic_type">
-				<option value=0>Arts Clinic Bookmark</option>
-				<option value=1>Sports Clinic Bookmark</option>
+				<option value=1>Arts Clinic Bookmark</option>
+				<option value=0>Sports Clinic Bookmark</option>
 				<option value=2>Arts Clinic Enrolled</option>
 				<option value=3>Sports Clinic Enrolled</option>
 			</select>

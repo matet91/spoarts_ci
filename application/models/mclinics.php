@@ -6,6 +6,7 @@ class mclinics extends CI_Model {
 	{
 			// Call the CI_Model constructor
 			parent::__construct();
+			date_default_timezone_set('Asia/Manila');
 	}
 	
 	function getlist($table, $fields , $where, $order, $leftjoin){
@@ -128,6 +129,7 @@ class mclinics extends CI_Model {
 					$data_stud['stud_age'] = $frmdata['stud_age'];
 					$data_stud['stud_address'] = $frmdata['stud_address'];
 					$data_stud['stud_name'] = $frmdata['stud_name'];
+					$data_stud['stud_relationship'] = $frmdata['stud_relationship'];
 					$data_stud['client_id'] = $userid;
 					$data_stud['stud_type'] = 1;
 					
@@ -151,25 +153,56 @@ class mclinics extends CI_Model {
 				
 			}
 		}else if($frmdata['studType'] ==1){ //existing
-			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
+			$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND (StudEnrolledStatus=0 or StudEnrolledStatus=1)");
 			
 			if($ch){
 				$error = 4; //student already enrolled in this schedule
 			}else{
 				$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
 				if($ch_sched['ch_sched'] == 0){
+
+					//check if student enroll but status is pending for confirmation
+					$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$frmdata['stud_id']."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=0");
+					if($ch){
+						return 6; exit(); //student already enrolled but status still pending.
+					}
+					//check if schedule is conflict on the student's current schedule
+					//get the details of schedule
+					$sqla = "SELECT SchedDays, SchedTime FROM schedules WHERE SchedID='".$frmdata['SchedID']."'";
+					$qsqla = $this->db->query($sqla);	
+					$ct = 0;
+					$rowa = $qsqla->row();
+					$sDays = explode(',',$rowa->SchedDays);
+					$sTime = explode('-',$rowa->SchedTime);
+					$sStart = date('h:i a',strtotime(str_replace(' ','',$sTime[0])));
+					$sEnd = date('h:i a',strtotime(str_replace(' ','',$sTime[1])));
+					$startTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',1),'%h:%i %p')";
+					$endTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',-1),'%h:%i %p')";
+					$start = "STR_TO_DATE('$sStart','%h:%i %p')";
+					$end = "STR_TO_DATE('$sEnd','%h:%i %p')";
+					$sqlb = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON b.SchedID = a.SchedID WHERE b.SchedDays REGEXP '".implode('|',$sDays)."' AND (($startTime BETWEEN $start AND $end AND $startTime !=$end) OR ($endTime BETWEEN $start AND $end AND $endTime != $start) OR ($startTime <= $start && $endTime >= $end)) AND a.stud_id='".$frmdata['stud_id']."' and a.StudEnrolledStatus=1";
+
+					$qb = $this->db->query($sqlb);
+					if($qb->num_rows() > 0){
+						return 7; exit(); //student's schedule is conflict
+					}
+
+
 					$data_enroll['stud_id'] = $frmdata['stud_id'];
 					$data_enroll['client_id'] = $userid;
 					$data_enroll['service_id'] = $frmdata['service_id'];
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 					$data_enroll['ins_id'] = $frmdata['ins_id'];
 					$data_enroll['SchedID'] = $frmdata['SchedID'];
-					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['StudEnrolledStatus'] = 0;
 					$insert = $this->db->insert('students_enrolled',$data_enroll);
 					
-					if($insert){$error = 0;
+					if($insert){
+
+						$error = 0;
 					}else{$error = 1;}
 				}else{
+
 					$error = 5;
 				}
 			}
@@ -192,7 +225,7 @@ class mclinics extends CI_Model {
 				$age = $diff->format("%y");
 				
 				//insert client data at first 
-				$data_stud['serviceHour'] = $rows['spfirstname'].' '.$rows['splastname'];
+				$data_stud['stud_name'] = $rows['spfirstname'].' '.$rows['splastname'];
 				$data_stud['stud_age'] = $age;
 				$data_stud['stud_address'] = $rows['spaddress'];
 				$data_stud['client_id'] = $userid;
@@ -207,18 +240,48 @@ class mclinics extends CI_Model {
 			$ch_sched = $this->checkData("schedules", "(schedremaining=schedslots) as ch_sched", "WHERE SchedID='".$frmdata['SchedID']."'");
 			if($ch_sched['ch_sched'] == 0){
 				$stud_id = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
-			
-				$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=1");
+
+				//check if already on the waiting list
+				$chw = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND StudEnrolledStatus=0");
+				//echo $this->db->last_query();
+				if($chw){
+					return 6; exit(); //on waiting list
+				}
+
+				$ch = $this->checkData("students_enrolled", "StudEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND service_id='".$frmdata['service_id']."' AND clinic_id='".$frmdata['clinic_id']."' AND SchedID='".$frmdata['SchedID']."' AND (StudEnrolledStatus=0 or StudEnrolledStatus=1)");
 				if($ch){
 					$error = 4; //student already enrolled in this schedule
 				}else{	
+
+					//check if schedule is conflict on the student's current schedule
+					//get the details of schedule
+					$sqla = "SELECT SchedDays, SchedTime FROM schedules WHERE SchedID='".$frmdata['SchedID']."'";
+					$qsqla = $this->db->query($sqla);	
+					$ct = 0;
+					$rowa = $qsqla->row();
+					$sDays = explode(',',$rowa->SchedDays);
+					$sTime = explode('-',$rowa->SchedTime);
+					$sStart = date('h:i a',strtotime(str_replace(' ','',$sTime[0])));
+					$sEnd = date('h:i a',strtotime(str_replace(' ','',$sTime[1])));
+					$startTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',1),'%h:%i %p')";
+					$endTime = "STR_TO_DATE(SUBSTRING_INDEX(b.SchedTime,'-',-1),'%h:%i %p')";
+					$start = "STR_TO_DATE('$sStart','%h:%i %p')";
+					$end = "STR_TO_DATE('$sEnd','%h:%i %p')";
+
+					$sqlb = "SELECT * FROM students_enrolled a LEFT JOIN schedules b ON b.SchedID = a.SchedID WHERE b.SchedDays REGEXP '".implode('|',$sDays)."' AND (($startTime BETWEEN $start AND $end AND $startTime !=$end) OR ($endTime BETWEEN $start AND $end AND $endTime != $start) OR ($startTime <= $start && $endTime >= $end)) AND a.stud_id='$userid' and a.StudEnrolledStatus=1";
+
+					$qb = $this->db->query($sqlb);
+					if($qb->num_rows() > 0){
+						return 7; exit(); //student's schedule is conflict
+					}
+					
 					$data_enroll['stud_id'] = $stud_id;
 					$data_enroll['client_id'] = $userid;
 					$data_enroll['service_id'] = $frmdata['service_id'];
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
 					$data_enroll['ins_id'] = $frmdata['ins_id'];
 					$data_enroll['SchedID'] = $frmdata['SchedID'];
-					$data_enroll['StudEnrolledStatus'] = 1;
+					$data_enroll['StudEnrolledStatus'] = 0;
 					$insert = $this->db->insert('students_enrolled',$data_enroll);
 					
 					if($insert){$error = 0;
@@ -230,6 +293,8 @@ class mclinics extends CI_Model {
 			
 			
 		}
+
+
 		return $error;
 	}
 	
@@ -258,6 +323,7 @@ class mclinics extends CI_Model {
 		$sSortype = $this->input->get('sSortDir_0');
 		$sSearch = $this->input->get('sSearch');
 		$usertype = $this->session->userdata('usertype');
+		$userid = $this->session->userdata('userid');
 		$sLimit = "";
 		if ( $this->input->get('iDisplayStart')!='' && $this->input->get('iDisplayLength') != '-1' )
 			$sLimit = "LIMIT ".intVal($this->input->get('iDisplayStart')).", ".intVal($this->input->get('iDisplayLength'));
@@ -273,6 +339,31 @@ class mclinics extends CI_Model {
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
 				$aColumns_output = array("serviceid","servicename", "ServiceRegistrationFee","ServicePrice","serviceWalkin","serviceHour","ServiceType");
+			break;
+			case 2:
+				$aColumns = array("NotifID","subject", "message","datecreate","clinic");
+				$select = array("n.NotifID","n.subject", "n.message","n.datecreated","(c.clinic_name) as clinic");
+				$sTable = "notifications n";
+				$leftjoin = " LEFT JOIN clinics c ON c.UserID = n.SPID";
+				$sWhere = " WHERE ClientID = ".$userid." AND n.NotifStatus=0";
+				if($sSearch){$sWhere .= " AND (subject like '%".$sSearch."%' OR message like '%".$sSearch."%' OR datecreated like '%".$sSearch."%'  OR c.clinic_name like '%".$sSearch."%')";}
+				$sOrder = 'ORDER BY n.datecreated DESC';
+				$groupby = "";
+				$aColumns_output = array("NotifID","subject", "message","datecreated","clinic");
+			break;
+			case 3:
+				$endate = date('Y-m-d');
+				$stdate = date('Y-m-d', strtotime("-7 day"));
+				
+				$aColumns = array("notifid","subject", "message","datecreated","clinic");
+				$select = array("n.notifid","n.subject", "n.message","n.datecreated","(c.clinic_name) as clinic");
+				$sTable = "notifications n";
+				$leftjoin = " LEFT JOIN clinics c ON c.UserID = n.SPID";
+				$sWhere = " WHERE ClientID = ".$userid." AND n.NotifStatus=1 AND n.datecreated BETWEEN '".$stdate."' AND '".$endate."'";
+				if($sSearch){$sWhere .= " AND (subject like '%".$sSearch."%' OR message like '%".$sSearch."%' OR datecreated like '%".$sSearch."%'  OR c.clinic_name like '%".$sSearch."%')";}
+				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+				$groupby = "";
+				$aColumns_output = array("notifid","subject", "message","datecreated","clinic");
 			break;
 		}
 		
