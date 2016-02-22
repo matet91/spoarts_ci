@@ -7,6 +7,7 @@ class mclinics extends CI_Model {
 			// Call the CI_Model constructor
 			parent::__construct();
 			date_default_timezone_set('Asia/Manila');
+			$this->load->model('mglobal');
 	}
 	
 	function getlist($table, $fields , $where, $order, $leftjoin){
@@ -294,6 +295,47 @@ class mclinics extends CI_Model {
 			
 		}
 
+		if($error == 0){
+			switch($frmdata['studType']){
+				case 0: //new student
+						$studname = $frmdata['stud_name'];
+						
+				break;
+
+				case 1: //existing student
+						$sid = $frmdata['stud_id'];
+						$sqql21 = $this->db->query("SELECT stud_name FROM students WHERE stud_id='$sid'");
+						$rod2 = $sqql21->row();
+						$studname = $rod2->stud_name;
+				break;
+
+				case 2: //client as student
+						$sid = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
+						$sqql21 = $this->db->query("SELECT stud_name FROM students WHERE stud_id='$sid'");
+						$rod2 = $sqql1->row();
+						$studname = $rod->stud_name;
+
+				break;
+			}
+			
+				
+				$schedid = $frmdata['SchedID'];
+				$sql = $this->db->query("SELECT c.clinic_name,b.ServiceName,c.UserID FROM schedules a LEFT JOIN services b ON a.ServiceID=b.ServiceID LEFT JOIN clinics c ON c.UserID = b.SPID WHERE a.SchedID='$schedid'");
+				$rowx = $sql->row();
+				$clinicname = $rowx->clinic_name;
+				$servicename = $rowx->ServiceName;
+				$clientid = $rowx->UserID; //service provider id
+				$myid = $this->session->userdata('userid'); //logged in userid
+				//GET name of the client 
+				$sqql1 = $this->db->query("SELECT CONCAT(spfirstname,' ',splastname) as name FROM user_details WHERE UserID='$myid'");
+				$rod = $sqql1->row();
+				$cname = $rod->name;
+
+				$subj = "For Approval [$servicename] : New Student Request";
+				$msg = "You have a new student request from client $cname. Enrollee Name: $studname.";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
+		}
 
 		return $error;
 	}

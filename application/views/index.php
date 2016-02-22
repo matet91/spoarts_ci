@@ -74,7 +74,7 @@
     <?php }else{?>
       <a class="open-switcher show-switcher" id = "login-icon" data-toggle = "popover" data-placement = "right" title = "Login/Register Here"><i class="fa fa-cog fa-2x"></i></a>
       <h4>Login</h4>
-          <a href = "#" id = "register">Register</a>|<a href="#">Forgot Password ?</a>
+          <a href = "#" id = "register">Register</a>|<a href="landingpage?type=3">Forgot Password ?</a>
           <br/>
           <span id = "error" data-placement="top" data-toggle="popover"></span>
           <!-- Divider -->

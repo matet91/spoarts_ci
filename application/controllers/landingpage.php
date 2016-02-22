@@ -30,6 +30,9 @@ class Landingpage extends CI_Controller {
 		if($type == 1){
 			$title = "Registration Completed";
 			$data = "";
+		}else if($type==3){
+			$title = "Forgot Password";
+			$data = $this->mlogin->verify();
 		}else{
 			$title = "Account Verification Status";
 			$data = $this->mlogin->verify();
@@ -44,4 +47,5 @@ class Landingpage extends CI_Controller {
 		
 		$this->load->view('index.php',$data);
 	}
+
 }

@@ -565,7 +565,7 @@ class mservices extends CI_Model {
 					$transactions = $payment->getTransactions(); 
 					$relatedResources = $transactions[0]->getRelatedResources(); 
 					$sale = $relatedResources[0]->getSale(); 
-					$userid = ((!isset($userid))?$userid:$this->session->userdata('userid'));
+					$userid = ($userid)?$userid:$this->session->userdata('userid');
 					$transactionID = $sale->getId();
 					$createTime = $sale->getCreateTime();
 					$status = $sale->getState();

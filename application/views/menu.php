@@ -25,7 +25,7 @@
             <a class="navbar-brand" href="#"><img alt="" src="assets/images/logo.png"></a>
           </div>
           <div class="navbar-collapse collapse">
-            <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == '2'){ ?>
+            <?php if($this->session->userdata('usertype') == '2' || $this->session->userdata('usertype') == '1'){ ?>
             <div class="search-side">
               <button class = "btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Notifications" id="notification"  style = "cursor:pointer"><span class = "glyphicon glyphicon-bell" style = "cursor:pointer" ></span></button>
             </div>

@@ -110,7 +110,7 @@
 									<label id = "instructor"></label>
 								  </div>
 								  <div class = "form-group">
-									<label for = "forsched_slot">Slot: </label>
+									<label for = "forsched_slot">Available Slot: </label>
 									<label id = "slot"></label>
 								  </div>
 								  <div class = "form-group">

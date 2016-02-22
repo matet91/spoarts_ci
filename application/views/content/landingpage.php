@@ -10,7 +10,21 @@
 			  	<?php if($this->input->get('type') == 1){ ?>
 		 			<h3 class="classic-title"><span>Registration Completed!</span></h3>
 		 			<p><h6>Congratulations! Your registration has been completed. We sent you your verification Link. Please check your email to activate your account. You have 24 hours before your verification link expired.</h6></p>
-		 		<?php }else { switch($data){ case 1:?>
+		 		<?php }else if($this->input->get('type') == 3){
+		 			?>	
+		 				<div class = "row">
+	 						<form class = "frm-resetpassword">
+	 							<div class = "row">
+	 								<div class = "form-group">
+	 									<label>Please type your email</label>
+	 									<input type="text" id="email" name = "email" class = "form-control"/>
+	 								</div>
+	 							</div>
+	 						</form>
+	 						<button type="button" class="btn btn-lg btn-primary" id="reset">RESET PASSWORD</button>
+	 					</div>
+		 			<?php
+		 			}else { switch($data){ case 1:?>
 		 					<h3 class="classic-title"><span>Account Verification Error!</span></h3>
 		 					<p><h6>Your account has already been verified and activated.</h6></p>
 				 		<?php break;case 2:?>
@@ -48,3 +62,4 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="assets/js/firstlogin.js"></script>

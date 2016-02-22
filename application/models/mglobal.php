@@ -126,8 +126,8 @@ class mglobal extends CI_Model {
 	}
 
 	function listInterest(){
-		$this->db->select("*");
-		$get = $this->db->get("interest");
+		$sql="SELECT a.interest_id, a.interest_name FROM services b LEFT JOIN interest a ON a.interest_id=b.interest_id WHERE b.ServiceStatus=1 GROUP BY b.interest_id";
+		$get = $this->db->query($sql);
 		return $get->result();
 	}
 
@@ -315,5 +315,45 @@ class mglobal extends CI_Model {
 		$sql = "Update notifications SET NotifStatus=1 WHERE ClientID=$userid";
 		$q = $this->db->query($sql);
 		return 0;
+	}
+
+	function resetpassword(){
+		$email = $this->input->post('email');
+		$sql = "SELECT a.UserID,b.spfirstname,b.splastname FROM user_accounts a LEFT JOIN WHERE UserName = '$email'";
+		$q = $this->db->query($sql);
+
+		if($q->num_rows() > 0){
+			//email here
+			$rowx = $q->row();
+			$userid = $rowx->UserID;
+			$fname = $rowx->spfirstname;
+	        $to = $email;
+	        $subject = "[Do not reply] Spoarts: Reset Password";
+	        $message = "<span style='color:#3BACAD'>Hi ".$fname."!</span><br/>
+	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=2&code=".$UAData['verification_code']."&id=".$UserID."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
+	                    <h3 style='color:#0298D3'>Spoarts Team</h3></p>";
+	        $mail = new Mailer();
+	       // $mail->SMTPDebug = 3;
+	        $mail->isSMTP(); // Set mailer to use SMTP
+	        $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
+	        $mail->SMTPAuth = true; // Enable SMTP authentication
+	        $mail->Username = 'spoarts.cebu@gmail.com';// SMTP username
+	        $mail->Password = 'sp0@rt$2016';// SMTP password
+	        $mail->SMTPSecure = 'tls';// Enable TLS encryption, `ssl` also accepted
+	        $mail->Port = 587;// TCP port to connect to
+	        $mail->addAddress($to);// Add a recipien
+	        $mail->isHTML(true);// Set email format to HTML
+	        $mail->setFrom('spoarts.cebu@gmail.com', 'Spoarts');
+	        $mail->Subject = $subject;
+	        $mail->Body    = $message;
+
+	        if(!$mail->send()) {
+
+	            //echo $mail->ErrorInfo;
+	            return 0; exit(); //not send
+	        }else{
+	        	return 1;exit()//sent
+	        }
+	    }else return 2;//email not exist
 	}
 }

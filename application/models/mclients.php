@@ -333,8 +333,6 @@ class mclients extends CI_Model {
 				$msg = "$studname just logged in today ".date('Y-m-d h:i:s')." [".$clinicname."-".$servicename."]";
 
 				$this->mglobal->addNotif($subj,$msg,$clientid);
-
-			$this->mglobal->addNotif($subj,$msg,$clientid);
 			return 0; exit();
 		}
 	}

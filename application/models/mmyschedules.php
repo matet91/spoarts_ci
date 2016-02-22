@@ -51,6 +51,7 @@ class mmyschedules extends CI_Model {
 		$iFilteredTotal = $aResultFilterTotal->count;
 		
 		/* Total data set length */
+		
 		$sQuery_total = "SELECT COUNT(".$sIndexColumn.") as count FROM $sTable";
 		$rResultTotal = $this->db->query( $sQuery_total);
 		$aResultTotal = $rResultTotal->row();

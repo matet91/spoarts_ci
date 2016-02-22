@@ -20,6 +20,7 @@ class Index extends CI_Controller {
 	 */
 	public function __construct(){
 			parent::__construct();
+			$this->load->library('mailer');
 			$this->load->model('mservices');
 			$this->load->model('mglobal');
 			$this->load->helper('date');
@@ -107,6 +108,11 @@ class Index extends CI_Controller {
 
 	function getServiceProviders(){
 		$data = $this->mglobal->getServiceProviders();
+		echo json_encode($data);
+	}
+
+	function resetpassword(){
+		$data = $this->db->mglobal->resetpassword();
 		echo json_encode($data);
 	}
 }

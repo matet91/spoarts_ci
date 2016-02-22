@@ -86,7 +86,7 @@ class Clinics extends CI_Controller {
 	
 	function changeSchedule($schedid){
 		$table = "schedules s";
-		$fields = "s.SchedID, CONCAT(r.RoomNo, ' ' ,r.RoomName) as Room , (m.MasterInsName) as Instructor, s.SchedSlots, s.RoomID, s.InstructorID";
+		$fields = "s.SchedID, CONCAT(r.RoomNo, ' ' ,r.RoomName) as Room , (m.MasterInsName) as Instructor, (CASE WHEN s.SchedSlots > s.SchedRemaining THEN s.SchedSlots-s.SchedRemaining ELSE 0 END) as SchedSlots, s.RoomID, s.InstructorID";
 		//$where = "WHERE SchedID = '".$schedid."' AND SchedStatus = 1";
 		$leftjoin = "LEFT JOIN rooms r ON r.RoomID = s.RoomID LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID";
 		$where = "WHERE SchedID = '".$schedid."'";

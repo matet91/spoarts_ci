@@ -6,6 +6,8 @@ class mmyevents extends CI_Model {
 	{
 			// Call the CI_Model constructor
 			parent::__construct();
+			date_default_timezone_set('Asia/Manila');
+			$this->load->model('mglobal');
 	}
 		
 	function getlistid($table, $fields , $where, $order, $leftjoin){
@@ -95,10 +97,10 @@ class mmyevents extends CI_Model {
 			}
 			
 			$stud_id = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
-			echo $this->db->last_query();
+			//echo $this->db->last_query();
 			$ch = $this->checkData("events_enrolled", "EventEnrolledID", "WHERE stud_id='".$stud_id."' AND client_id='".$userid."' AND clinic_id='".$frmdata['SPID']."' AND EventID='".$frmdata['EventID']."'AND (EventEnrolledStatus=0 or EventEnrolledStatus=1)");
-			echo $this->db->last_query();
-			echo $ch;
+			//echo $this->db->last_query();
+			//echo $ch;
 			
 			/*if($ch){
 				$error = 4; //student already enrolled in this schedule
@@ -115,6 +117,48 @@ class mmyevents extends CI_Model {
 			}*/
 			
 			
+		}
+		if($error == 0){
+			switch($frmdata['studType']){
+				case 0: //new student
+						$studname = $frmdata['stud_name'];
+						
+				break;
+
+				case 1: //existing student
+						$sid = $frmdata['stud_id'];
+						$sqql21 = $this->db->query("SELECT stud_name FROM students WHERE stud_id='$sid'");
+						$rod2 = $sqql21->row();
+						$studname = $rod2->stud_name;
+				break;
+
+				case 2: //client as student
+						$sid = $this->getID("students", "stud_id", "WHERE client_id='".$userid."' AND stud_type=0");
+						$sqql21 = $this->db->query("SELECT stud_name FROM students WHERE stud_id='$sid'");
+						$rod2 = $sqql1->row();
+						$studname = $rod->stud_name;
+
+				break;
+			}
+			
+				
+				$EventID = $frmdata['EventID'];
+
+				$sql = $this->db->query("SELECT * FROM events WHERE EventID='$EventID'");
+				//echo $this->db->last_query();
+				$rowx = $sql->row();
+				$eventname = $rowx->EventName;
+				$clientid = $rowx->SPID; //service provider id
+				$myid = $this->session->userdata('userid'); //logged in userid
+				//GET name of the client 
+				$sqql1 = $this->db->query("SELECT CONCAT(spfirstname,' ',splastname) as name FROM user_details WHERE UserID='$myid'");
+				$rod = $sqql1->row();
+				$cname = $rod->name;
+
+				$subj = "For Approval Event [$eventname] : New Student Request";
+				$msg = "You have a new participant's request from client $cname. Participant Name: $studname.";
+
+				$this->mglobal->addNotif($subj,$msg,$clientid);
 		}
 		return $error;
 	}

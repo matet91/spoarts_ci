@@ -202,8 +202,8 @@
                               <input type = "text" class = "form-control" id = "SPContactNo" name = "SPContactNo" placeholder="Contact Number"/>
                             </div>
                             <div class = "form-group">
-                              <label for = "country">House #, Street, Barangay :</label>
-                              <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="House #, Street, Barangay" />
+                              <label for = "country">Address :</label>
+                              <input type = "text" class = "form-control" id = "SPAddress" name = "SPAddress" placeholder="Address" />
                               <input type = "hidden" class = "form-control" id = "longitude" name = "longitude"/>
                               <input type = "hidden" class = "form-control" id = "latitude" name = "latitude" />
                             </div>

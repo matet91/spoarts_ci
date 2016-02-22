@@ -10,6 +10,10 @@ $(document).ready(function(){
 
 	});
 
+	$('#reset').click(function(){
+		resetpassword();
+	});
+
 });
 
 function saveSQSettings(){
@@ -98,4 +102,38 @@ function saveInterest(){
 			},3000);
 	}
 
+}
+
+function resetpassword(){
+	var email = $(".frm-resetpassword #email").val();
+	if(email == ''){
+		$("#message .alert").html("Please type you email.").addClass("alert-danger").show();$("#message").addClass('zindex');
+		setTimeout(function(){
+			$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+		},3000);
+	}else{
+		$.ajax({
+			url: 'index/resetpassword',
+			data:{email:email},
+			dataType:'JSON',
+			success:function(msg){
+				if(msg == 0){
+					$("#message .alert").html("System Error. Please try again later.").addClass("alert-danger").show();$("#message").addClass('zindex');
+					setTimeout(function(){
+						$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+					},3000);
+				}else if(msg == 1){
+					$("#message .alert").html("We sent you the link to change your password. Please check your email.").addClass("alert-success").show();$("#message").addClass('zindex');
+					setTimeout(function(){
+						$("#message .alert").html("").removeClass("alert-success").hide();$("#message").removeClass('zindex');
+					},3000);
+				}else{
+					$("#message .alert").html("Email does not exist.").addClass("alert-danger").show();$("#message").addClass('zindex');
+					setTimeout(function(){
+						$("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
+					},3000);
+				}
+			}
+		});
+	}
 }
