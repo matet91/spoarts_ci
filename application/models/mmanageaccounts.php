@@ -181,6 +181,7 @@ class Mmanageaccounts extends CI_Model {
 		$this->db->where('client_id',$id);
 		$this->db->select('*');
 		$get = $this->db->get('students');
+		if($get->num_rows() > 0){
 			foreach($get->result() as $row){
 				$data[] = $row->stud_id;
 			}
@@ -188,9 +189,11 @@ class Mmanageaccounts extends CI_Model {
 
 
 		$sql = $this->db->query("DELETE FROM students_enrolled WHERE stud_id in (".$students.")");
-		
+		}
 		$this->db->where($where);
 		$q = $this->db->delete($tables);//delete from table arrayed tables
-		return $q;
+		if($q) return false;
+		else return true;
+	
 	}
 }
