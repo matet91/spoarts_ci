@@ -352,7 +352,7 @@ class mglobal extends CI_Model {
 	            //echo $mail->ErrorInfo;
 	            return 0; exit(); //not send
 	        }else{
-	        	return 1;exit()//sent
+	        	return 1;exit();//sent
 	        }
 	    }else return 2;//email not exist
 	}
