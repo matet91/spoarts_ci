@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	$("#btn-newPwd").click(function(){
-		saveNewPassword();
+		saveNewPassword(1,'');
 	});
 	$(".chosen-select").chosen({width: "95%"});
 	$('.modal').on('hidden.bs.modal', function(e){
@@ -102,25 +102,19 @@ function comparepassword(p1val,p2val,p2label,x){
 	var p2 = $("#"+p2val).val();
 	
 	if(p1 == p2){
-		$("#"+p2label).attr('title',"<p class = 'text-success'>Password matched.</p>").popover({
-					html:true
-		}).popover('show');
+		$("#message .alert").html("Password matched.").addClass('alert-success').show(); $("#message").addClass('zindex');
+
 		setTimeout(function(){
-			$("#"+p2label).popover('hide');
-			$('#'+p2label).popover('destroy');
+			$("#message .alert").html("").removeClass('alert-success').hide(); $("#message").removeClass('zindex');
 		},2000);
 		$('#'+x).removeAttr('disabled');
 	}else{
 		$("#"+p2val).parent().addClass('has-error');
-		$("#label_"+p2val).attr('title',"<p class = 'text-danger'>Password does not match.</p>").popover({
-					html:true
-		}).popover('show');
+		$("#message .alert").html("Password does not match.").addClass('alert-danger').show(); $("#message").addClass('zindex');
 		$('#'+x).attr('disabled','disabled');
 		setTimeout(function(){
-			$("#"+p2label).popover('hide');
 			$("#"+p2val).parent().removeClass('has-error');
-			$('#'+p2label).popover('destroy');
-			
+			$("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
 		},1000);
 	}
 }
@@ -205,6 +199,7 @@ function saveProfile(data){
 }
 
 function uploadProfilePhoto(){
+	
   $('#btn-member_pic').change( function(e) {
     var file = this.files[0];
     var fd = new FormData();
@@ -236,6 +231,9 @@ function verifyPassword(c){
 		case 1: //login password 
 			var pwd = $("#oldpwd").val();
 		break;
+		case 2: //reset password
+			var pwd = $("#oldpwd1").val();
+		break;
 
 	}
 	$.ajax({
@@ -252,6 +250,10 @@ function verifyPassword(c){
 						$("#oldpwd").parent().removeClass('has-error');
 						$("#newpwd").removeAttr('disabled');
 					break;
+					case 2://reset password
+						$("#oldpwd1").parent().removeClass('has-error');
+						$("#newpwd1").removeAttr('disabled');
+					break;
 				}
 			}else{
 				switch(c){
@@ -260,7 +262,18 @@ function verifyPassword(c){
 						$("#oldpwd").parent().addClass('has-error');
 						$("#newpwd").attr('disabled','disabled');
 					break;
+					case 2: //reset password
+						$("#message .alert").html('Incorrect Login Password.').addClass('alert-danger').show();
+						$("#message").addClass('zindex');
+						$("#oldpwd1").parent().addClass('has-error');
+						$("#newpwd1").attr('disabled','disabled');
+
+						setTimeout(function(){
+		                    $("#message .alert").html("").removeClass('alert-danger').hide(); $("#message").removeClass('zindex');
+		                },3000);
+					break;
 				}
+
 			}
 		}
 	});
@@ -368,11 +381,21 @@ function numbersOnly(val,id){
   }
 }
 
-function saveNewPassword(){
+function saveNewPassword(c,userid){
 	$('#loader').show();
-	var newpwd = $("#newpwd").val();
+	switch(c){
+		case 1: //login password c 
+				var newpwd = $("#newpwd").val();
+		break;
+
+		case 2: //reset password
+				var newpwd = $("#newpwd1").val();
+		break;
+	}
+	
+	
 	$.ajax({
-		url: 'login/changepassword',
+		url: 'login/changepassword/'+userid,
 		data:{pwd:newpwd},
 		dataType:'JSON',
 		type:'POST',
@@ -384,6 +407,9 @@ function saveNewPassword(){
 				setTimeout(function(){
 					$("#message .alert").html("").removeClass("alert-success").hide();
 					$("#message").removeClass('zindex');
+					if(c == 2){
+						window.location = 'login';
+					}
 				},2000);
 			}else{
 				$("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();
@@ -393,7 +419,7 @@ function saveNewPassword(){
 					$("#message .alert").html("").removeClass("alert-danger").hide();
 				},2000);
 			}
-			$("#modal_secsettings").modal('close');
+			if(c == 1) $("#modal_secsettings").modal('close');
 		}
 	});
 }

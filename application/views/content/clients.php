@@ -40,6 +40,7 @@
         <li class="active"><a href="#tab-clientsx" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
           <li><a href="#tab-student_approved" data-toggle="tab"><i class="fa fa-group"></i>Approved Students</a></li>
           <li><a href="#tab-students_pending" data-toggle="tab"><i class="fa fa-group"></i>Pending Students&nbsp;<span id='countPending' class='text-danger'></span></a></li>
+          <li><a href="#tab-students_event" data-toggle="tab"><i class="fa fa-group"></i>Events - Enrolled Students</a></li>
           
         </ul>
         <!-- Tab panels -->
@@ -63,6 +64,11 @@
               <!-- Divider -->
 				      <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
            		<table id="tbl-disapproved_students" class="display" cellspacing="0" width="100%"></table>
+          </div>
+		  <div class="tab-pane fade in" id="tab-students_event">
+              <!-- Divider -->
+				      <div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
+           		<table id="tbl-events_students" class="display" cellspacing="0" width="100%"></table>
           </div>
         </div>
       </div>

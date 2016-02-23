@@ -78,8 +78,8 @@ class Login extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function changepassword(){
-		$data = $this->mlogin->changepassword();
+	function changepassword($id=null){
+		$data = $this->mlogin->changepassword($id);
 		echo json_encode($data);
 	}
 

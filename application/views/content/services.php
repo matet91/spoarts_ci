@@ -8,6 +8,9 @@
       }
 
 </style>
+<?php
+  $clinicstatus = $this->session->userdata('clinic_status');
+?>
 <!-- Start Page Banner -->
     <div class="page-banner no-subtitle">
       <div class="container">
@@ -56,29 +59,7 @@
 
                 <div class="row">
                   <div class="col-sm-10">
-                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php
-                    if($data->SubscType==2){
-
-                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
-                        {
-                          echo "";
-                        }else if($data->SubsStatus==0){
-                          echo "disabled";
-                        }else{
-                          echo "disabled";
-                        }
-                      }else{
-                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
-
-                            $datetime1 = date_create($data->SubscEndDate);
-                            $datetime2 = date_create(date('Y-m-d'));
-                            $interval = date_diff($datetime2, $datetime1);
-                            echo "";
-                          }else{
-                            echo "disabled";
-                          }
-                      }
-                  ?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
+                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php echo ($clinicstatus==0)?'disabled':'';?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
                   </div>
                 </div>
               </div>
@@ -188,110 +169,23 @@
 	            <div class="tab-content">
 	                <!-- Tab Content 1 -->
 	                <div class="tab-pane fade in active" id="tab-4">
-	                <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services" 
-                  <?php
-                    if($data->SubscType==2){
-                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
-                        {
-                          echo "";
-                        }else if($data->SubsStatus==0){
-                          echo "disabled";
-                        }else{
-                          echo "disabled";
-                        }
-                      }else{
-                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
-
-                            $datetime1 = date_create($data->SubscEndDate);
-                            $datetime2 = date_create(date('Y-m-d'));
-                            $interval = date_diff($datetime2, $datetime1);
-                            echo "";
-                          }else{
-                            echo "disabled";
-                          }
-                      }
-                  ?>
-                  ><i class="fa fa-plus"> Add Services</i></button>
+	                <button class="btn btn-primary btn-sm" id="btn-addService" data-toggle="tooltip" data-placement="top" title="Add Services" <?php echo ($clinicstatus==0)?'disabled':'';?>><i class="fa fa-plus"> Add Services</i></button>
 	                <div class="hr1 margin-top"></div>
               			<table id="tbl-services" class="display" cellspacing="0" width="100%"></table>
               		</div>
               		<div class="tab-pane fade in" id="tab-5">
-              			<button class="btn btn-primary btn-sm" id="btn-modalSched" data-toggle="tooltip" data-placement="top" title="Add Schedules"
-                     <?php
-                    if($data->SubscType==2){
-                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
-                        {
-                          echo "";
-                        }else if($data->SubsStatus==0){
-                          echo "disabled";
-                        }else{
-                          echo "disabled";
-                        }
-                      }else{
-                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
-
-                            $datetime1 = date_create($data->SubscEndDate);
-                            $datetime2 = date_create(date('Y-m-d'));
-                            $interval = date_diff($datetime2, $datetime1);
-                            echo "";
-                          }else{
-                            echo "disabled";
-                          }
-                      }
-                  ?>><i class="fa fa-plus"></i> Add Schedules</button>
+              			<button class="btn btn-primary btn-sm" id="btn-modalSched" data-toggle="tooltip" data-placement="top" title="Add Schedules" <?php echo ($clinicstatus==0)?'disabled':'';?>><i class="fa fa-plus"></i> Add Schedules</button>
               			<div class="hr1 margin-top"></div>
 
               			<table id="tbl-schedules" class="display" cellspacing="0" width="100%"></table>
               		</div>
               		<div class="tab-pane fade in" id="tab-6">
-                    <button class="btn btn-primary btn-sm" id="btn-modalInstructor" data-toggle="tooltip" data-placement="top" title="Add Intstructor"
-                     <?php
-                    if($data->SubscType==2){
-                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
-                        {
-                          echo "";
-                        }else if($data->SubsStatus==0){
-                          echo "disabled";
-                        }else{
-                          echo "disabled";
-                        }
-                      }else{
-                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
-
-                            $datetime1 = date_create($data->SubscEndDate);
-                            $datetime2 = date_create(date('Y-m-d'));
-                            $interval = date_diff($datetime2, $datetime1);
-                            echo "";
-                          }else{
-                            echo "disabled";
-                          }
-                      }?>><i class="fa fa-plus"></i> Add Instructor</button>
+                    <button class="btn btn-primary btn-sm" id="btn-modalInstructor" data-toggle="tooltip" data-placement="top" title="Add Intstructor" <?php echo ($clinicstatus==0)?'disabled':'';?>><i class="fa fa-plus"></i> Add Instructor</button>
                      <div class="hr1 margin-top"></div>
               			<table id="tbl-insmaterlist" class="display" cellspacing="0" width="100%"></table>
               		</div>
               		<div class="tab-pane fade in" id="tab-7">
-                    <button class="btn btn-primary btn-sm" id="btn-modalRoom" data-toggle="tooltip" data-placement="top" title="Add Room"
-                     <?php
-                    if($data->SubscType==2){
-                        if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
-                        {
-                          echo "";
-                        }else if($data->SubsStatus==0){
-                          echo "disabled";
-                        }else{
-                          echo "disabled";
-                        }
-                      }else{
-                          if(strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))){
-
-                            $datetime1 = date_create($data->SubscEndDate);
-                            $datetime2 = date_create(date('Y-m-d'));
-                            $interval = date_diff($datetime2, $datetime1);
-                            echo "";
-                          }else{
-                            echo "disabled";
-                          }
-                      }?>><i class="fa fa-plus"></i> Add Room</button>
+                    <button class="btn btn-primary btn-sm" id="btn-modalRoom" data-toggle="tooltip" data-placement="top" title="Add Room"  <?php echo ($clinicstatus==0)?'disabled':'';?>><i class="fa fa-plus"></i> Add Room</button>
                      <div class="hr1 margin-top"></div>
               			<table id="tbl-rooms" class="display" cellspacing="0" width="100%"></table>
               		</div>

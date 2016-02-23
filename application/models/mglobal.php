@@ -319,18 +319,18 @@ class mglobal extends CI_Model {
 
 	function resetpassword(){
 		$email = $this->input->post('email');
-		$sql = "SELECT a.UserID,b.spfirstname,b.splastname FROM user_accounts a LEFT JOIN WHERE UserName = '$email'";
+		$sql = "SELECT a.UserID as userid,b.spfirstname,b.splastname FROM user_accounts a LEFT JOIN user_details b ON b.UserID=a.UserID WHERE b.SPEmail = '$email'";
 		$q = $this->db->query($sql);
 
 		if($q->num_rows() > 0){
 			//email here
 			$rowx = $q->row();
-			$userid = $rowx->UserID;
+			$userid = $rowx->userid;
 			$fname = $rowx->spfirstname;
 	        $to = $email;
 	        $subject = "[Do not reply] Spoarts: Reset Password";
 	        $message = "<span style='color:#3BACAD'>Hi ".$fname."!</span><br/>
-	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=3&id=".$UserID."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
+	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=3&id=".$userid."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
 	                    <h3 style='color:#0298D3'>Spoarts Team</h3></p>";
 	        $mail = new Mailer();
 	       // $mail->SMTPDebug = 3;

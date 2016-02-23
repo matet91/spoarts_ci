@@ -99,6 +99,27 @@ function timelogs(id){
   });
 }
 
+function getEventsStudents(){
+  $('#tbl-events_students').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "clients/dataTables/5",
+    "aoColumns":[ 
+            {"sTitle":"ID","sName":"ID","bVisible":false},
+            {"sTitle":"Event","sName":"eventname","bSearchable": true},
+            {"sTitle":"Student","sName":"studname","bSearchable": true},
+            {"sTitle":"Client","sName":"client","bSearchable": true},
+            {"sTitle":"Date Enrolled","sName":"date_enrolled","bSearchable": true}
+    ],
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+}
+
 function view_timelogs(id,schedid,clinicid,serviceid,clientid,studid){
     $("#studEnrolledID").val(id);
     $("#SchedID").val(schedid);
@@ -442,6 +463,7 @@ function clients(){
 
 
 $(document).ready(function(){
+    getEventsStudents();
     getApprovedStudents();
     countPendings();
     clientlist();

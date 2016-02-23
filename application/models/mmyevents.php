@@ -42,7 +42,7 @@ class mmyevents extends CI_Model {
 				$data_enroll['client_id'] = $userid;
 				$data_enroll['EventID'] = $frmdata['EventID'];
 				$data_enroll['clinic_id'] = $frmdata['SPID'];
-				$data_enroll['EventEnrolledStatus'] = 0;
+				$data_enroll['EventEnrolledStatus'] = 1;
 				
 				$insert2 = $this->db->insert('events_enrolled',$data_enroll);
 				
@@ -60,7 +60,7 @@ class mmyevents extends CI_Model {
 				$data_enroll['client_id'] = $userid;
 				$data_enroll['EventID'] = $frmdata['EventID'];
 				$data_enroll['clinic_id'] = $frmdata['SPID'];
-				$data_enroll['EventEnrolledStatus'] = 0;
+				$data_enroll['EventEnrolledStatus'] = 1;
 				$insert = $this->db->insert('events_enrolled',$data_enroll);
 				if($insert){$error = 0;
 				}else{$error = 1;}
@@ -102,19 +102,19 @@ class mmyevents extends CI_Model {
 			//echo $this->db->last_query();
 			//echo $ch;
 			
-			/*if($ch){
+			if($ch){
 				$error = 4; //student already enrolled in this schedule
 			}else{	
 				$data_enroll['stud_id'] = $stud_id;
 				$data_enroll['client_id'] = $userid;
 				$data_enroll['EventID'] = $frmdata['EventID'];
 				$data_enroll['clinic_id'] = $frmdata['SPID'];
-				$data_enroll['EventEnrolledStatus'] = 0;
+				$data_enroll['EventEnrolledStatus'] = 1;
 				$insert = $this->db->insert('events_enrolled',$data_enroll);
 				
 				if($insert){$error = 0;
 				}else{$error = 1;}
-			}*/
+			}
 			
 			
 		}
@@ -155,7 +155,8 @@ class mmyevents extends CI_Model {
 				$rod = $sqql1->row();
 				$cname = $rod->name;
 
-				$subj = "For Approval Event [$eventname] : New Student Request";
+				//$subj = "For Approval Event [$eventname] : New Student Request";
+				$subj = "Approved Event [$eventname] : New Student Request";
 				$msg = "You have a new participant's request from client $cname. Participant Name: $studname.";
 
 				$this->mglobal->addNotif($subj,$msg,$clientid);

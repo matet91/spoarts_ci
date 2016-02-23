@@ -112,7 +112,7 @@ class Index extends CI_Controller {
 	}
 
 	function resetpassword(){
-		$data = $this->db->mglobal->resetpassword();
+		$data = $this->mglobal->resetpassword();
 		echo json_encode($data);
 	}
 }

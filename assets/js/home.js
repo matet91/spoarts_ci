@@ -52,6 +52,7 @@ function loadEventPromo(){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
+			$('#loader').fadeOut();
 			 var content = "",timestamp,month = ['Jan','Feb','Mar','April','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 
             $.each(msg, function(i,e){

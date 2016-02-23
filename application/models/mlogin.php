@@ -265,9 +265,9 @@ class Mlogin extends CI_Model {
 
     }
 
-    function changepassword(){
+    function changepassword($id=null){
         $pwd = md5($this->input->post('pwd'));
-        $userid = $this->input->get('id');
+        $userid = ($id)?$id:$this->session->userdata('userid');
         $this->db->where('UserID',$userid);
         $q = $this->db->update('user_accounts',array('Password'=>$pwd));
 

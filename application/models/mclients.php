@@ -162,6 +162,28 @@ class mclients extends CI_Model {
 					$groupby = "";
 					$aColumns_output = array("payment_id","start_date","end_date","payment_type",'payment_amt','payment_balance','date_added','last_updated','action');
 			break;
+			case 5://enrolled student in events logs
+					$userid = $this->session->userdata('userid');
+					$select = array("ee.EventEnrolledID",
+									"e.EventName",
+									"s.stud_name",
+									"CONCAT(u.spfirstname,' ',u.splastname) as client",
+									"ee.dateEnrolled");
+					$sTable = "events_enrolled ee";
+					$leftjoin = " LEFT JOIN events e ON e.EventID=ee.EventID LEFT JOIN students s ON s.stud_id = ee.stud_id LEFT JOIN user_details u ON u.UserID=ee.client_id";
+					//print_r($select); 
+					$sWhere = "WHERE ee.EventEnrolledStatus=1 AND ee.clinic_id='$userid'";
+					if($sSearch){
+						$sWhere .= " AND (e.EventName like '%".$sSearch."%' OR s.stud_name like '%".$sSearch."%' OR u.spfirstname like '%".$sSearch."%' OR u.splastname like '%".$sSearch."%' OR ee.dateEnrolled like '%".$sSearch."%')";
+						
+					}
+					$aColumns = array("ee.EventEnrolledID","e.EventName",
+									  "s.stud_name",'client','ee.dateEnrolled'
+									);
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("EventEnrolledID","EventName","stud_name","client",'dateEnrolled');
+			break;
 		}
 		
 		$sIndexColumn = "*";
@@ -527,6 +549,12 @@ class mclients extends CI_Model {
 	}
 
 	function removePending($id){
+		$sqlz = $this->db->query("SELECT * FROM students_enrolled WHERE StudEnrolledID='$id'");
+		$ros = $sqlz->row();
+		$schedid = $ros->SchedID;
+		//update waiting list
+		$sql = $this->db->query("UPDATE schedules set SchedRemaining = (SchedRemaining-1) WHERE SchedID='$schedid'");
+
 		$this->db->where('StudEnrolledID',$id);
 		return $this->db->delete('students_enrolled');
 	}

@@ -1,3 +1,9 @@
+<div id="message">
+    <div style="padding: 5px;">
+        <div id="inner-message" class="alert alert-error">
+        </div>
+    </div>
+  </div>
 <div id="content">
     <div class="container">
 	   
@@ -23,29 +29,25 @@
 	 								</div>
 	 							</div>
 	 						</form>
-	 						<button type="button" class="btn btn-lg btn-primary" id="reset">RESET PASSWORD</button>
+	 						<button type="button" class="btn btn-lg btn-primary" id="resetpwd">RESET PASSWORD</button>
 	 					</div>
 		 			<?php
 		 				}
 		 				else{
-		 				?>
+		 				?><input type = "hidden" id = "resetiduser" value="<?=$this->input->get('id');?>"/>
 		 					<div class = "row">
 		 						<div class = "row" style = "margin: 5px">
 			                        <form id = "form-resetpassword-req">  
 			                          <div class = "form-group">
-			                            <label for = "oldpwd">Old Password :</label>
-			                            <input type = "password" class = "form-control" id = "oldpwd1" name = "oldpwd1" placeholder="Enter Old Password" data-placement="top" data-toggle="tooltip" data-placement="top" title="Click outside this textbox to verify inputted password.">
-			                          </div>
-			                          <div class = "form-group">
 			                            <label for = "newpwd1" id="label_newpwd" data-placement="top" data-toggle="popover">New Password : <span class ="text-info">Minimum of 8 and maximum of 10 characters.<span></label>
-			                            <input type = "password" class = "form-control" id = "newpwd1" name = "newpwd1" placeholder="New Password" disabled>
+			                            <input type = "password" class = "form-control" id = "newpwd1" name = "newpwd1" placeholder="New Password">
 			                          </div>
 			                          <div class = "form-group">
 			                            <label for = "con_newpwd1" id="label_con_newpwd1" data-placement="top" data-toggle="popover">Confirm New Password :</label>
 			                            <input type = "password" class = "form-control" id = "con_newpwd1" name = "con_newpwd1" placeholder="Confirm New Password" disabled>
 			                          </div>
 			                        </form>
-			                        <button class="btn btn-primary" id = "btn-newPwd" data-placement="top" data-toggle="tooltip" data-placement="top" title="Save Changes" disabled><span class="glyphicon glyphicon-floppy-save"></span>SAVE CHANGES</button>
+			                        <button class="btn btn-primary" id = "btn-newPwd1" data-placement="top" data-toggle="tooltip" data-placement="top" title="Save Changes" disabled><span class="glyphicon glyphicon-floppy-save"></span>SAVE CHANGES</button>
 		 					</div>
 		 				<?php
 		 				}

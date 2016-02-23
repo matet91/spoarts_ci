@@ -51,7 +51,7 @@ class Myschedules extends CI_Controller {
 		$fields ="se.StudEnrolledID,s.stud_name,CONCAT(sc.SchedDays, '@',sc.SchedTime)as Schedule,(CASE WHEN sc.RoomID=0 THEN 'TBA'  ELSE CONCAT(r.RoomNo, '-',r.RoomName) END)as Room,(CASE WHEN sc.InstructorID=0 THEN 'TBA'  ELSE m.MasterInsName END) as Instructor,ser.ServiceName as Service,c.clinic_name as Clinic,sc.SchedDays,sc.SchedTime";
 		$table = "students_enrolled se";
 		$leftjoin = " LEFT JOIN students s ON s.stud_id = se.stud_id LEFT JOIN schedules sc ON sc.SchedID = se.SchedID LEFT JOIN rooms r ON r.RoomID = sc.RoomID LEFT JOIN instructor_masterlist m ON m.MasterInsID = sc.InstructorID LEFT JOIN services ser ON ser.ServiceID = se.service_id LEFT JOIN clinics c ON c.clinic_id = se.clinic_id";
-		$where = "WHERE se.client_id = ".$userid." AND se.StudEnrolledStatus=1";
+		$where = "WHERE se.client_id = ".$userid." AND se.StudEnrolledStatus=1 and c.clinic_status=1";
 		$order = "";
 	
 		$data = $this->mmyschedules->getlist($table, $fields , $where, $order, $leftjoin);

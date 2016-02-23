@@ -34,6 +34,17 @@ class mservices extends CI_Model {
 
 	function loadprofile(){
 		$userid = $this->session->userdata('userid');
+		//check if subscription is expired
+		$checkSubs = $this->db->query("SELECT * FROM subscriptions WHERE SubscEndDate < '".date('Y-m-d')."' and UserID='$userid'");
+		if($checkSubs->num_rows() > 0){
+			$data = array('clinic_status'=>0);
+			$this->db->where('UserID',$userid);
+			$this->db->update('clinics',$data);
+		}else{
+			$data = array('clinic_status'=>1);
+			$this->db->where('UserID',$userid);
+			$this->db->update('clinics',$data);
+		}
 		$sql = "SELECT * FROM user_details a LEFT JOIN clinics b ON a.UserID=b.UserID  LEFT JOIN user_accounts c ON c.UserID = a.UserID LEFT JOIN subscriptions d ON d.UserID=a.UserID LEFT JOIN subscription_plans e ON e.PlanID=d.SubscType WHERE a.UserID='$userid'";
 
 		$q = $this->db->query($sql);
@@ -89,8 +100,21 @@ class mservices extends CI_Model {
 		foreach($clinicInfo as $key){
 			$clinicData[$key] = ucfirst($data[$key]);
 		}
-		$clinicData['clinic_status'] = 1;
 		$userid = $this->session->userdata('userid');
+		//check if trial
+		$sqlc = $this->db->query("SELECT * FROM subscriptions WHERE UserID='$userid'");
+		$srow = $sqlc->row();
+		$enddate = strtotime($srow->SubscEndDate);
+		$sStatus = $srow->SubsStatus;
+		$sType = $srow->SubscType;
+		$datenow = strtotime(date('Y-m-d'));
+
+		if($sType == 1 && $enddate >= $datenow)
+			$clinicData['clinic_status'] = 1;
+		else if($sType == 2 && $enddate >= $datenow && $sStatus == 1)
+			$clinicData['clinic_status'] = 1;
+		else $clinicData['clinic_status'] = 0;
+		
 
 		//check if existing
 		$this->db->where('UserID',$userid);
