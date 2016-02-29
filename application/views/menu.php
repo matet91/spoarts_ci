@@ -33,6 +33,9 @@
             <!-- End Search -->
             <!-- Start Navigation List -->
             <ul class="nav navbar-nav navbar-right " id = "menus">
+            <?php if($this->session->userdata('userid')==2){?>
+                <li><a href="clinicprofile" class = "<?php echo ($content == 'content/clinicprofile.php'?'active':'');?>">Clinic Profile</a></li>
+              <?php } ?>
             <?php if(!$this->session->userdata('userid') || $this->session->userdata('usertype') == 2){?>
               <li>
                 <a class = "<?php echo ($content == 'content/login.php'?'active':''); echo ($content == 'content/home.php'?'active':'');?>" href="<?= (!$this->session->userdata('userid'))?'login':'index';?>">Home</a>
@@ -74,6 +77,9 @@
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
                 <li><a href="sales?type=0" class = "<?php echo ($content == 'content/sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
+              <?php if(!$this->session->userdata('userid')){?>
+                <li><a href="sales?type=0" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
+              <?php } ?>
             </ul>
             <!-- End Navigation List -->
           </div>
@@ -81,6 +87,9 @@
 
         <!-- Mobile Menu Start -->
         <ul class="wpb-mobile-menu">
+          <?php if($this->session->userdata('userid')==2){?>
+                <li><a href="clinicprofile" class = "<?php echo ($content == 'content/clinicprofile.php'?'active':'');?>">Clinic Profile</a></li>
+              <?php } ?>
           <?php if(!$this->session->userdata('userid') || $this->session->userdata('usertype') == 2){?>
               <li>
                 <a class = "<?php echo ($content == 'home.php'?'active':'');?>" href="<?= (!$this->session->userdata('userid'))?'login':'index';?>">Home</a>
@@ -121,6 +130,9 @@
               <?php } ?>
               <?php if($this->session->userdata('userid') && $this->session->userdata('usertype') == 0){?>
                 <li><a href="sales?type=0" class = "<?php echo ($content == 'content/sales.php'?'active':'');?>">Sales</a></li>
+              <?php } ?>
+              <?php if(!$this->session->userdata('userid')){?>
+                <li><a href="sales?type=0" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
               <?php } ?>
         </ul>
         <!-- Mobile Menu End -->

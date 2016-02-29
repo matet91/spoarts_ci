@@ -180,7 +180,7 @@ class mglobal extends CI_Model {
 
 			case 5: //room
 					$table = "rooms";
-					$select = "RoomID as id,CONCAT(RoomNo,'-',RoomName)as name";
+					$select = "RoomID as id,RoomNo as name";
 					$this->db->where('RoomStatus',1);
 					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;

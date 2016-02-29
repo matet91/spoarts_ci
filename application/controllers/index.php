@@ -24,20 +24,25 @@ class Index extends CI_Controller {
 			$this->load->model('mservices');
 			$this->load->model('mglobal');
 			$this->load->helper('date');
+
 	}
 	public function index()
 	{
 		$userid = $this->session->userdata('userid');
   		$userType = $this->session->userdata('usertype');
   		$first_login = $this->session->userdata('first_login');
-
+  		$profile = '';
   		switch($first_login){
   			case 0: //firstlogin
   				$title = "Settings";
   				if($userType == 2) //client
   					$content = "content/firstlogin_client.php";
   				else if($userType == 1){//service provider
-  					header('Location:services'); exit();
+  					$content = "content/clinicprofile.php";
+  					$profile = $this->mservices->loadprofile();
+					$this->session->set_userdata('clinic_id',$profile->clinic_id);
+					$this->session->set_userdata('clinic_status',$profile->clinic_status);
+					$clubpic = $profile->clinic_logo;
   				}else{
   					header('Location:subscribers');
   					exit();
@@ -47,7 +52,15 @@ class Index extends CI_Controller {
 
   			case 1: //old user
 				$title = "Home";
-				$content = "content/home.php";
+				if($userType == 2) //client
+  					$content = "content/home.php";
+  				else if($userType == 1){//service provider
+  					header('Location:services'); exit();
+  				}else{
+  					header('Location:subscribers');
+  					exit();
+  				}
+				
 				$menu="menu.php";
   			break;
   		}
@@ -57,7 +70,9 @@ class Index extends CI_Controller {
 						'footer'=>'footer.php',
 						'title'=>$title,
 						'userid'=>$userid,
-						'userType'=>$userType
+						'userType'=>$userType,
+						'data'=>$profile,
+						'clubpic'=>$clubpic
 					);
 
 

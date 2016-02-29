@@ -68,6 +68,18 @@ var height = $(window).height();
       checkClinicFields();
   });
 
+  $("#endTime").change(function(){
+      var starttime = $("#startTime").val(),endtime=$("#endTime").val(), days = $('#SchedDays').val();
+      if(starttime != '' && endtime!='' && days!='')  filterDropdowns();
+      else {
+         $("#message .alert").html("Please fill in start time.").addClass('alert-danger').show();$("#message").addClass('zindex');
+
+        setTimeout(function(){
+          pwd.parent().removeClass('has-error');
+          $("#message .alert").html("").removeClass('alert-danger').hide();$("#message").removeClass('zindex');
+        },1500);
+      }
+  });
 //validate inputted security password before saving the data
   $("#modal_security #btn-continue").click(function(){
       var pwd = $("#modal_security #sec_pwd");
@@ -152,7 +164,6 @@ function getservices(){
     "aoColumns":[ {"sTitle":"ID","bVisible":false},
             {"sTitle":"Services"},
             {"sTitle":"Description","bSearchable": true},
-            {"sTitle":"Schedule","bSearchable": true},
             {"sTitle":"Membership Fee (Peso)","bSearchable": true},
             {"sTitle":"Walk-in Fee/Session (Peso)","bSearchable": true},
             {"sTitle":"# of Hours Per Session","bSearchable": true},
@@ -162,8 +173,8 @@ function getservices(){
     ],
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
-      if ( aData[9] == 1 ){
-        $('td:eq(8)', nRow).html('<button class = "btn btn-info btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick=removeData('+aData[0]+',1,"tbl-services")><i class = "fa fa-remove fa-fw"></i></button>' );
+      if ( aData[8] == 1 ){
+        $('td:eq(7)', nRow).html('<button class = "btn btn-primary btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Update Service" onclick="editServices('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Service" onclick=removeData('+aData[0]+',1,"tbl-services")><i class = "fa fa-remove fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs " data-toggle="tooltip" data-placement="top" title="View Instructors" onclick=viewInsList('+aData[0]+')><i class = "fa fa-group fa-fw"></i></button>' );
       }
 
     },
@@ -209,6 +220,37 @@ function getSchedules(){
 
 
 }
+
+
+function insSchedules(id){
+  $('#tbl-insSched').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,  
+    "sAjaxSource": "services/dataTables/6/"+id,
+    "aoColumns":[ {"sTitle":"ID","sName":"s.SchedID","bVisible":false},
+            {"sTitle":"Days","sName":"s.SchedDays"},
+            {"sTitle":"Time","sName":"s.SchedTime","bSearchable": true},
+            {"sTitle":"Rooms","sName":"r.RoomName","bSearchable": true},
+            {"sTitle":"Services","sName":"srv.ServiceName","bSearchable": true},
+            {"sTitle":"Slots","sName":"s.SchedSlots","bSearchable": true},
+            {"sTitle":"Enrolled Headcounts","sName":"s.SchedRemaining","bSearchable": true},
+            {"sTitle":"Waiting List Headcounts","sName":"waitingList","bSearchable": false,"bsortable":false},
+            {"sTitle":"Date Added","sName":"s.date_added","bSearchable": true}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
+
+
+}
+
 
 function uploadClubpic(){
   $('#clubpic').change( function(e) {
@@ -282,7 +324,7 @@ function saveClinicInfo(){
         $("#modal_security").modal('hide');
         $("#message .alert").html("Changes saved. Page will reload after 3 seconds").removeClass("alert-danger").addClass("alert-success").show();$("#message").addClass('zindex');
         setTimeout(function(){
-          window.location = 'services';
+          window.location = 'clinicprofile';
         },2000);
       }else{
         $("#modal_security .alert").html("Can't save right now. Please try again later or contact the WebDev Support Team.");
@@ -352,7 +394,7 @@ function masterlistInstructors(){
     "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 
       if ( aData[7] == 1 ){
-        $('td:eq(6)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick=removeData('+aData[0]+',2,"tbl-insmaterlist")><i class = "fa fa-remove fa-fw"></i></button>' );
+        $('td:eq(6)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Update" onclick="updateInstructor('+aData[0]+');"><i class = "fa fa-edit fa-fw"></i></button>&nbsp;<button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove" onclick=removeData('+aData[0]+',2,"tbl-insmaterlist")><i class = "fa fa-remove fa-fw"></i></button>&nbsp;<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="View Schedules" onclick=viewSched('+aData[0]+')><i class = "fa fa-calendar-o fa-fw"></i></button>' );
       }
     },
     "fnInitComplete": function(oSettings, json) {
@@ -370,8 +412,8 @@ function manageRooms(){
     "sLimit":10,
     "sAjaxSource": "services/dataTables/5",
     "aoColumns":[ {"sTitle":"ID","sName":"RoomID","bVisible":false},
-            {"sTitle":"Room #","sName":"RoomNo"},
-            {"sTitle":"Room Name","sName":"RoomName","bSearchable": true},
+            {"sTitle":"Venue","sName":"RoomNo"},
+            {"sTitle":"Description","sName":"RoomName","bSearchable": true},
             {"sTitle":"Status","sName":"RoomStatus","bSearchable": true},
             {"sTitle":"Actions","sName":"1 as action"}
     ],
@@ -828,6 +870,7 @@ var error = $("#"+frmid+" .has-error").length;
                 $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
               },2000);
         }else if(msg == 5){
+
             $("#message .alert").html(errorMsg).addClass("alert-success").show();$("#message").addClass('zindex');
 
             $.each(dataForm, function(i,e){
@@ -870,7 +913,7 @@ var error = $("#"+frmid+" .has-error").length;
                 $("#message .alert").html("").removeClass("alert-danger").hide();$("#message").removeClass('zindex');
               },2000);
         }else{
-          $("#message .alert").html("System Error. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();$("#message").addClass('zindex');
+          $("#message .alert").html("System Error or Incorrect Card Details. Please try again later or report this error to spoarts.cebu@gmail.com.").addClass("alert-success").show();$("#message").addClass('zindex');
         }
         
       }
@@ -901,4 +944,60 @@ function maps(){
         infowindow.open(marker.get('map'), marker);
       });
 
+}
+
+function filterDropdowns(){
+  var starttime = $('#startTime').val(), endtime = $("#endTime").val(),days = $("#SchedDays").val();
+  $.ajax({
+      url: 'services/filterDropdowns',
+      dataType:'JSON',
+      data: {start:starttime,end:endtime,days:days.toString()},
+      type:'POST',
+      success: function(msg){
+        var optIns = "",optRoom="";
+        $.each(msg.instructor, function(i,e){
+          optIns += "<option value='"+msg.instructor[i].id+"'>"+msg.instructor[i].name+"</option>";
+        });
+
+        $.each(msg.rooms, function(i,e){
+          optRoom += "<option value='"+msg.rooms[i].id+"'>"+msg.rooms[i].name+"</option>";
+        });
+        $("#InstructorID").html(optIns).trigger('chosen:updated');
+        $("#RoomID").html(optRoom).trigger('chosen:updated');
+      }
+  });
+}
+
+function viewSched(id){
+  $("#modal_viewSchedule").modal('show');
+  insSchedules(id);
+}
+
+function viewInsList(id){
+  $("#modal_viewInsList").modal('show');
+  ServicesinsList(id);
+}
+
+function ServicesinsList(id){
+  var table = $('#tbl-serviceIns').DataTable( {
+    "bProcessing":true, 
+    "bServerSide":true,
+    "bRetrieve": true,
+    "bDestroy":true,
+    "sLimit":10,
+    "sAjaxSource": "services/dataTables/7/"+id,
+    "aoColumns":[ {"sTitle":"ID","sName":"MasterInsID","bVisible":false},
+            {"sTitle":"Name","sName":"MasterInsName"},
+            {"sTitle":"Address","sName":"MasterInsAddress","bSearchable": true},
+            {"sTitle":"Contact #","sName":"MasterInsContactNo","bSearchable": true},
+            {"sTitle":"E-mail","sName":"MasterInsEmail","bSearchable": true},
+            {"sTitle":"Expertise","sName":"MasterInsExpertise","bSearchable": true}
+    ],
+    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+
+    },
+    "fnInitComplete": function(oSettings, json) {
+    }
+  }).on('processing.dt',function(oEvent, settings, processing){
+  });
 }

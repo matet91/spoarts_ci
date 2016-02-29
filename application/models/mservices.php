@@ -123,9 +123,17 @@ class mservices extends CI_Model {
 		if($chkq->num_rows() > 0){
 			$this->db->where('UserID',$userid);
 			$q = $this->db->update('clinics',$clinicData);
+			$this->db->where('UserID',$userid);
+			$this->db->update('user_accounts',array('first_login'=>1));
+			$this->session->set_userdata('first_login',1);
 		}else{
+
 			$clinicData['UserID'] = $userid;
 			$q = $this->db->insert('clinics',$clinicData);
+
+			$this->db->where('UserID',$userid);
+			$this->db->update('user_accounts',array('first_login'=>1));
+			$this->session->set_userdata('first_login',1);
 		}
 
 		return $q;
@@ -144,8 +152,8 @@ class mservices extends CI_Model {
 
 		switch($case){
 			case 1://list of services
-				$aColumns = array("serviceid","servicename", "servicedesc", "serviceschedule", "serviceregistrationfee", "serviceprice",'serviceWalkin',"serviceHour","servicetype");
-				$select = array("serviceid","servicename", "servicedesc", "serviceschedule", "serviceregistrationfee", "serviceprice","serviceWalkin","serviceHour as servicehour","(CASE WHEN servicetype=1 THEN 'Arts' ELSE 'Sports' END) as servicetype","1 as action");
+				$aColumns = array("serviceid","servicename", "servicedesc", "serviceregistrationfee", "serviceprice",'serviceWalkin',"serviceHour","servicetype");
+				$select = array("serviceid","servicename", "servicedesc", "serviceregistrationfee", "serviceprice","serviceWalkin","serviceHour as servicehour","(CASE WHEN servicetype=1 THEN 'Arts' ELSE 'Sports' END) as servicetype","1 as action");
 				$sTable = "services";
 				$leftjoin = " ";
 				if($usertype == 0)
@@ -156,7 +164,7 @@ class mservices extends CI_Model {
 				if($sSearch){$sWhere .= " AND (servicename like '%".$sSearch."%' OR servicedesc like '%".$sSearch."%' OR serviceschedule like '%".$sSearch."%' OR serviceregistrationfee like '%".$sSearch."%' OR servicetype like '%".$sSearch."%' OR serviceprice like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("serviceid","servicename","servicedesc", "serviceschedule", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
+				$aColumns_output = array("serviceid","servicename","servicedesc", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
 			break;
 			case 2://list of instructors
 
@@ -175,7 +183,7 @@ class mservices extends CI_Model {
 			break;
 
 			case 3://schedules
-					$select = array("s.SchedID","s.SchedDays","s.SchedTime","CONCAT(r.RoomNo,'-',r.RoomName) as RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots","s.SchedRemaining","s.date_added","1 as action");
+					$select = array("s.SchedID","s.SchedDays","s.SchedTime","RoomNo as RoomName","m.MasterInsName","srv.ServiceName","s.SchedSlots","s.SchedRemaining","s.date_added","1 as action");
 					
 					$sTable = "schedules s";
 					$leftjoin = "LEFT JOIN services srv ON srv.ServiceID=s.ServiceID
@@ -216,6 +224,35 @@ class mservices extends CI_Model {
 					$groupby = "";
 					$aColumns_output = array("RoomID","RoomNo","RoomName","RoomStatus","action");
 			break;
+			case 6://instructors' schedules
+					$select = array("s.SchedID","s.SchedDays","s.SchedTime","RoomNo as RoomName","srv.ServiceName","s.SchedSlots","s.SchedRemaining","s.date_added");
+					
+					$sTable = "schedules s";
+					$leftjoin = "LEFT JOIN services srv ON srv.ServiceID=s.ServiceID
+						LEFT JOIN rooms r ON r.RoomID=s.RoomID and r.RoomStatus=1
+						LEFT JOIN instructor_masterlist m ON m.MasterInsID = s.InstructorID and m.MasterInsStatus=1";
+					//print_r($select);
+					$sWhere = "WHERE srv.SPID = '$userid' and m.MasterInsID='$id'";
+					if($sSearch){
+						$sWhere .= " AND (r.RoomName like '%".$sSearch."%' OR s.SchedTime like '%".$sSearch."%' OR s.date_added like '%".$sSearch."%' OR s.SchedDays like '%".$sSearch."%' OR srv.ServiceName like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = "";
+					$aColumns_output = array("SchedID","SchedDays","SchedTime","RoomName","ServiceName","SchedSlots","SchedRemaining",'waitingList',"date_added");
+			break;
+
+			case 7://SERVICE instructor list
+					$select = $aColumns;
+					$select[6] = "(CASE WHEN MasterInsStatus = 1 THEN 'Active' ELSE 'Inactive' END) as MasterInsStatus";
+					$sTable = "instructor_masterlist a";
+					$leftjoin = " LEFT JOIN schedules b ON b.InstructorID=a.MasterInsID";
+					//print_r($select);
+					$sWhere = "wHERE a.UserID='$userid' and b.ServiceID='$id' and a.MasterInsStatus=1";
+					if($sSearch){
+						$sWhere .= " AND (MasterInsName like '%".$sSearch."%' OR MasterInsAddress like '%".$sSearch."%' OR MasterInsContactNo like '%".$sSearch."%' OR MasterInsEmail like '%".$sSearch."%' OR MasterInsExpertise like '%".$sSearch."%')";}
+					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
+					$groupby = " GROUP BY a.MasterInsID";
+					$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise");
+			break;
 		}
 		
 		$sIndexColumn = "*";
@@ -249,7 +286,7 @@ class mservices extends CI_Model {
 		foreach($rResult->result() as $aRow){	
 			$row = array();
 			foreach ( $aColumns_output as $col ){
-				if($case == 3){
+				if($case == 3 || $case == 6){
 					if($col == 'waitingList'){
 						$this->db->where('SchedID',$aRow->SchedID);
 						$this->db->where('StudEnrolledStatus',0);
@@ -343,37 +380,6 @@ class mservices extends CI_Model {
 					$table = "rooms";
 			break;
 		}
-
-		if($type == 3 || $type == 4){
-			//get data for the specific schedule
-			$this->db->where($field,$id);
-			$this->db->select("*");
-			$getDetails = $this->db->get('schedules');
-			$rowSched = $getDetails->row();
-			$schedDays = explode(',',$rowSched->SchedDays);
-			$schedTime = explode('-',$rowSched->SchedTime);
-			$start = str_replace(' ','',$schedTime[0]);
-			$end = str_replace(' ','',$schedTime[1]);
-			$room = isset($data['RoomID'])?$data['RoomID']:0;
-			$insID = isset($data['InstructorID'])?$data['InstructorID']:0; //instructor id
-
-			//check if schedule is conflict with other schedules
-			$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE a.SchedDays REGEXP '".implode('|',$schedDays)."' AND ((unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME))) OR (unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',-1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME)))) and (a.RoomID='$room' AND a.RoomID!=0) and b.SPID='$userid' and a.SchedID!='$id'";
-			$getCon1 = $this->db->query($sql);
-			// /echo $getCon1->num_rows();
-			//echo $this->db->last_query();
-			if($getCon1->num_rows() > 0){
-				return 1;//sched and room and time is conflict 
-				exit();
-			}else{
-				$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE  a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.InstructorID='$insID' AND a.InstructorID!=0 AND ((unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME))) OR (unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',-1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME)))) and b.SPID='$userid' and a.SchedID!='$id'";	
-				$getCon2 = $this->db->query($sql);
-				if($getCon2->num_rows() > 0){
-					return 2; //instructor's schedule is conflict
-					exit();
-				}
-			}
-		}
 		
 		$this->db->where($field,$id);
 		$q = $this->db->update($table,$data);
@@ -416,57 +422,7 @@ class mservices extends CI_Model {
 	function addSchedule(){
 		$userid = $this->session->userdata('userid');
 		$data = $this->input->post('data');
-		$schedDays = explode(',',$data['schedDays']);
-		$schedTime = explode('-',$data['SchedTime']);
-		$start = date('h:i a',strtotime(str_replace(' ','',$schedTime[0])));
-		$end = date('h:i a',strtotime(str_replace(' ','',$schedTime[1])));
-
-		$room = isset($data['RoomID'])?$data['RoomID']:0;
-		$insID = isset($data['InstructorID'])?$data['InstructorID']:0; //instructor id
-
-
-		//check if schedule is conflict with other schedules
-		// $startTime = "unix_timestamp(STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',1),'%H:%i'))";
-		// $endTime = "unix_timestamp(STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',-1),'%H:%i'))";
-		// $sStart = "unix_timestamp(STR_TO_DATE('$start','%H:%i'))";
-		// $sEnd = "unix_timestamp(STR_TO_DATE('$end','%H:%i'))";
-		//STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',1),'%h:%i %p')
-		$startTime = "STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',1),'%h:%i %p')";
-		$endTime = "STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',-1),'%h:%i %p')";
-		$sStart = "STR_TO_DATE('$start','%h:%i %p')";
-		$sEnd = "STR_TO_DATE('$end','%h:%i %p')";
-
-		//trap
-
-		$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.RoomID='$room' AND a.RoomID!=0 and b.SPID='$userid' AND ($startTime < $sStart and $endTime > $sStart)";
-		$getCon3 = $this->db->query($sql);
-		if($getCon3->num_rows() > 0){
-			return 1;//sched and room and time is conflict 
-			exit();
-		}
-		$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.RoomID='$room' AND a.RoomID!=0 and b.SPID='$userid' AND (($startTime BETWEEN $sStart AND $sEnd AND $startTime !=$sEnd) OR ($endTime BETWEEN $sStart AND $sEnd AND $endTime != $sStart) OR ($startTime <= $sStart && $endTime >= $sEnd))";
-		$getCon1 = $this->db->query($sql);
-
-		//echo $this->db->last_query();
-		if($getCon1->num_rows() > 0){
-			return 1;//sched and room and time is conflict 
-			exit();
-		}else{
-			$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE  a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.InstructorID='$insID' AND a.InstructorID!=0 AND b.SPID='$userid' AND ($startTime < $sStart and $endTime> $sStart)";
-			$getCon4 = $this->db->query($sql);
-			if($getCon4->num_rows() > 0){
-				return 2;//sched and room and time is conflict 
-				exit();
-			}
-			$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE  a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.InstructorID='$insID' AND a.InstructorID!=0 AND b.SPID='$userid' AND (($startTime BETWEEN $sStart AND $sEnd AND $startTime !=$sEnd) OR ($endTime BETWEEN $sStart AND $sEnd AND $endTime != $sStart) OR ($startTime <= $sStart && $endTime >= $sEnd))";	
-
-			//echo $sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE  a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.InstructorID='$insID' AND a.InstructorID!=0 AND ((unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME))) OR (unix_timestamp(CAST(SUBSTRING_INDEX(a.SchedTime,'-',-1) as TIME)) BETWEEN unix_timestamp(CAST('$start' as TIME)) AND unix_timestamp(CAST('$end' as TIME)))) and b.SPID='$userid'";	
-			$getCon2 = $this->db->query($sql);
-			if($getCon2->num_rows() > 0){
-				return 2; //instructor's schedule is conflict
-				exit();
-			}
-		}
+		
 		$q = $this->db->insert('schedules',$data);
 		if($q == true){
 			$q = 5;//successful
@@ -674,5 +630,56 @@ class mservices extends CI_Model {
 					$approvalUrl = $payment->getApprovalLink();
 			break;
 		}
+	}
+
+	function filterDropdowns(){
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+		$days = $this->input->post('days');
+		$schedDays = explode(',',$days);
+		$userid = $this->session->userdata('userid');
+
+
+		//check if schedule is conflict with other schedules
+		// $startTime = "unix_timestamp(STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',1),'%H:%i'))";
+		// $endTime = "unix_timestamp(STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',-1),'%H:%i'))";
+		// $sStart = "unix_timestamp(STR_TO_DATE('$start','%H:%i'))";
+		// $sEnd = "unix_timestamp(STR_TO_DATE('$end','%H:%i'))";
+		//STR_TO_DATE(SUBSTRING_INDEX(a.SchedTime,'-',1),'%h:%i %p')
+		$startTime = "STR_TO_DATE(SUBSTRING_INDEX(SchedTime,'-',1),'%h:%i %p')";
+		$endTime = "STR_TO_DATE(SUBSTRING_INDEX(SchedTime,'-',-1),'%h:%i %p')";
+		$sStart = "STR_TO_DATE('$start','%h:%i %p')";
+		$sEnd = "STR_TO_DATE('$end','%h:%i %p')";
+
+		$sql = "SELECT MasterInsID as id, MasterInsName as name FROM instructor_masterlist WHERE UserID='$userid' and MasterInsStatus=1";
+
+		$qsql = $this->db->query($sql);
+		$instructor = array();
+		if($qsql->num_rows() >0){
+			foreach($qsql->result() as $qrow){
+				$name = $qrow->name;
+				$id = $qrow->id;
+				$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE  a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.InstructorID='$id' AND a.InstructorID!=0 AND b.SPID='$userid' AND (($startTime BETWEEN $sStart AND $sEnd AND $startTime !=$sEnd) OR ($endTime BETWEEN $sStart AND $sEnd AND $endTime != $sStart) OR ($startTime <= $sStart && $endTime >= $sEnd))";
+				$q1 = $this->db->query($sql);
+				if($q1->num_rows() == 0	) $instructor[] = array('name'=>$name,'id'=>$id);
+			}
+		}
+
+		$rsql = "SELECT RoomNo as name, RoomID as id FROM rooms WHERE UserID='$userid' and RoomStatus=1";
+
+		$getCon1 = $this->db->query($rsql);
+		$rooms = array();
+		if($getCon1->num_rows() > 0){
+			foreach($getCon1->result() as $rRow){
+				$name = $rRow->name;
+				$id = $rRow->id;
+				$sql = "SELECT * FROM schedules a LEFT JOIN services b ON b.ServiceID=a.ServiceID WHERE a.SchedDays REGEXP '".implode('|',$schedDays)."' and a.RoomID='$id' AND a.RoomID!=0 and b.SPID='$userid' AND (($startTime BETWEEN $sStart AND $sEnd AND $startTime !=$sEnd) OR ($endTime BETWEEN $sStart AND $sEnd AND $endTime != $sStart) OR ($startTime <= $sStart && $endTime >= $sEnd))";
+				$getCon1 = $this->db->query($sql);
+				if($getCon1->num_rows() == 0) $rooms[] = array('id'=>$id,'name'=>$name);
+			}
+		}
+
+		$data = array('instructor'=>$instructor,'rooms'=>$rooms);
+		return $data;
 	}
 }

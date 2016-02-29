@@ -28,8 +28,8 @@ class Mspprofile extends CI_Model {
 
 		switch($case){
 			case 1://list of services
-				$aColumns = array("serviceid","servicename", "servicedesc", "serviceschedule", "serviceregistrationfee", "serviceprice",'serviceWalkin',"serviceHour","servicetype");
-				$select = array("serviceid","servicename", "servicedesc", "serviceschedule", "serviceregistrationfee", "serviceprice","serviceWalkin","serviceHour as servicehour","(CASE WHEN servicetype=1 THEN 'Arts' ELSE 'Sports' END) as servicetype","1 as action");
+				$aColumns = array("serviceid","servicename", "servicedesc", "serviceregistrationfee", "serviceprice",'serviceWalkin',"serviceHour","servicetype");
+				$select = array("serviceid","servicename", "servicedesc", "serviceregistrationfee", "serviceprice","serviceWalkin","serviceHour as servicehour","(CASE WHEN servicetype=1 THEN 'Arts' ELSE 'Sports' END) as servicetype","1 as action");
 				$sTable = "services";
 				$leftjoin = " ";
 				$sWhere = "WHERE servicestatus=1 AND SPID=$id";
@@ -38,7 +38,7 @@ class Mspprofile extends CI_Model {
 					$sWhere .= " AND (servicename like '%".$sSearch."%' OR servicedesc like '%".$sSearch."%' OR serviceschedule like '%".$sSearch."%' OR serviceregistrationfee like '%".$sSearch."%' OR servicetype like '%".$sSearch."%' OR serviceprice like '%".$sSearch."%')";}
 					$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 					$groupby = "";
-					$aColumns_output = array("serviceid","servicename","servicedesc", "serviceschedule", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
+					$aColumns_output = array("serviceid","servicename","servicedesc", "serviceregistrationfee", "serviceWalkin","servicehour","serviceprice", "servicetype","action");
 			break;
 			case 2://list of instructors
 

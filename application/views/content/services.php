@@ -1,6 +1,6 @@
 <style>
   #content-services .modal-dialog {
-    width 95%; /* or whatever you wish */
+    width 95% !important; /* or whatever you wish */
   }
    #map {
         width: 500px;
@@ -47,74 +47,10 @@
         
         <div class="row sidebar-page"> 
             <div class="page-content" id = "content-services">
-            <!-- picture -->
-            <div class = "col-md-1">
-                <div class = "row">
-                  <img src="assets/images/<?php echo $clubpic;?>" class="img-circle" style = "width:80px; height:80px; cursorpointer;" id = "clubimage" data-toggle = "popover" data-placement = "top" title = "Click here to change picture.">
-                   <input type="file" name="clubpic" id="clubpic" accept="image/*" style = "display:none"/>
-                </div>
-                 <!-- end picture -->
-              </div>
-              <div class = "col-md-4">
-
-                <div class="row">
-                  <div class="col-sm-10">
-                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php echo ($clinicstatus==0)?'disabled':'';?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <br/>
-              <div class="alert" role="alert" style = "displaynone"></div>
-
-                <form class="form-horizontal" id = "form-clinic">
-                  
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Clinic Name</label>
+            <div class="form-group">
+                    
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="clinic_name" name = "clinic_name" placeholder="Club Name" value = "<?=ucfirst($data->clinic_name);?>">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Owner Name </label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" value = "<?=ucfirst($this->session->userdata('name'));?>" disabled>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Location</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="SPLocation" name = "SPLocation" placeholder="Location" value = "<?=ucfirst($data->SPLocation);?>">
-                      <input type="hidden" class="form-control" id="latitude" name = "latitude" value="<?php echo $data->latitude;?>">
-                      <input type="hidden" class="form-control" id="longitude" name = "longitude" value="<?php echo $data->longitude;?>">
-                      <span class = "glyphicon glyphicon-map-marker" style = "cursor:pointer !important;" id = "showmap" data-toggle="tooltip" data-placement="top" title="Click to show map"></span>
-                    </div>
-
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">About Us</label>
-                    <div class="col-sm-10">
-                      <textarea id = "SPAboutMe" name = "SPAboutMe"><?=ucfirst($data->SPAboutMe);?></textarea>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Subscription Type</label>
-                    <div class="col-sm-10">
-                      <select  id = "SubscType" name = "SubscType" class = "form-control" disabled>
-                        <option value="1" <?php echo($data->SubscType==1)?'selected':'';?>>Trial</option>
-                        <option value="2" <?php echo($data->SubscType==2)?'selected':'';?>>Premium</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan Expiry Date</label>
-                    <div class="col-sm-10">
-                      <p><?php echo date('F d Y',strtotime($data->SubscEndDate));?></p>
-                    </div>
-                  </div>
-                  <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Subscription Plan Status</label>
-                    <div class="col-sm-10">
                       <p><?php 
                       if($data->SubscType==2){
                         if($data->SubsStatus==1 && (strtotime($data->SubscEndDate) > strtotime(date('Y-m-d'))))
@@ -122,7 +58,7 @@
                            $datetime1 = date_create($data->SubscEndDate);
                             $datetime2 = date_create(date('Y-m-d'));
                             $interval = date_diff($datetime2, $datetime1);
-                          echo "<p class='text-success'>Paid. <p class='text-info'>You have ".$interval->format('%R%a days')." remaining.</span></p>";
+                          echo "<p class='text-success'>Paid. <span class='text-info'>You have ".$interval->format('%R%a days')." remaining.</span></p>";
                         }else if($data->SubsStatus==0){
                           echo "<p class='text-danger'>Unpaid. Please settle your balance for you to Manage Services Module.</p><button class='btn btn-info btn-sm' id='btn-paynow' data-toggle='tooltip' data-placement='top' title='Pay Now'><i class ='fa fa-cc-visa fa-2x'></i>&nbsp;<i class ='fa fa-cc-paypal fa-2x'></i>&nbsp;</i>&nbsp;<i class ='fa fa-credit-card fa-2x'></i>&nbsp;Pay Now</button>";
                         }else{
@@ -142,8 +78,6 @@
                       
                     </div>
                   </div>
-                </form>
-              </div>
               <!-- Divider -->
               <div class = "row">
                 <div class="hr1 margin-top"></div>
@@ -227,10 +161,6 @@
                           <div class = "form-group">
                             <label for = "forserv_desc">Description</label>
                             <textarea class = "form-control" id = "ServiceDesc" name = "ServiceDesc"></textarea>
-                          </div>
-                          <div class = "form-group">
-                            <label for = "serv_sched">Schedule</label>
-                            <input type="text" placeholder="Schedule" class = "form-control" id = "ServiceSchedule" name = "ServiceSchedule"/>
                           </div>
                         </div>
                         <div class = "col-md-6">
@@ -390,7 +320,50 @@
             </div><!-- /.modal -->
           </div>
             <!-- end Intstructor modal -->
-
+            <!-- modal schedule Instructor -->
+            <div class="modal fade" id = "modal_viewSchedule" tabindex="-1" role="dialog">
+              <div class="modal-dialog" style = "width: 95% !important">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Instructor's Schedules</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    <div class = "row" style = "margin:5% !important">
+                      <table id="tbl-insSched" class="display" cellspacing="0" width="100%"></table>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+            <!-- end schedule instructor modal -->
+            <!-- modal service instructor list -->
+            <div class="modal fade" id = "modal_viewInsList" tabindex="-1" role="dialog">
+              <div class="modal-dialog" style = "width: 95% !important">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Service's Instructors</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    <div class = "row" style = "margin:5% !important">
+                      <table id="tbl-serviceIns" class="display" cellspacing="0" width="100%"></table>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
+            <!-- end service instructor list modal -->
              <!-- modal add Instructor -->
             <div class="modal fade" id = "modal_map" tabindex="-1" role="dialog">
               <div class="modal-dialog">
@@ -410,6 +383,7 @@
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+
           </div>
             <!-- end Intstructor modal -->
             <!-- END MODAL -->
@@ -431,12 +405,12 @@
               <div class = "row" style ="margin:3%">
                 <form  id="formaddRoom">  
                     <div class = "form-group">
-                      <label for = "RoomNo">Room # </label>
-                      <input type = "text" placeholder="Room #" class = "form-control" id = "RoomNo" name = "RoomNo" onkeypress = "numbersOnly(this.value,this.name)"/>
+                      <label for = "RoomNo">Venue </label>
+                      <input type = "text" placeholder="Venue" class = "form-control" id = "RoomNo" name = "RoomNo" onkeypress = "numbersOnly(this.value,this.name)"/>
                     </div>
                     <div class = "form-group">
-                      <label for = "RoomName">Room Name </label>
-                      <input type="text" class = "form-control" id = "RoomName" name = "RoomName" placeholder = "Room Name"/>
+                      <label for = "RoomName">Description </label>
+                      <textarea class = "form-control" id = "RoomName" name = "RoomName" placeholder = "Description"></textarea>
                     </div>
                     <div class = "form-group">
                       <label for = "RoomStatus">Status</label>
@@ -533,32 +507,4 @@
     <!-- End Content -->
     <!-- javascripts -->
   <script type="text/javascript" src="assets/js/services.js"></script>
-  <script>
-var autocomplete;
-
-function initAutocomplete() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('SPLocation')),
-      {types: ['geocode']});
-
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
-}
-
-// [START region_fillform]
-function fillInAddress() {
-  // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
-      var lat=place.geometry.location.lat();
-      var lng = place.geometry.location.lng();
-      $("#latitude").val(lat), $("#longitude").val(lng);
-}
-
-</script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
-         async defer>
-</script>
+ 

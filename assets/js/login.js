@@ -45,10 +45,6 @@ $(document).ready(function(){
 			$("#SubscType").removeAttr('disabled');
 		}else{
 			$("#SubscType").attr('disabled','disabled');
-			$("#message .alert").html("Please Skip Step 2: Subscription Plan.").addClass("alert-info").show();$("#message").addClass('zindex');
-			setTimeout(function(){
-				$("#message .alert").html("").removeClass("alert-info").hide();$("#message").removeClass('zindex');
-			},3000);
 		}
 	});
 	//check password length
@@ -134,7 +130,7 @@ function login(){
 						if(msg[1] == "0"){
 							window.location = "subscribers";
 						}else if(msg[1] == "1"){
-							window.location = "services";
+							window.location = "index";
 						}else{
 							window.location = "index";
 						}
@@ -174,8 +170,10 @@ function register(){
 	$.each(regdata, function(i,e){
 		var name = $("#"+e.name);
 		if(e.value == ""){
+
 			name.parent().addClass("has-error");
-			err.push(name.attr('placeholder'));
+			if(e.name != 'longitude' && e.name != "latitude")
+				err.push(name.attr('placeholder'));
 		}else{
 			name.parent().removeClass("has-error");
 		}

@@ -130,4 +130,9 @@ class Services extends CI_Controller {
 		$data = $this->mservices->paypal($type,$userid);
 		echo json_encode($data);
 	}
+
+	function filterDropdowns(){
+		$data = $this->mservices->filterDropdowns();
+		echo json_encode($data);
+	}
 }

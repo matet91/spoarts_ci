@@ -11,7 +11,6 @@ function getservices(){
         "aoColumns":[ {"sTitle":"ID","bVisible":false},
                 {"sTitle":"Services"},
                 {"sTitle":"Description","bSearchable": true},
-                {"sTitle":"Schedule","bSearchable": true},
                 {"sTitle":"Registration Fee (Peso)","bSearchable": true},
                 {"sTitle":"Walk-in Fee/Session (Peso)","bSearchable": true},
                 {"sTitle":"# of Hours Per Session","bSearchable": true},
@@ -20,8 +19,8 @@ function getservices(){
                 {"sTitle":"Actions",'bVisible':true,"bSortable":false}
         ],
         "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-            if ( aData[9] == 1 ){
-                $('td:eq(8)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="  Enroll" onclick = enroll('+aData[0]+')><i class = "fa fa-sign-in fa-fw"></i></button>');
+            if ( aData[8] == 1 ){
+                $('td:eq(7)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="  Enroll" onclick = enroll('+aData[0]+')><i class = "fa fa-sign-in fa-fw"></i></button>');
               }
         },
         "fnInitComplete": function(oSettings, json) {
