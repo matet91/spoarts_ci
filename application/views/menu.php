@@ -78,7 +78,7 @@
                 <li><a href="sales?type=0" class = "<?php echo ($content == 'content/sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
               <?php if(!$this->session->userdata('userid')){?>
-                <li><a href="sales?type=0" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
+                <li><a href="registration" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
               <?php } ?>
             </ul>
             <!-- End Navigation List -->
@@ -132,7 +132,7 @@
                 <li><a href="sales?type=0" class = "<?php echo ($content == 'content/sales.php'?'active':'');?>">Sales</a></li>
               <?php } ?>
               <?php if(!$this->session->userdata('userid')){?>
-                <li><a href="sales?type=0" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
+                <li><a href="registration" class = "<?php echo ($content == 'content/registration.php'?'active':'');?>">Register</a></li>
               <?php } ?>
         </ul>
         <!-- Mobile Menu End -->

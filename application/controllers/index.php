@@ -32,6 +32,7 @@ class Index extends CI_Controller {
   		$userType = $this->session->userdata('usertype');
   		$first_login = $this->session->userdata('first_login');
   		$profile = '';
+  		$clubpic = '';
   		switch($first_login){
   			case 0: //firstlogin
   				$title = "Settings";
