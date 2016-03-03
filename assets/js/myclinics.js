@@ -264,7 +264,7 @@ function saveEnroll(){
 			  var name = $("#"+e.name);  
 			  data[e.name] = e.value;
 			  
-			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address"){
+			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address" || e.name == "relationship"){
 				  if(e.value == ""){
 					name.parent().addClass("has-error");
 				  }else{
@@ -332,7 +332,7 @@ function saveEnroll(){
 			  dataType:'JSON',
 			  type:'POST',
 			  success:function(msg){
-			  		$("#message .alert").removeClass('alert-danger').removeClass('alert-success');
+			  	$("#message .alert").removeClass('alert-danger').removeClass('alert-success');
 				var nme = $("#stud_name").val()+" is";
 				if(studType==1){
 					nme = $("#stud_id option:selected").text();
@@ -340,12 +340,12 @@ function saveEnroll(){
 					nme = "You are";
 				}
 				if(msg == 0){
-					$("#message .alert").html(nme+" now on the waiting list of this clinic's service.").addClass('alert-success').show();$("#message").addClass('zindex');
+					$("#message .alert").html(nme+" now on the waiting list of this clinic's service's service.").addClass('alert-success').show();$("#message").addClass('zindex');
 					$("#stud_name").val("");$("#stud_age").val("");$("#stud_address").val("");
 					setTimeout(function(){
 						$("#message .alert").html("").removeClass('alert-success').hide();$("#message").removeClass('zindex');
-						window.location = 'myclinics';
-					},2000);
+						window.location = 'clinics?type='+$("#ctype").val();
+					},3000);
 				}else if(msg == 3){ //existing student in a clinic
 				
 					$("#message .alert").html(nme+" already exist. Please select Student Type: Existing.").addClass('alert-danger').show();$("#message").addClass('zindex');
@@ -353,9 +353,9 @@ function saveEnroll(){
 				}else if(msg == 4){ //student already enrolled in schedule selected
 					$("#message .alert").html(nme+" already enrolled in this schedule").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else if(msg == 5){
-					$("#message .alert").html("The service hits its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();$("#message").addClass('zindex');
+					$("#message .alert").html("The service has reached its maximum capacity for the selected schedule. Please select other schedule if any.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else if(msg == 6){
-					$("#message .alert").html(nme+" already in this service' waiting list for approval.").addClass('alert-danger').show();$("#message").addClass('zindex');
+					$("#message .alert").html(nme+" already in this clinic's waiting list for approval.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else if(msg == 7){
 					$("#message .alert").html("Schedule is conflict. Please select a different schedule.").addClass('alert-danger').show();$("#message").addClass('zindex');
 				}else{
@@ -373,6 +373,7 @@ function saveEnroll(){
 	}
 	
 }
+
 
 function bookmark(clinicid){
 	$.ajax({

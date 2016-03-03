@@ -147,6 +147,20 @@
 									<label for = "forsched_slot">Address</label>
 									<input type="text" class = "form-control" id = "stud_address" name = "stud_address" />
 								  </div>
+								   <div class = "form-group">
+									<label for = "forsched_slot">Relationship</label>
+									<select class = "form-control chosen-select" id = "relationship" name = "relationship">
+										<option value="Mother">Mother</option>
+										<option value="Father">Father</option>
+										<option value="Brother">Brother</option>
+										<option value="Sister">Sister</option>
+										<option value="Son">Son</option>
+										<option value="Daughter">Daughter</option>
+										<option value="Wife">Wife</option>
+										<option value="Husband">Husband</option>
+										<option value="Relative">Relative</option>
+									</select>
+								  </div>
 								  <input type="hidden" class = "form-control" id = "service_id" name = "service_id" />
 								  <input type="hidden" class = "form-control" id = "clinic_id" name = "clinic_id" />
 								  <input type="hidden" class = "form-control" id = "ins_id" name = "ins_id" />

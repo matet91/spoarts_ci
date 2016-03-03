@@ -64,6 +64,18 @@ class Clinics extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	//get Instructor Sched
+	function getInstructorSched($istructorid){
+		$table = "schedules sc";
+		$fields = "sc.SchedID, sc.SchedDays,sc.SchedTime, se.ServiceName, (schedremaining=schedslots) as ch_sched, se.SPID, sc.ServiceID,CONCAT(r.RoomNo,'-',r.RoomName)as Room  ";
+		$where = "WHERE sc.InstructorID = '".$istructorid."'";
+		$leftjoin = "LEFT JOIN services se ON se.ServiceID = sc.ServiceId LEFT JOIN rooms r ON r.RoomID = sc.RoomID";
+		$order = "";
+
+		$data = $this->mclinics->getlist($table,$fields,$where,$order,$leftjoin);
+		echo json_encode($data);
+	}
+	
 	function getService($c,$userid){
 		$table = "services";
 		$fields = "ServiceID, ServiceName";

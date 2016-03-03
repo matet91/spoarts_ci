@@ -56,6 +56,16 @@
 					<select class = "form-control chosen-select" id = "year" onchange="reloadtable()"></select>
 					</div>
 				  </div>
+				  <?php if($this->input->get('type')==1){?>
+				  <div class = "form-group">
+					<label for = "forrep_type">Service</label>
+					<select class = "form-control chosen-select" id = "service_id" onchange="reloadtable();changeservice(this.options[this.selectedIndex].value);"></select>
+				  </div>
+				  <div class = "form-group">
+					<label for = "forrep_type">Schedule</label>
+					<select class = "form-control chosen-select" id = "schedule_id" onchange="reloadtable();"></select>
+				  </div>
+				  <?php }?>
 				</div>
 				
 				<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>

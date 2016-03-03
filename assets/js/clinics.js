@@ -234,11 +234,11 @@ function getRelationship(){
 		type:'POST',
 		success:function(msg){ 
 			var result = "";
-			$("#stud_relationship").html("");
+			$("#relationship").html("");
 			$.each(msg, function(i,e){	
 				result += '<option value='+e.relationship_name+'>'+e.relationship_name+'</option>';		
 			});	
-			$('#stud_relationship').html(result).trigger("chosen:updated");
+			$('#relationship').html(result).trigger("chosen:updated");
 		}
 	});
 }
@@ -280,7 +280,7 @@ function saveEnroll(){
 			  var name = $("#"+e.name);  
 			  data[e.name] = e.value;
 			  
-			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address" || e.name == "stud_relationship"){
+			  if(e.name == "stud_name" || e.name == "stud_age" || e.name == "stud_address" || e.name == "relationship"){
 				  if(e.value == ""){
 					name.parent().addClass("has-error");
 				  }else{

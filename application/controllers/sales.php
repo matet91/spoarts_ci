@@ -23,6 +23,7 @@ class Sales extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->model('msales');
+		$this->load->model('mclinics');
 	}
 
 	public function index()
@@ -39,8 +40,34 @@ class Sales extends CI_Controller {
 		$this->load->view('index',$data);
 	}
 	
-	function dataTables($switch,$reptype,$repdate){
-		$data = $this->msales->dataTables($switch,$reptype,$repdate);
+	function dataTables($switch,$reptype,$repdate,$serviceid,$scheduleid){
+		$data = $this->msales->dataTables($switch,$reptype,$repdate,$serviceid,$scheduleid);
 		echo json_encode($data);
 	}
+	
+	function getService(){
+		
+		$table = "services";
+		$fields = "ServiceID,ServiceName";
+		$leftjoin = "";
+		$where = "WHERE SPID = ".$this->session->userdata('userid')."";
+		$order = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
+
+		echo json_encode($data);
+	}
+	
+	function getSchedule($serviceid){
+		
+		$table = "schedules";
+		$fields = "SchedID,CONCAT(SchedDays,'@',SchedTime)as Sched";
+		$leftjoin = "";
+		$where = "WHERE ServiceID = ".$serviceid."";
+		$order = "";
+		$data = $this->mclinics->getlist($table, $fields , $where, $order,$leftjoin);
+
+		echo json_encode($data);
+	}
+	
+	
 }

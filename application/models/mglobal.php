@@ -180,7 +180,7 @@ class mglobal extends CI_Model {
 
 			case 5: //room
 					$table = "rooms";
-					$select = "RoomID as id,RoomNo as name";
+					$select = "RoomID as id,CONCAT(RoomNo,'-',RoomName)as name";
 					$this->db->where('RoomStatus',1);
 					$this->db->where('UserID',$this->session->userdata('userid'));
 			break;
@@ -316,44 +316,48 @@ class mglobal extends CI_Model {
 		$q = $this->db->query($sql);
 		return 0;
 	}
-
-	function resetpassword(){
-		$email = $this->input->post('email');
-		$sql = "SELECT a.UserID as userid,b.spfirstname,b.splastname FROM user_accounts a LEFT JOIN user_details b ON b.UserID=a.UserID WHERE b.SPEmail = '$email'";
-		$q = $this->db->query($sql);
-
-		if($q->num_rows() > 0){
-			//email here
-			$rowx = $q->row();
-			$userid = $rowx->userid;
-			$fname = $rowx->spfirstname;
-	        $to = $email;
-	        $subject = "[Do not reply] Spoarts: Reset Password";
-	        $message = "<span style='color:#3BACAD'>Hi ".$fname."!</span><br/>
-	                    <p style='color:#0298D3;'> To change your password, click <a href='http://localhost/spoarts_ci/landingpage?type=3&id=".$userid."' target='_blank'>HERE</a> to continue your request. If you do not wish to change your password,just ignore this message. </b><br/><br/><span style='color:#3BACAD'>Best Regards</span>,<br/>
-	                    <h3 style='color:#0298D3'>Spoarts Team</h3></p>";
-	        $mail = new Mailer();
-	       // $mail->SMTPDebug = 3;
-	        $mail->isSMTP(); // Set mailer to use SMTP
-	        $mail->Host = 'smtp.gmail.com';// Specify main and backup SMTP servers
-	        $mail->SMTPAuth = true; // Enable SMTP authentication
-	        $mail->Username = 'spoarts.cebu@gmail.com';// SMTP username
-	        $mail->Password = 'sp0@rt$2016';// SMTP password
-	        $mail->SMTPSecure = 'tls';// Enable TLS encryption, `ssl` also accepted
-	        $mail->Port = 587;// TCP port to connect to
-	        $mail->addAddress($to);// Add a recipien
-	        $mail->isHTML(true);// Set email format to HTML
-	        $mail->setFrom('spoarts.cebu@gmail.com', 'Spoarts');
-	        $mail->Subject = $subject;
-	        $mail->Body    = $message;
-
-	        if(!$mail->send()) {
-
-	            //echo $mail->ErrorInfo;
-	            return 0; exit(); //not send
-	        }else{
-	        	return 1;exit();//sent
-	        }
-	    }else return 2;//email not exist
+	
+	function getInterests(){
+		$interest = (object)array(array("interest_id"=>1,"interest_name"=>"Animation","interest_type"=>1),
+			array("interest_id"=>2,"interest_name"=>"Architecture","interest_type"=>1),
+			array("interest_id"=>3,"interest_name"=>"Body Art","interest_type"=>1),
+			array("interest_id"=>6,"interest_name"=>"Brief Art","interest_type"=>1),
+			array("interest_id"=>7,"interest_name"=>"Cinema","interest_type"=>1),
+			array("interest_id"=>8,"interest_name"=>"Comic Writing","interest_type"=>1),
+			array("interest_id"=>9,"interest_name"=>"Dance","interest_type"=>1),
+			array("interest_id"=>10,"interest_name"=>"Digital Art","interest_type"=>1),
+			array("interest_id"=>11,"interest_name"=>"Drawing","interest_type"=>1),
+			array("interest_id"=>12,"interest_name"=>"Engraving","interest_type"=>1),
+			array("interest_id"=>13,"interest_name"=>"Fractal art","interest_type"=>1),
+			array("interest_id"=>14,"interest_name"=>"Gastronomy","interest_type"=>1),
+			array("interest_id"=>15,"interest_name"=>"Gold-smithery, silver-smithery, and jewellery","interest_type"=>1),
+			array("interest_id"=>16,"interest_name"=>"Graffiti","interest_type"=>1),
+			array("interest_id"=>17,"interest_name"=>"Music","interest_type"=>1),
+			array("interest_id"=>18,"interest_name"=>"Opera","interest_type"=>1),
+			array("interest_id"=>19,"interest_name"=>"Painting","interest_type"=>1),
+			array("interest_id"=>20,"interest_name"=>"Photography","interest_type"=>1),
+			array("interest_id"=>21,"interest_name"=>"Poetry","interest_type"=>1),
+			array("interest_id"=>22,"interest_name"=>"Pottery","interest_type"=>1),
+			array("interest_id"=>23,"interest_name"=>"Sculpture","interest_type"=>1),
+			array("interest_id"=>24,"interest_name"=>"Singing","interest_type"=>1),
+			array("interest_id"=>25,"interest_name"=>"Theatre","interest_type"=>1),
+			array("interest_id"=>27,"interest_name"=>"Woodwork","interest_type"=>1),
+			array("interest_id"=>28,"interest_name"=>"Writing","interest_type"=>1),
+			array("interest_id"=>29,"interest_name"=>"Air sports","interest_type"=>0),
+			array("interest_id"=>30,"interest_name"=>"Archery","interest_type"=>0),
+			array("interest_id"=>31,"interest_name"=>"Ball-over-net games","interest_type"=>0),
+			array("interest_id"=>32,"interest_name"=>"Basketball family","interest_type"=>0),
+			array("interest_id"=>33,"interest_name"=>"Board sports","interest_type"=>0),
+			array("interest_id"=>34,"interest_name"=>"Climbing","interest_type"=>0),
+			array("interest_id"=>35,"interest_name"=>"Cycling","interest_type"=>0),
+			array("interest_id"=>36,"interest_name"=>"Combat sports: Wrestling and martial arts","interest_type"=>0),
+			array("interest_id"=>37,"interest_name"=>"Dance","interest_type"=>0),
+			array("interest_id"=>38,"interest_name"=>"Football","interest_type"=>0),
+			array("interest_id"=>39,"interest_name"=>"Ice sports","interest_type"=>0),
+			array("interest_id"=>40,"interest_name"=>"Running","interest_type"=>0),
+			array("interest_id"=>41,"interest_name"=>"Snow sports","interest_type"=>0),
+			array("interest_id"=>42,"interest_name"=>"Table sports","interest_type"=>0)
+		);
+		return $interest;
 	}
 }

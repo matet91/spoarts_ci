@@ -8,7 +8,7 @@ class msales extends CI_Model {
 			parent::__construct();
 	}
 	
-	function dataTables($switch,$reptype,$repdate){
+	function dataTables($switch,$reptype,$repdate,$serviceid,$scheduleid){
 		$sSort = $this->input->get('iSortCol_0');
 		$sSortype = $this->input->get('sSortDir_0');
 		$sSearch = $this->input->get('sSearch');
@@ -61,6 +61,8 @@ class msales extends CI_Model {
 				$sTable = "payment_logs p";
 				$leftjoin = " LEFT JOIN students s ON s.stud_id = p.stud_id LEFT JOIN schedules sc ON sc.SchedID = p.SchedID LEFT JOIN services ser ON ser.ServiceID = p.service_id LEFT JOIN clinics u ON u.UserID = p.UserID";
 				$sWhere = "WHERE p.UserID = ".$this->session->userdata("userid")."";
+				if($serviceid !=0){ $sWhere .= " AND p.service_id=".$serviceid.""; }
+				if($scheduleid !=0){ $sWhere .= " AND p.SchedID=".$scheduleid.""; }
 				$sWhere .= $wheredate;
 				if($sSearch){$sWhere .= " AND (payment_date like '%".$sSearch."%' OR payment_amt like '%".$sSearch."%' OR payment_balance like '%".$sSearch."%'  OR payment_desc like '%".$sSearch."%' OR stud_name like '%".$sSearch."%' OR payment_type like '%".$sSearch."%' OR ser.ServiceName like '%".$sSearch."%' OR sc.SchedDays like '%".$sSearch."%' OR sc.SchedTime like '%".$sSearch."%' OR u.clinic_name like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
@@ -76,7 +78,7 @@ class msales extends CI_Model {
 		//print_r("SELECT SQL_CALC_FOUND_ROWS ".implode(",", $aColumns)." FROM $sTable $leftjoin $sWhere $groupby $sOrder $sLimit");
 		
 		$rResult = $this->db->query( $sQuery );
-		// 	echo $this->db->last_query();
+		//echo $this->db->last_query();
 		$sQuery = "SELECT FOUND_ROWS() as count";
 		$rResultFilterTotal = $this->db->query( $sQuery);
 

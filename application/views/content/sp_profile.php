@@ -1,6 +1,9 @@
 <style>
   #content-services .modal-dialog {
     width 95%; /* or whatever you wish */
+  } 
+  #modal_instructor_sched .modal-dialog{
+    width:900px; /* or whatever you wish */
   }
 
 </style>
@@ -118,13 +121,13 @@
               <!-- Nav Tabs -->
 	              <ul class="nav nav-tabs">
 	                <li class="active"><a href="#tab-4" data-toggle="tab"><i class="fa fa-desktop"></i>Services</a></li>
-                  <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-picture-o"></i>Gallery</a></li>
-                  <li><a href="#tab-6" data-toggle="tab"><i class="fa fa-calendar"></i>Events</a></li>
-                  <li><a href="#tab-7" data-toggle="tab"><i class="fa fa-gift"></i>Promos</a></li>
+					<li><a href="#tab-5" data-toggle="tab"><i class="fa fa-picture-o"></i>Gallery</a></li>
+					<li><a href="#tab-6" data-toggle="tab"><i class="fa fa-calendar"></i>Events</a></li>
+					<li><a href="#tab-7" data-toggle="tab"><i class="fa fa-gift"></i>Promos</a></li>
 	                <li><a href="#tab-8" data-toggle="tab"><i class="fa fa-star"></i>Reviews & Ratings</a></li>
-	               <?php if($usertype == 0){?> <li><a href="#tab-9" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
-                 <li><a href="#tab-10" data-toggle="tab"><i class="fa fa-group"></i>Enrolled Students</a></li>
-                 <li><a href="#tab-11" data-toggle="tab"><i class="fa fa-group"></i>Instructor MasterList</a></li>
+					<li><a href="#tab-11" data-toggle="tab"><i class="fa fa-group"></i>Instructor MasterList</a></li>
+	              <?php if($usertype == 0){?> <li><a href="#tab-9" data-toggle="tab"><i class="fa fa-group"></i>Clients</a></li>
+					<li><a href="#tab-10" data-toggle="tab"><i class="fa fa-group"></i>Enrolled Students</a></li>
                  <?php } ?>
 	              </ul>
 
@@ -339,9 +342,19 @@
                   <input type="text" class = "form-control" id = "stud_address" name = "stud_address" />
                   </div>
                   <div class = "form-group">
-                  <label for = "forsched_slot">Relationship</label>
-                  <select class = "form-control chosen-select" id = "stud_relationship" name = "stud_relationship"></select>
-                  </div>
+						<label for = "forsched_slot">Relationship</label>
+						<select class = "form-control chosen-select" id = "relationship" name = "relationship">
+							<option value="Mother">Mother</option>
+							<option value="Father">Father</option>
+							<option value="Brother">Brother</option>
+							<option value="Sister">Sister</option>
+							<option value="Son">Son</option>
+							<option value="Daughter">Daughter</option>
+							<option value="Wife">Wife</option>
+							<option value="Husband">Husband</option>
+							<option value="Relative">Relative</option>
+						</select>
+					  </div>
                   <input type="hidden" class = "form-control" id = "service_id" name = "service_id" />
                   <input type = "hidden" id = "clinic_id" name = "clinic_id" value = "<?=$data->clinic_id?>">
                   <input type="hidden" class = "form-control" id = "ins_id" name = "ins_id" />
@@ -395,9 +408,19 @@
                   <input type="text" class = "form-control" id = "stud_address1" name = "stud_address1" />
                   </div>
                   <div class = "form-group">
-                  <label for = "forsched_slot">Relationship</label>
-                  <select class = "form-control chosen-select" id = "stud_relationship1" name = "stud_relationship1"></select>
-                  </div>
+						<label for = "forsched_slot">Relationship</label>
+						<select class = "form-control chosen-select" id = "relationship1" name = "relationship1">
+							<option value="Mother">Mother</option>
+							<option value="Father">Father</option>
+							<option value="Brother">Brother</option>
+							<option value="Sister">Sister</option>
+							<option value="Son">Son</option>
+							<option value="Daughter">Daughter</option>
+							<option value="Wife">Wife</option>
+							<option value="Husband">Husband</option>
+							<option value="Relative">Relative</option>
+						</select>
+					  </div>
                   <input type="hidden" class = "form-control" id = "SPID1" name = "SPID1" value = "<?=$data->clinic_id?>"/>
                   <input type="hidden" class = "form-control" id = "EventID" name = "EventID" />
                 </div>
@@ -407,6 +430,68 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
             <button type="button" id= "btn-EventEnroll" class="btn btn-primary">Enroll</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+    <!-- end modal -->
+	
+	<!-- modal enroll -->
+    <div class="modal fade" id = "modal_instructor_sched" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="title-promo">Instructor's Schedule</h4>
+        </div>
+        <div class="modal-body">
+          <div class = "row">
+				<div id="calendar_instructor_sched"></div>
+				<form id="forminstructorenroll" style="display:none">
+				  <div class="col-md-6">
+					<div class = "form-group">
+					<label for = "forsched_name">Student Type</label>
+					<select class = "form-control chosen-select" id = "StudTypeins"><option value=0>New</option><option value=1>Existing</option><option value=2>Client</option></select>
+					</div>
+					<div id="stud-existins" style="display:none"> 
+					  <label for = "forsched_name">Student</label>
+					  <select class = "form-control chosen-select" id = "stud_idins" name = "stud_idins"></select>
+					</div>
+					<div id="stud-newins">
+					  <div class = "form-group">
+					  <label for = "forsched_name">Name</label>
+					  <input type="text" class = "form-control" id = "stud_nameins" name = "stud_nameins" />
+					  </div>
+					  <div class = "form-group">
+					  <label for = "forsched_instructor">Age</label>
+					  <input type="text" class = "form-control" id = "stud_ageins" name = "stud_ageins" />
+					  </div>
+					  <div class = "form-group">
+					  <label for = "forsched_slot">Address</label>
+					  <input type="text" class = "form-control" id = "stud_addressins" name = "stud_addressins" />
+					  </div>
+					  <div class = "form-group">
+						<label for = "forsched_slot">Relationship</label>
+						<select class = "form-control chosen-select" id = "relationshipins" name = "relationshipins">
+							<option value="Mother">Mother</option>
+							<option value="Father">Father</option>
+							<option value="Brother">Brother</option>
+							<option value="Sister">Sister</option>
+							<option value="Son">Son</option>
+							<option value="Daughter">Daughter</option>
+							<option value="Wife">Wife</option>
+							<option value="Husband">Husband</option>
+							<option value="Relative">Relative</option>
+						</select>
+					  </div>
+					</div>
+				  </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+            <button type="button" id= "btn-InstructorEnroll" class="btn btn-primary" style="display:none">Enroll</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

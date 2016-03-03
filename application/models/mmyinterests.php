@@ -61,7 +61,7 @@ class mmyinterests extends CI_Model {
 			}
 
 		}else{
-			$data = array('interest_ids'=>$clinicid,'client_id'=>$userid);
+			$data = array('interest_ids'=>implode(",",$interestid),'client_id'=>$userid);
 			$d = $this->db->insert('client_interest',$data);
 
 			if($d == true)

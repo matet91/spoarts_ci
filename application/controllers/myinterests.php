@@ -24,6 +24,7 @@ class Myinterests extends CI_Controller {
 		
 		$this->load->model('mreviews_and_ratings');
 		$this->load->model('mmyinterests');
+		$this->load->model('mglobal');
 	}
 
 	public function index()
@@ -48,16 +49,18 @@ class Myinterests extends CI_Controller {
 	//get all interest for dropdown in event
 	function getselInterest($type){
 		$userid = $this->session->userdata('userid');
-		//list of interest that is added on his list
-		$interestids = $this->mmyinterests->getID("client_interest", "interest_ids" , "WHERE client_id = '".$userid."'");
+		$interestids = explode(",",$this->mmyinterests->getID("client_interest", "interest_ids" , "WHERE client_id = '".$userid."'"));
+		$data = $this->mglobal->getInterests();
+		$ndata=array();
+		foreach($data as $key){
+			if( $key['interest_type'] == $type){
+				if(!in_array($key["interest_id"], $interestids)){
+					$ndata[] = $key;
+				}					
+			}
+		}
 		
-		$table = "interest";
-		$fields = "interest_id, interest_name";
-		$where = "WHERE interest_type = '".$type."' AND interest_id NOT IN(".$interestids.")";
-		$order = "";
-
-		$data = $this->mreviews_and_ratings->getlist($table,$fields,$where,$order);
-		echo json_encode($data);
+		echo json_encode((object)$ndata);
 	}
 	
 	function saveInterest(){

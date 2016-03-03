@@ -108,4 +108,9 @@ class cglobal extends CI_Controller {
 		$data = $this->mglobal->readNotification();
 		echo json_encode($data);
 	}
+	
+	function getInterests(){
+		$data = $this->mglobal->getInterests();
+		echo json_encode($data);
+	}
 }

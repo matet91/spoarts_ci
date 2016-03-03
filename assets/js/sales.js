@@ -14,6 +14,7 @@ $(document).ready(function() {
 		opt.innerHTML = i;
 		select.appendChild(opt);
 	}
+	getService();
 	get_payments();
 } );
 
@@ -29,17 +30,57 @@ function repchange(reptype){
 	reloadtable();
 }
 
+function getService(){
+	$.ajax({
+		url:'sales/getService/',
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){ 
+			var result = "<option value='0'>Select Service</option>";
+			$("#service_id").html("");
+			$.each(msg, function(i,e){	
+				result += '<option value='+e.ServiceID+'>'+e.ServiceName+'</option>';		
+			});
+			$('#service_id').html(result).trigger("chosen:updated");
+		}
+	});
+}
+
+function changeservice(serviceid){
+	$.ajax({
+		url:'sales/getSchedule/'+serviceid,
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){ 
+			var result = "<option value='0'>Select Service</option>";
+			$("#schedule_id").html("");
+			$.each(msg, function(i,e){	
+				result += '<option value='+e.SchedID+'>'+e.Sched+'</option>';		
+			});
+			$('#schedule_id').html(result).trigger("chosen:updated");
+		}
+	});
+}
+
 function get_payments(){
 	var user_type = $("#user_type").val();
 	var rep_type = $("#report_type").val();
 	var rep_date = "0";
-	
 	if(rep_type == 1){
 		rep_date = $("#month").val()+" "+$("#year").val();
 	}else if(rep_type == 2){
 		rep_date = $("#year").val();
 	}
 	
+	if($("#user_type").val()== 1){
+		var schedule_id = $("#schedule_id").val();
+		var service_id = $("#service_id").val();
+		if (!service_id){service_id="0";}
+		if(!schedule_id){schedule_id="0";}
+	}else{
+		var schedule_id = 0;
+		var service_id = 0;
+	}
 	if(user_type == 1){
 		$("#mypayment_list").append('<tfoot><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tfoot>');
 		$('#mypayment_list').DataTable( {
@@ -47,7 +88,7 @@ function get_payments(){
 		"bServerSide":true,
 		"bRetrieve": true,
 		"bDestroy":true,
-		"sAjaxSource": "sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date,
+		"sAjaxSource": "sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date+"/"+service_id+"/"+schedule_id,
 		"aoColumns":[	
 			{"sTitle":"ID","bVisible":false},
 			{"sTitle":"Date","bSearchable": true},
@@ -97,7 +138,7 @@ function get_payments(){
 		"bServerSide":true,
 		"bRetrieve": true,
 		"bDestroy":true,
-		"sAjaxSource": "sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date,
+		"sAjaxSource": "sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date+"/"+service_id+"/"+schedule_id,
 		"aoColumns":[	
 					{"sTitle":"ID","bVisible":false},
 					{"sTitle":"Date","bSearchable": true},
@@ -147,12 +188,20 @@ function reloadtable(){
 	var user_type = $("#user_type").val();
 	var rep_type = $("#report_type").val();
 	var rep_date = "0";
-	
 	if(rep_type == 1){
 		rep_date = $("#month").val()+" "+$("#year").val();
 	}else if(rep_type == 2){
 		rep_date = $("#year").val();
 	}
+	if($("#user_type").val()== 1){
+		var schedule_id = $("#schedule_id").val();
+		var service_id = $("#service_id").val();
+		if (!service_id){service_id="0";}
+		if(!schedule_id){schedule_id="0";}
+	}else{
+		var schedule_id = 0;
+		var service_id = 0;
+	}
 	var table = $('#mypayment_list').DataTable();
-	table.ajax.url("sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date).load();
+	table.ajax.url("sales/dataTables/"+user_type+"/"+rep_type+"/"+rep_date+"/"+service_id+"/"+schedule_id).load();
 }

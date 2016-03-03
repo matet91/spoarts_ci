@@ -94,11 +94,11 @@ function getselInterest(type){
 		url:'myinterests/getselInterest/'+type,
 		dataType:'JSON',
 		type:'POST',
-		success:function(msg){ 
+		success:function(msg){
 			var result = "";
 			$("#interest_id").html("");
 			$.each(msg, function(i,e){
-				result += '<option value='+e.interest_id+'>'+e.interest_name+'</option>';	
+				result += '<option value='+e.interest_id+'>'+e.interest_name+'</option>';
 			});		
 			$('#interest_id').html(result).trigger("chosen:updated");
 			$('#interest_id_chosen').css({ width: "550px" });

@@ -247,32 +247,3 @@
     </div><!-- /.modal -->
   </div>
     <!-- end modal -->
-    <script>
-var autocomplete;
-
-function initAutocomplete() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('SPAddress')),
-      {types: ['geocode']});
-
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
-}
-
-// [START region_fillform]
-function fillInAddress() {
-  // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
-      var lat=place.geometry.location.lat();
-      var lng = place.geometry.location.lng();
-      $("#latitude").val(lat), $("#longitude").val(lng);
-}
-
-</script>
-  <script type="text/javascript" src="assets/js/home.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJ0WgzkdpMew-6H3IB1JpVk8Gq_Sxxl0&signed_in=true&sensor=false&libraries=places&callback=initAutocomplete"
-         async defer>
-</script>

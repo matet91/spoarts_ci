@@ -119,7 +119,7 @@ class mclinics extends CI_Model {
 		$frmdata = $this->input->post('data');
 		if($frmdata['studType'] ==0){ //new student
 			
-			$ch = $this->checkData("students", "stud_id", "WHERE stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
+			$ch = $this->checkData("students", "stud_id", "WHERE stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND relationship ='".$frmdata['relationship']."' AND stud_type=1");
 	
 			if($ch){
 				$error = 3; //existing student in a clinic
@@ -130,13 +130,13 @@ class mclinics extends CI_Model {
 					$data_stud['stud_age'] = $frmdata['stud_age'];
 					$data_stud['stud_address'] = $frmdata['stud_address'];
 					$data_stud['stud_name'] = $frmdata['stud_name'];
-					$data_stud['stud_relationship'] = $frmdata['stud_relationship'];
+					$data_stud['relationship'] = $frmdata['relationship'];
 					$data_stud['client_id'] = $userid;
 					$data_stud['stud_type'] = 1;
 					
 					$insert = $this->db->insert('students',$data_stud);
 					
-					$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE  stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND stud_type=1");
+					$data_enroll['stud_id'] = $this->getID("students", "stud_id", "WHERE  stud_age='".$frmdata['stud_age']."' AND stud_address='".$frmdata['stud_address']."' AND client_id='".$userid."' AND relationship ='".$frmdata['relationship']."' AND stud_type=1");
 					$data_enroll['client_id'] = $userid;
 					$data_enroll['service_id'] = $frmdata['service_id'];
 					$data_enroll['clinic_id'] = $frmdata['clinic_id'];
