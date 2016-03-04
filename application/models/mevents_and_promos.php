@@ -93,7 +93,8 @@ class mevents_and_promos extends CI_Model {
 				$data[$row]= date("Y-m-d", strtotime($val));
 			}else{ $data[$row]=$val; }
 		}
-		$data['SPID']=$this->session->userdata('userid');
+		$userid = $this->session->userdata('userid');
+		$data['SPID']=$userid;
 		
 		$this->db->where('EventID',$data['EventID']);	
 		$update = $this->db->update('events',$data);
@@ -169,7 +170,8 @@ class mevents_and_promos extends CI_Model {
 				$data[$row]= date("Y-m-d", strtotime($val));
 			}else{ $data[$row]=$val; }
 		}
-		$data['SPID']=$this->session->userdata('userid');
+		$userid = $this->session->userdata('userid');
+		$data['SPID']=$userid;
 		
 		$this->db->where('PromoID',$data['PromoID']);	
 		$update = $this->db->update('promos',$data);
