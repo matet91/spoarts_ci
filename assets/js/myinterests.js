@@ -45,16 +45,23 @@ function getlistinterest(){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
-			var result = "";
+			var result = "<thead><tr><th></th><th></th></tr></thead>";
 			$.each(msg, function(i,e){
+				if(i == 1){
+					result+="<tbody>";
+				}
+
 				result += '<tr><td>'+e+'</td><td><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Interest" onclick="removeIntererst('+i+',1);"><i class = "fa fa-remove fa-fw"></i></button></td></tr>';
 			});
+			result += "</tbody>";
 			
-			$("#tbody-list").html(result);
-			
-			 $('#myinterest_list').DataTable( {
-				"pagingType": "full_numbers"
-			} );
+			 $('#myinterest_list').html(result).DataTable( {
+				"sPaginationType":"full_numbers",
+					"bProcessing":true,
+				    "bDestroy":true,
+				    "deferRender":true,
+					"deferLoading":57}
+			);
 		}
 	});
 	/*$('#myinterest_list').DataTable( {

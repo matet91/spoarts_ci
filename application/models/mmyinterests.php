@@ -51,9 +51,9 @@ class mmyinterests extends CI_Model {
 				return 1; //already save
 				exit();
 			}else{
-				array_push($rowinterestid,implode(",",$interestid));
+				$result = array_unique(array_merge($rowinterestid,$interestid));
 				$this->db->where('client_id',$userid);
-				$d = $this->db->update('client_interest',array('interest_ids'=>implode(",",$rowinterestid)));
+				$d = $this->db->update('client_interest',array('interest_ids'=>implode(",",$result)));
 				if($d == true)
 					return 2;//interest updated
 				else return 0; //error occurred

@@ -49,16 +49,7 @@ class Myinterests extends CI_Controller {
 	//get all interest for dropdown in event
 	function getselInterest(){
 		$userid = $this->session->userdata('userid');
-		$interestids = explode(",",$this->mmyinterests->getID("client_interest", "interest_ids" , "WHERE client_id = '".$userid."'"));
-		$data = $this->mglobal->interestlist(null);
-		$ndata=array();
-
-		foreach($data as $key=>$val){
-			if(!in_array($key, $interestids)){
-				$ndata[] = $val;
-			}					
-		}
-		
+		$ndata = $this->mglobal->listInterest();
 		echo json_encode((object)$ndata);
 	}
 	
@@ -67,12 +58,13 @@ class Myinterests extends CI_Controller {
 		$interestids = explode(",",$this->mmyinterests->getID("client_interest", "interest_ids" , "WHERE client_id = '".$userid."'"));
 		$data = $this->mglobal->interestlist(null);
 		$ndata=array();
-		foreach($data as $key=>$val){
-			if(in_array($key, $interestids)){
-				$ndata[] = $val;
-			}					
+		$ids = array();
+		if(count($interestids) > 0){
+			foreach($interestids as $val){
+				$ids[$val] = $val;
+			}
 		}
-		
+		$ndata = array_intersect_key($data, $ids);
 		echo json_encode((object)$ndata);
 	}
 	

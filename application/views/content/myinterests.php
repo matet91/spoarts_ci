@@ -30,14 +30,7 @@
 				<button class="btn btn-primary btn-sm" id="btn-addInterest" data-toggle="tooltip" data-placement="top" title="Add Interest"><span class = "glyphicon glyphicon-plus"></span></button>
 				<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
 				<table id="myinterest_list" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody id="tbody-list">
-					</tbody>
+					
 				</table>
 			</div>
         </div>

@@ -130,14 +130,15 @@ class mglobal extends CI_Model {
 		$get = $this->db->query($sql);
 		$arrayInt = $this->interestlist(null);
 		if($get->num_rows() > 0){
-			foreach($get->result() as $key=>$val){
-				$interest[$key] = $key;
+			foreach($get->result() as $val){
+				$interest[$val->interest_id] = $val->interest_id;
 			}
 
 			$data = array_intersect_key($arrayInt, $interest);
 		}else{
 			$data = $arrayInt;
 		}
+		//print_r($interest);
 		return $data;
 	}
 
