@@ -248,7 +248,7 @@ class mglobal extends CI_Model {
 			}
 			$cliniclist = $clinic;
 
-			if(isset($cliniclist)){
+			if(!empty($cliniclist)){
 				$this->db->where_in('clinic_id',$cliniclist);
 			}
 		}

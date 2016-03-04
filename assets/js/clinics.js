@@ -223,24 +223,7 @@ function enroll(c,userid,clinic_id){
 				$('#Service').html(result).trigger("chosen:updated");
 			}
 		});
-		getRelationship();
 	}
-}
-
-function getRelationship(){
-	$.ajax({
-		url:'clinics/getRelationship/',
-		dataType:'JSON',
-		type:'POST',
-		success:function(msg){ 
-			var result = "";
-			$("#relationship").html("");
-			$.each(msg, function(i,e){	
-				result += '<option value='+e.relationship_name+'>'+e.relationship_name+'</option>';		
-			});	
-			$('#relationship').html(result).trigger("chosen:updated");
-		}
-	});
 }
 
 function changeStudType(){
