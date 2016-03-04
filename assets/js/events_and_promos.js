@@ -23,6 +23,7 @@ $(document).ready(function(){
 	var height = $(window).height();
 	
 	$('#btn-addEvents').click(function(e){ //show the form for adding events
+
 		e.preventDefault();
 		var dialogHeight = $("#modal_addevents").find('.modal-dialog').outerHeight(true);
 		var top = parseInt(height)/6-parseInt(dialogHeight);
@@ -60,6 +61,7 @@ $(document).ready(function(){
 	
 	//save events details to database
 	$("#btn-saveEvents").click(function(){	
+		$('#loader').show();
 		var eventid = $("#EventID").val();
 		if(eventid){ //check if it is for updating an event
 			saveEvents("updateEvents");
@@ -69,6 +71,7 @@ $(document).ready(function(){
 	});
 	
 	$("#btn-savePromos").click(function(){
+		$('#loader').show();
 		var promoid = $("#PromoID").val();
 		if(promoid){ // check if updating a promo
 			savePromos("updatePromos");
@@ -353,7 +356,8 @@ var error = $("#formaddevents .has-error").length;
       data:{data},
       dataType:'JSON',
       type:'POST',
-      success:function(msg){ 
+      success:function(msg){
+      $('#loader').fadeOut(); 
         if(msg == 0){
 			if(type == "addEvents"){
 				$("#message .alert").html($("#EventName").val()+" Event has been added successfully.").addClass("alert-success").show();$("#message").addClass('zindex');
@@ -406,6 +410,7 @@ var error = $("#formaddpromos .has-error").length;
       dataType:'JSON',
       type:'POST',
       success:function(msg){
+      	$('#loader').fadeOut();
         if(msg == 0){
 			if(type == "addPromos"){
 				$("#message .alert").html($("#PromoName").val()+" Promo has been added successfully.").addClass("alert-success").show();$("#message").addClass('zindex');

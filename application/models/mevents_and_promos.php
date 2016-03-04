@@ -80,7 +80,7 @@ class mevents_and_promos extends CI_Model {
 			
 		}
 		
-		if($insert and $notif){$error = 0;
+		if($insert){$error = 0;//remove notif variable to avoid error when the sp doesn't have a client yet
 		}else{$error = 1;}
 
 		return $error;
@@ -135,12 +135,13 @@ class mevents_and_promos extends CI_Model {
 				$data[$row]= date("Y-m-d", strtotime($val));
 			}else{ $data[$row]=$val; }
 		}
-		$data['SPID']=$this->session->userdata('userid');
+		$userid = $this->session->userdata('userid');
+		$data['SPID']=$userid;
 		$data['PromoStatus'] = 1;
 		$insert = $this->db->insert('promos',$data);
 		
 		//saveNotification
-		$sname = $this->getdatabyfield("services", "servicename", "WHERE SPID = $userid", ""); //service name
+		$sname = $this->getdatabyfield("services", "servicename", "WHERE SPID = '$userid'", ""); //service name
 		$dataNotif["Subject"] = "New Promo";
 		$dataNotif["Message"] = "Promo ".$frmdata['PromoName']. " has been added by ".$sname;
 		$dataNotif["DateCreated"] = date('Y-m-d');
@@ -152,7 +153,7 @@ class mevents_and_promos extends CI_Model {
 			$notif = $this->db->insert('notifications',$dataNotif);
 		}
 		
-		if($insert and $notif){//if successful return 0
+		if($insert){//if successful return 0, removed notif var to avoid error when sp doesn't have client yet
 			$error = 0;
 		}else{
 			$error = 1;
