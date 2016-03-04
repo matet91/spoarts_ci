@@ -89,15 +89,15 @@ function listInterest(){
 			var chk = '<div class="col-md-4">';
 			var c = 0;
 			$.each(msg,function(i,e){
-				var iname = e.interest_name;
-				var iid = e.interest_id;
-				if(c == 5){
-					chk+="</div><div class='col-md-4'>";
-					c=0;
-				}
-				chk+="<label><input type='checkbox' name='chkinterest"+i+"' id='chkinterest"+i+"' value='"+iid+"'>"+iname+"</label><br/>";
+				if(e != 0){
+					if(c == 5){
+						chk+="</div><div class='col-md-4'>";
+						c=0;
+					}
+					chk+="<label><input type='checkbox' name='chkinterest"+i+"' id='chkinterest"+i+"' value='"+i+"'>"+e+"</label><br/>";
 
-				c++;
+					c++;
+				}
 
 			});
 			chk +="</div>";

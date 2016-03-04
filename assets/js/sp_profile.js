@@ -117,19 +117,18 @@ function masterlistInstructors(id){
 		"bRetrieve": true,
 		"bDestroy":true,
 		"sLimit":10,
-		"sAjaxSource": "sp_profile/dataTables/6/"+id,
-		"aoColumns":[ {"sTitle":"ID","bVisible":false},
-				{"sTitle":"Name"},
-				{"sTitle":"Address","bSearchable": true},
-				{"sTitle":"Contact #","bSearchable": true},
-				{"sTitle":"E-mail","bSearchable": true},
-				{"sTitle":"Expertise","bSearchable": true},
-				{"sTitle":"Action","bSearchable": false}
-		],
+		"sAjaxSource": "sp_profile/dataTables/2/"+id,
+		"aoColumns":[ {"sTitle":"ID","sName":"MasterInsID","bVisible":false},
+                {"sTitle":"Name","sName":"MasterInsName"},
+                {"sTitle":"Address","sName":"MasterInsAddress","bSearchable": true},
+                {"sTitle":"Contact #","sName":"MasterInsContactNo","bSearchable": true},
+                {"sTitle":"E-mail","sName":"MasterInsEmail","bSearchable": true},
+                {"sTitle":"Expertise","sName":"MasterInsExpertise","bSearchable": true},
+                {"sTitle":"Action","bSearchable": true}
+        ],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-            if ( aData[6] == 1 ){
                 $('td:eq(5)', nRow).html('<button class = "btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="  Enroll" onclick = viewInstructorSched('+aData[0]+')><i class = "fa fa-sign-in fa-fw"></i></button>');
-              }
+              
         },
 		"fnInitComplete": function(oSettings, json) {
 		}
@@ -245,7 +244,7 @@ function SaveEnrollSchedule(schedid,insid,clinicid,serviceid){
 		  data[nname] = e.value;
 		  
 		  if(nname == "stud_name" || nname == "stud_age" || nname == "stud_address" || nname == "relationship"){
-			  if(nvalue == ""){
+			  if(e.value == ""){
 				name.parent().addClass("has-error");
 			  }else{
 				name.parent().removeClass('has-error'); 

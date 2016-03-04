@@ -143,7 +143,7 @@
                         <div class="col-md-6">
                           <div class = "form-group">
                             <label for = "ServiceType">Service Type</label>
-                            <select class = "form-control chosen-select" onchange="loadInterest(this.value)" id = "serv_type" name = "ServiceType">
+                            <select class = "form-control chosen-select" id = "serv_type" name = "ServiceType">
                               <option value = "">Please Select Service Type</option>
                               <option value = "0">Sports</option>
                               <option value = "1">Arts</option>

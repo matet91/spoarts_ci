@@ -1,13 +1,15 @@
 $(document).ready(function(){
 var height = $(window).height();
    services();
-
+   loadInterest();
    $('.modal').on('hidden.bs.modal', function (e) {
         $(".chosen-select").removeAttr('disabled').trigger('chosen:updated');
         $("#startTime,#endTime").removeAttr('disabled');
          $('#txtHiddenService').val('');
          $(".modal input").val('');
          $(".modal select").val('');
+         $('#message .alert').removeAttr('class').hide();
+         $("form input, form textarea").parent().removeClass('has-error');
   });
    $('#btn-addService').click(function(e){
 	    e.preventDefault();
@@ -247,8 +249,6 @@ function insSchedules(id){
     }
   }).on('processing.dt',function(oEvent, settings, processing){
   });
-
-
 }
 
 
@@ -606,15 +606,16 @@ function removeData(id,t,dt){
 }
 
 
-function loadInterest(t){
+function loadInterest(){
   $.ajax({
-    url: 'cglobal/loadInterest/'+t,
+    url: 'cglobal/loadInterest/',
     dataType:'JSON',
     type:'POST',
     success: function(msg){
       var opt = "";
       $.each(msg, function(i,e){
-            opt += "<option value = "+e.interest_id+">"+e.interest_name+"</option>";
+        if(e!=null)
+            opt += "<option value = "+i+">"+e+"</option>";
       });
 
       $('#interest_id').html(opt).trigger("chosen:updated");

@@ -63,8 +63,8 @@ class cglobal extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	function loadInterest($t){
-		$data = $this->mglobal->loadInterest($t);
+	function loadInterest($t=null){ //indae
+		$data = $this->mglobal->interestlist($t);
 		echo json_encode($data);
 	}
 	

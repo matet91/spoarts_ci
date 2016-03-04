@@ -44,6 +44,7 @@ class Mspprofile extends CI_Model {
 
 				$select = $aColumns;
 				$select[6] = "(CASE WHEN MasterInsStatus = 1 THEN 'Active' ELSE 'Inactive' END) as MasterInsStatus";
+				$select[7] = "1 as action";
 				$sTable = "instructor_masterlist";
 				$leftjoin = "";
 				//print_r($select);
@@ -52,7 +53,7 @@ class Mspprofile extends CI_Model {
 					$sWhere .= " AND (MasterInsName like '%".$sSearch."%' OR MasterInsAddress like '%".$sSearch."%' OR MasterInsContactNo like '%".$sSearch."%' OR MasterInsEmail like '%".$sSearch."%' OR MasterInsExpertise like '%".$sSearch."%')";}
 				$sOrder = 'ORDER BY '.$aColumns[$sSort].' '.$sSortype;
 				$groupby = "";
-				$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise");
+				$aColumns_output = array("MasterInsID","MasterInsName","MasterInsAddress","MasterInsContactNo","MasterInsEmail","MasterInsExpertise","action");
 			break;
 
 			case 3://schedules

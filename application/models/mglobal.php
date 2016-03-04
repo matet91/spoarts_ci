@@ -126,9 +126,19 @@ class mglobal extends CI_Model {
 	}
 
 	function listInterest(){
-		$sql="SELECT a.interest_id, a.interest_name FROM services b LEFT JOIN interest a ON a.interest_id=b.interest_id WHERE b.ServiceStatus=1 GROUP BY b.interest_id";
+		$sql="SELECT interest_id FROM services WHERE ServiceStatus=1 GROUP BY interest_id";
 		$get = $this->db->query($sql);
-		return $get->result();
+		$arrayInt = $this->interestlist(null);
+		if($get->num_rows() > 0){
+			foreach($get->result() as $key=>$val){
+				$interest[$key] = $key;
+			}
+
+			$data = array_intersect_key($arrayInt, $interest);
+		}else{
+			$data = $arrayInt;
+		}
+		return $data;
 	}
 
 	function saveInterest(){
@@ -359,5 +369,15 @@ class mglobal extends CI_Model {
 			array("interest_id"=>42,"interest_name"=>"Table sports","interest_type"=>0)
 		);
 		return $interest;
+	}
+
+	function interestlist($id){ //indae
+
+
+		$arraylist = array("","Animation","Architecture","Body Art","Brief Art","Cinema","Comic Writing","Dance","Digital Art","Drawing","Engraving","Fractal art","Gastronomy","Gold-smithery, silver-smithery, and jewellery","Graffiti","Music","Opera","Painting","Photography","Poetry","Pottery","Sculpture","Singing","Theatre","Woodwork","Writing","Air sports","Archery","Ball-over-net games","Basketball family","Board sports","Climbing","Cycling","Combat sports: Wrestling and martial arts","Dance","Football","Ice sports","Running","Snow sports","Table sports");
+
+		$data = (isset($id))?$arraylist[$id]:$arraylist;
+
+		return $data;
 	}
 }

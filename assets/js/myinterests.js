@@ -44,7 +44,25 @@ $(document).ready(function() {
 } );
 
 function getlistinterest(){
-	$('#myinterest_list').DataTable( {
+	$.ajax({
+		url:'myinterests/getlistinterest',
+		dataType:'JSON',
+		type:'POST',
+		success:function(msg){
+			console.log(msg);
+			var result = "";
+			$.each(msg, function(i,e){
+				result += '<tr><td>'+e.interest_name+'</td><td>'+e.interest_type+'</td><td><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Interest" onclick="removeIntererst('+e.interest_id+',1);"><i class = "fa fa-remove fa-fw"></i></button></td></tr>';
+			});
+			
+			$("#tbody-list").html(result);
+			
+			 $('#myinterest_list').DataTable( {
+				"pagingType": "full_numbers"
+			} );
+		}
+	});
+	/*$('#myinterest_list').DataTable( {
     "bProcessing":true, 
     "bServerSide":true,
     "bRetrieve": true,
@@ -63,7 +81,7 @@ function getlistinterest(){
     "fnInitComplete": function(oSettings, json) {
     }
   }).on('processing.dt',function(oEvent, settings, processing){
-  });
+  });*/
 }
 
 function removeIntererst(interestid){
