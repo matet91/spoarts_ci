@@ -126,7 +126,7 @@ class mglobal extends CI_Model {
 	}
 
 	function listInterest(){
-		$sql="SELECT interest_id FROM services WHERE ServiceStatus=1 GROUP BY interest_id";
+		$sql="SELECT interest_id FROM services LEFT JOIN clinics ON SPID=UserID WHERE clinic_status =1 GROUP BY interest_id";
 		$get = $this->db->query($sql);
 		$arrayInt = $this->interestlist(null);
 		if($get->num_rows() > 0){
