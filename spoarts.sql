@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2016 at 05:28 PM
+-- Generation Time: Mar 04, 2016 at 08:06 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `client_interest` (
   `ci_id` int(11) NOT NULL,
   `interest_ids` longtext NOT NULL COMMENT 'e.g. 1,2,3,4',
   `client_id` int(11) NOT NULL COMMENT 'userid foreign key see usr_account'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `client_interest`
@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS `client_interest` (
 
 INSERT INTO `client_interest` (`ci_id`, `interest_ids`, `client_id`) VALUES
 (1, '1,2,6,7,18,19,20,21,22,33,34,35,36,3,8', 3),
-(2, '1', 3);
+(2, '1', 3),
+(3, '34,35', 6);
 
 -- --------------------------------------------------------
 
@@ -101,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `clinics` (
   `clinic_status` int(11) NOT NULL COMMENT '0-deactivated;1-activated',
   `longitude` text NOT NULL,
   `latitude` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `clinics`
@@ -109,7 +110,8 @@ CREATE TABLE IF NOT EXISTS `clinics` (
 
 INSERT INTO `clinics` (`clinic_id`, `UserID`, `clinic_name`, `clinic_logo`, `SPAboutMe`, `SPLocation`, `SPSubsPlan`, `SPSubsDate`, `clinic_status`, `longitude`, `latitude`) VALUES
 (1, 2, 'Rene''s Pink Club', 'original.jpg', 'I have a pink mouse and i really really love it', 'Mandaue City, Central Visayas, Philippines', 0, '0000-00-00 00:00:00', 1, '123.94155180000007', '10.3402623'),
-(2, 4, 'Bugoy''s club', 'IMG_20150608_211313.jpg', 'Mga bugoy ug bugay lang pwede', 'Guadalupe, Cebu City, Central Visayas, Philippines', 0, '0000-00-00 00:00:00', 1, '123.88543770000001', '10.3156173');
+(2, 4, 'Bugoy''s club', 'IMG_20150608_211313.jpg', 'Mga bugoy ug bugay lang pwede', 'Guadalupe, Cebu City, Central Visayas, Philippines', 0, '0000-00-00 00:00:00', 1, '123.88543770000001', '10.3156173'),
+(3, 5, 'Erfe', 'Devil.jpg', 'Efer', 'Cebu City, Central Visayas, Philippines', 0, '0000-00-00 00:00:00', 1, '123.88543660000005', '10.3156992');
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `EventStatus` int(11) NOT NULL,
   `SPID` int(11) NOT NULL,
   `TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `events`
@@ -149,7 +151,11 @@ INSERT INTO `events` (`EventID`, `EventName`, `EventDesc`, `EventFor`, `EventSta
 (12, 'test', 'tes', '1', '2016-02-01', '2016-02-02', 'a', 0, 2, '2016-02-21 10:24:44'),
 (13, 'z', 'z', '1', '2016-02-01', '2016-02-22', 'z', 0, 2, '2016-02-21 10:24:43'),
 (14, 'a', 'a', '1', '2016-02-09', '2016-02-09', 'a', 0, 2, '2016-02-21 10:24:49'),
-(15, 'tests', 'tests', '1', '2016-02-08', '2016-02-15', 'test', 1, 2, '2016-02-23 03:10:04');
+(15, 'tests', 'tests', '1', '2016-02-08', '2016-02-15', 'test', 1, 2, '2016-02-23 03:10:04'),
+(16, 'sdf', 'sdfsd', '3', '2016-03-01', '2016-03-10', 'fdgdfg', 1, 5, '2016-03-04 18:12:26'),
+(17, 'sdf', 'sdfsd', '3', '2016-03-01', '2016-03-10', 'fdgdfg', 1, 5, '2016-03-04 18:14:43'),
+(18, 'sdf', 'sdfsd', '3', '2016-03-01', '2016-03-10', 'fdgdfg', 1, 5, '2016-03-04 18:15:38'),
+(19, 'rge', 'dfgfd', '3', '2016-03-01', '2016-03-08', 'fdgfdg', 1, 5, '2016-03-04 18:22:08');
 
 -- --------------------------------------------------------
 
@@ -254,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `ClientID` int(11) NOT NULL,
   `SPID` int(11) NOT NULL,
   `NotifStatus` int(11) NOT NULL COMMENT '0:not read; 1:read;'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `notifications`
@@ -265,7 +271,11 @@ INSERT INTO `notifications` (`NotifID`, `Subject`, `Message`, `DateCreated`, `Cl
 (2, 'New Event', 'Event test has been added by Jiujitsu pink service', '2016-02-21', 3, 2, 1),
 (3, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client cris cubcub. Enrollee Name: a.', '0000-00-00', 2, 3, 0),
 (4, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client cris cubcub. Enrollee Name: b.', '0000-00-00', 2, 3, 0),
-(5, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client cris cubcub. Enrollee Name: dian.', '0000-00-00', 2, 3, 0);
+(5, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client cris cubcub. Enrollee Name: dian.', '0000-00-00', 2, 3, 0),
+(6, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client sdfsdf sdfsdf. Enrollee Name: das.', '0000-00-00', 2, 6, 0),
+(7, 'Enrollment Request Approval', 'das enrollment to Jiujitsu pink service of Rene''s Pink Club has been approved last 2016-03-05 03:02:04 [Rene''s Pink Club-Jiujitsu pink service]', '0000-00-00', 6, 2, 0),
+(8, 'For Approval [Jiujitsu pink service] : New Student', 'You have a new student request from client sdfsdf sdfsdf. Enrollee Name: dfg.', '0000-00-00', 2, 6, 0),
+(9, 'Enrollment Request Approval', 'dfg enrollment to Jiujitsu pink service of Rene''s Pink Club has been approved last 2016-03-05 03:05:12 [Rene''s Pink Club-Jiujitsu pink service]', '0000-00-00', 6, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -337,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `promos` (
   `PromoStatus` int(11) NOT NULL,
   `SPID` int(11) NOT NULL,
   `TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `promos`
@@ -345,7 +355,11 @@ CREATE TABLE IF NOT EXISTS `promos` (
 
 INSERT INTO `promos` (`PromoID`, `PromoName`, `PromoDesc`, `PromoStartDate`, `PromoEndDate`, `PromoStatus`, `SPID`, `TIMESTAMP`) VALUES
 (1, 'Pink Promo', 'Pink Manther ', '2016-02-24', '2016-02-29', 1, 2, '2016-02-16 16:21:36'),
-(2, 'tests', 'tests', '2016-02-17', '2016-02-18', 0, 2, '2016-02-17 07:54:25');
+(2, 'tests', 'tests', '2016-02-17', '2016-02-18', 0, 2, '2016-02-17 07:54:25'),
+(3, 'sdfsd', 'sdfsd', '2016-03-06', '2016-03-16', 1, 5, '2016-03-04 18:16:20'),
+(4, 'sdfsd', 'sdfsd', '2016-03-06', '2016-03-16', 1, 5, '2016-03-04 18:16:59'),
+(5, 'sdfsd', 'sdfsd', '2016-03-06', '2016-03-16', 1, 5, '2016-03-04 18:18:23'),
+(6, 'sdfsd', 'sdfsd', '2016-03-06', '2016-03-16', 1, 5, '2016-03-04 18:20:03');
 
 -- --------------------------------------------------------
 
@@ -420,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `schedules` (
 --
 
 INSERT INTO `schedules` (`SchedID`, `SchedDays`, `RoomID`, `InstructorID`, `ServiceID`, `SchedSlots`, `SchedTime`, `date_added`, `SchedRemaining`) VALUES
-(1, 'Tuesday,Thursday', 1, 1, 1, 10, '11:00 am - 01:00 pm', '2016-02-16 11:16:14', 1),
+(1, 'Tuesday,Thursday', 1, 1, 1, 10, '11:00 am - 01:00 pm', '2016-02-16 11:16:14', 4),
 (2, 'Monday,Tuesday,Wednesday', 4, 2, 2, 20, '03:00 pm - 05:00 pm', '2016-02-21 14:58:27', 0),
 (3, 'Wednesday,Saturday', 1, 1, 1, 20, '06:00 pm - 07:00 pm', '2016-02-27 16:46:06', 0);
 
@@ -465,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `services` (
   `serviceHour` int(11) NOT NULL,
   `clubpic` varchar(50) NOT NULL,
   `interest_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `services`
@@ -473,7 +487,8 @@ CREATE TABLE IF NOT EXISTS `services` (
 
 INSERT INTO `services` (`ServiceID`, `ServiceName`, `ServiceDesc`, `ServiceSchedule`, `ServiceRegistrationFee`, `ServiceStatus`, `ServicePrice`, `ServiceType`, `SPID`, `serviceWalkin`, `serviceHour`, `clubpic`, `interest_id`) VALUES
 (1, 'Jiujitsu pink service', 'I have pink mouse and this is pink manther', 'Monday-Friday 09:00am-10:00pm', 1000, 1, '1500', 0, 2, 300, 3, '', 36),
-(2, 'Body Art', 'Body Art', 'Tuesday', 200, 1, '100', 1, 4, 100, 50, '', 3);
+(2, 'Body Art', 'Body Art', 'Tuesday', 200, 1, '100', 1, 4, 100, 50, '', 3),
+(3, 'Fdg', 'Dfgfg', '', 5654, 1, '45', 0, 5, 4, 45, '', 4);
 
 -- --------------------------------------------------------
 
@@ -490,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `client_id` int(11) NOT NULL,
   `stud_type` int(11) NOT NULL COMMENT '0:client; 1:non-client;',
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students`
@@ -501,7 +516,9 @@ INSERT INTO `students` (`stud_id`, `stud_name`, `stud_age`, `stud_address`, `rel
 (2, 'cris cubcub', 50, 'Mandaue City, Central Visayas, Philippines', '0', 3, 0, '2016-02-21 11:38:41'),
 (3, 'dian', 4, 'cebu', '0', 3, 1, '2016-02-21 12:08:21'),
 (4, 'a', 12, 'a', 'Sister', 3, 1, '2016-02-29 19:20:10'),
-(5, 'b', 23, 'b', 'Sister', 3, 1, '2016-02-29 19:25:12');
+(5, 'b', 23, 'b', 'Sister', 3, 1, '2016-02-29 19:25:12'),
+(6, 'das', 33, 'sda', 'Sister', 6, 1, '2016-03-04 14:01:01'),
+(7, 'dfg', 34, 'sdfsdf', 'Mother', 6, 1, '2016-03-04 14:04:00');
 
 -- --------------------------------------------------------
 
@@ -519,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `students_enrolled` (
   `SchedID` int(11) NOT NULL,
   `StudEnrolledStatus` int(11) NOT NULL,
   `date_enrolled` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students_enrolled`
@@ -533,7 +550,9 @@ INSERT INTO `students_enrolled` (`StudEnrolledID`, `stud_id`, `client_id`, `serv
 (5, 4, 3, 1, 1, 1, 3, 0, '2016-02-29 19:20:10'),
 (6, 5, 3, 1, 1, 1, 3, 0, '2016-02-29 19:25:12'),
 (7, 2, 3, 1, 2, 1, 1, 0, '2016-03-03 00:22:32'),
-(8, 3, 3, 1, 2, 1, 1, 0, '2016-03-03 15:37:12');
+(8, 3, 3, 1, 2, 1, 1, 0, '2016-03-03 15:37:12'),
+(9, 6, 6, 1, 1, 1, 1, 1, '2016-03-04 14:01:01'),
+(10, 7, 6, 1, 1, 1, 1, 1, '2016-03-04 14:04:00');
 
 -- --------------------------------------------------------
 
@@ -548,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `SubscEndDate` date NOT NULL,
   `UserID` int(11) NOT NULL,
   `SubsStatus` int(11) NOT NULL COMMENT '0-unpaid;1-paid'
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subscriptions`
@@ -556,7 +575,8 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
 
 INSERT INTO `subscriptions` (`SubscID`, `SubscType`, `SubscStartDate`, `SubscEndDate`, `UserID`, `SubsStatus`) VALUES
 (2, 2, '2016-02-16', '2017-02-16', 2, 1),
-(3, 1, '2016-02-21', '2016-03-21', 4, 0);
+(3, 1, '2016-02-21', '2016-03-21', 4, 0),
+(4, 1, '2016-03-04', '2016-04-04', 5, 0);
 
 -- --------------------------------------------------------
 
@@ -616,7 +636,7 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
   `verification_code` varchar(10) NOT NULL,
   `verify_expiry` varchar(25) NOT NULL,
   `confirmation_status` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_accounts`
@@ -624,9 +644,11 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
 
 INSERT INTO `user_accounts` (`UserID`, `UserName`, `Password`, `UserType`, `UserStatus`, `security_question_id`, `security_password`, `first_login`, `verification_code`, `verify_expiry`, `confirmation_status`) VALUES
 (1, 'admin', 'a5507290a2d7b5e23d2d408410ffc626', 0, 1, 0, '', 0, '998100816', '2016-02-17 04:59:14', 0),
-(2, 'rene', '99186c7ea5e48c857e1248fbc10decb9', 1, 1, 0, '', 0, '239963565', '2016-02-17 05:02:28', 0),
+(2, 'rene', '99186c7ea5e48c857e1248fbc10decb9', 1, 1, 0, '', 1, '239963565', '2016-02-17 05:02:28', 0),
 (3, 'cris', 'dbe3578deeb495215b304d7917bce826', 2, 1, 0, '', 1, '24564950', '2016-02-17 05:03:44', 0),
-(4, 'norfelyn', 'd8624b2a737b418417e45ae460947657', 1, 1, 0, '', 0, '786850178', '2016-02-22 07:46:33', 0);
+(4, 'norfelyn', 'd8624b2a737b418417e45ae460947657', 1, 1, 0, '', 0, '786850178', '2016-02-22 07:46:33', 0),
+(5, 'gma7', '25f9e794323b453885f5181f1b624d0b', 1, 1, 0, '', 1, '223042818', '2016-03-05 06:53:05', 0),
+(6, 'qwer', '25f9e794323b453885f5181f1b624d0b', 2, 1, 0, '', 1, '867583264', '2016-03-05 07:44:36', 0);
 
 -- --------------------------------------------------------
 
@@ -647,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `user_details` (
   `spbirthday` date NOT NULL,
   `longitude` text NOT NULL,
   `latitude` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user_details`
@@ -657,7 +679,9 @@ INSERT INTO `user_details` (`SPID`, `SPAddress`, `SPContactNo`, `SPEmail`, `User
 (1, 'Mandaue City, Central Visayas, Philippines', '12346598', 'spoarts.cebu@gmail.com', 1, '', 'admin', 'admin', '2016-02-16 10:59:14', '1966-02-02', '123.94155180000007', '10.3402623'),
 (2, 'Mandaue City, Central Visayas, Philippines', '1234567', 'rene@gmail.com', 2, 'Devil.jpg', 'rene', 'macalisang', '2016-02-16 11:02:28', '1966-07-04', '123.94155180000007', '10.3402623'),
 (3, 'Mandaue City, Central Visayas, Philippines', '1234556', 'cris@gmail.com', 3, '', 'cris', 'cubcub', '2016-02-16 11:03:44', '1966-02-03', '123.94155180000007', '10.3402623'),
-(4, 'Kalunasan, Cebu City, Central Visayas, Philippines', '09055475725', 'nalmonicar1988@gmail.com', 4, '', 'Norfelyn', 'Almonicar', '2016-02-21 14:46:33', '1988-12-20', '123.8774052', '10.3502923');
+(4, 'Kalunasan, Cebu City, Central Visayas, Philippines', '09055475725', 'nalmonicar1988@gmail.com', 4, '', 'Norfelyn', 'Almonicar', '2016-02-21 14:46:33', '1988-12-20', '123.8774052', '10.3502923'),
+(5, 'Cebu City, Central Visayas, Philippines', '1454823', 'sadas@gmail.com', 5, '', 'haas', 'jsldfjsdkl', '2016-03-04 12:53:05', '1966-03-04', '123.88543660000005', '10.3156992'),
+(6, 'Verbena Capitol Suites, Don Gil Garcia Street, Cebu City, Central Visayas, Philippines', '56786876987', 'sdfdsf@yahooc.om', 6, '', 'sdfsdf', 'sdfsdf', '2016-03-04 13:44:36', '1966-03-01', '123.89019770000004', '10.3155579');
 
 --
 -- Indexes for dumped tables
@@ -825,17 +849,17 @@ ALTER TABLE `bookmark`
 -- AUTO_INCREMENT for table `client_interest`
 --
 ALTER TABLE `client_interest`
-  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `clinics`
 --
 ALTER TABLE `clinics`
-  MODIFY `clinic_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `clinic_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `EventID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+  MODIFY `EventID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `events_enrolled`
 --
@@ -855,7 +879,7 @@ ALTER TABLE `instructor_masterlist`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `NotifID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `NotifID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `payment_logs`
 --
@@ -870,7 +894,7 @@ ALTER TABLE `paypal_logs`
 -- AUTO_INCREMENT for table `promos`
 --
 ALTER TABLE `promos`
-  MODIFY `PromoID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `PromoID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `reviews_and_ratings`
 --
@@ -895,22 +919,22 @@ ALTER TABLE `security_questions`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `ServiceID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `stud_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `stud_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `students_enrolled`
 --
 ALTER TABLE `students_enrolled`
-  MODIFY `StudEnrolledID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `StudEnrolledID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `SubscID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `SubscID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `subscription_plans`
 --
@@ -925,12 +949,12 @@ ALTER TABLE `time_logs`
 -- AUTO_INCREMENT for table `user_accounts`
 --
 ALTER TABLE `user_accounts`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `SPID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `SPID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
