@@ -33,7 +33,7 @@
             <!-- End Search -->
             <!-- Start Navigation List -->
             <ul class="nav navbar-nav navbar-right " id = "menus">
-            <?php if($this->session->userdata('userid')==2){?>
+            <?php if($this->session->userdata('usertype')==1){?>
                 <li><a href="clinicprofile" class = "<?php echo ($content == 'content/clinicprofile.php'?'active':'');?>">Clinic Profile</a></li>
               <?php } ?>
             <?php if(!$this->session->userdata('userid') || $this->session->userdata('usertype') == 2){?>

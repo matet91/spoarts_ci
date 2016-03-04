@@ -59,7 +59,7 @@
 
                 <div class="row">
                   <div class="col-sm-10">
-                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php echo ($clinicstatus==0)?'disabled':'';?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
+                    <button class="btn btn-primary btn-sm" id="btn-update" data-toggle="tooltip" data-placement="top" title="Save Changes" <?php echo ($clinicstatus==0 && $data->PlanID!=1 && strtotime($data->SubscEndDate) >= strtotime(date('Y-m-d')))?'disabled':'';?>><span class = "glyphicon glyphicon-floppy-save" ></span> </button>
                   </div>
                 </div>
               </div>

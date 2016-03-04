@@ -29,7 +29,16 @@
             <div class="page-content" id = "content-reviews-ratings">
 				<button class="btn btn-primary btn-sm" id="btn-addInterest" data-toggle="tooltip" data-placement="top" title="Add Interest"><span class = "glyphicon glyphicon-plus"></span></button>
 				<div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
-				<table id="myinterest_list" class="display" cellspacing="0" width="100%"></table>
+				<table id="myinterest_list" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-list">
+					</tbody>
+				</table>
 			</div>
         </div>
       </div>
@@ -48,13 +57,6 @@
 					<div class = "row">
 						<form  id="formschedule">  
 							<div class="col-md-6">
-							  <div class = "form-group">
-								<label for = "forsched_name">Type</label>
-								<select class = "form-control chosen-select" id = "interest_type" name = "interest_type">
-									<option value=1>Arts</option>
-									<option value=0>Sports</option>
-								</select>
-							  </div>
 							  <div class = "form-group">
 								<label for = "forsched_name">Interest Names</label>
 								<select multiple="multiple" class="form-control chosen-select" id = "interest_id" name = "interest_id"></select>

@@ -45,6 +45,7 @@ class ClinicProfile extends CI_Controller {
 		$title = "Clinic Profile";
 		
 		$profile = $this->mservices->loadprofile();
+		
 		$this->session->set_userdata('clinic_id',$profile->clinic_id);
 		$this->session->set_userdata('clinic_status',$profile->clinic_status);
 		$clubpic = $profile->clinic_logo;

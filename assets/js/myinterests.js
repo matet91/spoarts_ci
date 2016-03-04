@@ -2,15 +2,12 @@ $(document).ready(function() {
 	$(".chzn-select").chosen();
 	var height = $(window).height();
  
-	$("#interest_type").change(function (){
-		getselInterest($(this).val());
-	});
-	
 	$("#btn-addInterest").click(function (e){
 		e.preventDefault();
 		var dialogHeight = $("#modal_interest").find('.modal-dialog').outerHeight(true);
 		var top = parseInt(height)/3-parseInt(dialogHeight);
 		$("#modal_interest").modal('show').attr('style','top:'+top+'px !important');
+		getselInterest();
 	});
 	$("#btn-saveInterest").click(function (e){
 		e.preventDefault();
@@ -40,7 +37,6 @@ $(document).ready(function() {
 	});
 	
 	getlistinterest();
-	getselInterest($("#interest_type").val());
 } );
 
 function getlistinterest(){
@@ -49,10 +45,9 @@ function getlistinterest(){
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
-			console.log(msg);
 			var result = "";
 			$.each(msg, function(i,e){
-				result += '<tr><td>'+e.interest_name+'</td><td>'+e.interest_type+'</td><td><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Interest" onclick="removeIntererst('+e.interest_id+',1);"><i class = "fa fa-remove fa-fw"></i></button></td></tr>';
+				result += '<tr><td>'+e+'</td><td><button class = "btn btn-danger btn-xs btn-viewlist" data-toggle="tooltip" data-placement="top" title="Remove Interest" onclick="removeIntererst('+i+',1);"><i class = "fa fa-remove fa-fw"></i></button></td></tr>';
 			});
 			
 			$("#tbody-list").html(result);
@@ -107,16 +102,17 @@ function removeIntererst(interestid){
 	});
 }
 
-function getselInterest(type){
+function getselInterest(){
 	$.ajax({
-		url:'myinterests/getselInterest/'+type,
+		url:'myinterests/getselInterest/',
 		dataType:'JSON',
 		type:'POST',
 		success:function(msg){
+			
 			var result = "";
 			$("#interest_id").html("");
 			$.each(msg, function(i,e){
-				result += '<option value='+e.interest_id+'>'+e.interest_name+'</option>';
+				result += '<option value='+i+'>'+e+'</option>';
 			});		
 			$('#interest_id').html(result).trigger("chosen:updated");
 			$('#interest_id_chosen').css({ width: "550px" });
